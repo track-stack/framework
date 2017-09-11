@@ -1,0 +1,13 @@
+{
+  "name": "trackstack",
+  "version": "1.0.10",
+  "description": "Shared code for Track Stack",
+  "main": "./lib/trackstack.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "author": "mikekavouras",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
