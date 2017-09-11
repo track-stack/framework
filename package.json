@@ -1,6 +1,6 @@
 {
   "name": "trackstack",
-  "version": "1.0.10",
+  "version": "0.0.1",
   "description": "Shared code for Track Stack",
   "main": "./lib/trackstack.js",
   "scripts": {
