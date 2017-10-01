@@ -9,5 +9,9 @@
   "author": "mikekavouras",
   "license": "MIT",
   "dependencies": {
+    "redux": "^3.7.2"
+  },
+  "devDependencies": {
+    "webpack": "2"
   }
 }
