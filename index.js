@@ -826,6 +826,7 @@ module.exports = g;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.selectGameInvitee = selectGameInvitee;
 exports.performSearch = performSearch;
 exports.fetchFriends = fetchFriends;
 var store = __webpack_require__(0);
@@ -841,6 +842,19 @@ function _fetchFriends(results) {
   return {
     type: "FETCH",
     data: results
+  };
+}
+
+function _selectGameInvitee(friend) {
+  return {
+    type: "SELECTED_INVITEE",
+    data: friend
+  };
+}
+
+function selectGameInvitee(friend) {
+  return function (dispatch) {
+    return dispatch(_selectGameInvitee(friend));
   };
 }
 
@@ -924,6 +938,10 @@ function reducer() {
     case 'FETCH':
       {
         return Object.assign({}, state, { friends: action.data });
+      }
+    case 'SELECTED_INVITEE':
+      {
+        return Object.assign({}, state, { invitee: action.data });
       }
     default:
       return state;
