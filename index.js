@@ -827,6 +827,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.selectGameInvitee = selectGameInvitee;
+exports.fetchGame = fetchGame;
 exports.performSearch = performSearch;
 exports.fetchFriends = fetchFriends;
 var store = __webpack_require__(0);
@@ -845,6 +846,13 @@ function _fetchFriends(results) {
   };
 }
 
+function _fetchedGame(game) {
+  return {
+    type: "GAME.FETCHED",
+    data: game
+  };
+}
+
 function _selectGameInvitee(friend) {
   return {
     type: "SELECTED_INVITEE",
@@ -855,6 +863,21 @@ function _selectGameInvitee(friend) {
 function selectGameInvitee(friend) {
   return function (dispatch) {
     return dispatch(_selectGameInvitee(friend));
+  };
+}
+
+function fetchGame(gameId) {
+  return function (dispatch) {
+    fetch("/games/" + gameId, {
+      credentials: 'same-origin',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return dispatch(_fetchedGame(json));
+    });
   };
 }
 
@@ -929,7 +952,7 @@ module.exports = reducer;
 "use strict";
 
 
-var defaultState = { friends: [] };
+var defaultState = { friends: [], game: null };
 function reducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
   var action = arguments[1];
@@ -942,6 +965,10 @@ function reducer() {
     case 'SELECTED_INVITEE':
       {
         return Object.assign({}, state, { invitee: action.data });
+      }
+    case 'GAME.FETCHED':
+      {
+        return Object.assign({}, state, { game: action.data });
       }
     default:
       return state;

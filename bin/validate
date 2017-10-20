@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+webpack
+uglifyjs index.js
