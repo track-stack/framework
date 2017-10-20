@@ -876,7 +876,7 @@ function fetchGame(gameId) {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      return dispatch(_fetchedGame(json));
+      return dispatch(_fetchedGame(json["game"]));
     });
   };
 }
