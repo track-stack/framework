@@ -830,29 +830,10 @@ exports.selectGameInvitee = selectGameInvitee;
 exports.fetchGame = fetchGame;
 exports.performSearch = performSearch;
 exports.fetchFriends = fetchFriends;
+exports.submitAnswer = submitAnswer;
 var store = __webpack_require__(0);
 
-function _performSearch(results) {
-  return {
-    type: "SEARCH",
-    data: results
-  };
-}
-
-function _fetchFriends(results) {
-  return {
-    type: "FETCH",
-    data: results
-  };
-}
-
-function _fetchedGame(game) {
-  return {
-    type: "GAME.FETCHED",
-    data: game
-  };
-}
-
+// SELECT GAME INVITEE
 function _selectGameInvitee(friend) {
   return {
     type: "SELECTED_INVITEE",
@@ -863,6 +844,14 @@ function _selectGameInvitee(friend) {
 function selectGameInvitee(friend) {
   return function (dispatch) {
     return dispatch(_selectGameInvitee(friend));
+  };
+}
+
+// FETCH GAME
+function _fetchedGame(game) {
+  return {
+    type: "GAME.FETCHED",
+    data: game
   };
 }
 
@@ -881,6 +870,14 @@ function fetchGame(gameId) {
   };
 }
 
+// PERFORM MUSIC SEARCH
+function _performSearch(results) {
+  return {
+    type: "SEARCH",
+    data: results
+  };
+}
+
 function performSearch(query) {
   return function (dispatch) {
     fetch("http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + query + "&api_key=80b1866e815a8d2ddf83757bd97fdc76&format=json").then(function (response) {
@@ -894,12 +891,50 @@ function performSearch(query) {
   };
 }
 
+// FETCH FRIENDS
+function _fetchFriends(results) {
+  return {
+    type: "FETCH",
+    data: results
+  };
+}
+
 function fetchFriends() {
   return function (dispatch) {
     fetch('/friends', { credentials: 'same-origin' }).then(function (response) {
       return response.json();
     }).then(function (json) {
       dispatch(_fetchFriends(json["friends"]));
+    });
+  };
+}
+
+function _answerSubmitted(game) {
+  return {
+    type: "ANSWER_SUBMISSION.DONE",
+    data: game
+  };
+}
+
+function submitAnswer(_ref) {
+  var gameId = _ref.gameId,
+      answer = _ref.answer;
+
+  return function (dispatch) {
+    var data = JSON.stringify({ answer: answer });
+    console.log(data);
+    fetch("/games/" + gameId + "/turn", {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      dispatch(_answerSubmitted(json["game"]));
     });
   };
 }
@@ -967,6 +1002,10 @@ function reducer() {
         return Object.assign({}, state, { invitee: action.data });
       }
     case 'GAME.FETCHED':
+      {
+        return Object.assign({}, state, { game: action.data });
+      }
+    case 'ANSWER_SUBMISSION.DONE':
       {
         return Object.assign({}, state, { game: action.data });
       }
