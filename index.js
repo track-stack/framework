@@ -916,13 +916,19 @@ function _answerSubmitted(game) {
   };
 }
 
+function _answerSubmissionFailed(error) {
+  return {
+    type: "ANSWER_SUBMISSION.FAILED",
+    data: ""
+  };
+}
+
 function submitAnswer(_ref) {
   var gameId = _ref.gameId,
       answer = _ref.answer;
 
   return function (dispatch) {
     var data = JSON.stringify({ answer: answer });
-    console.log(data);
     fetch("/games/" + gameId + "/turn", {
       method: 'POST',
       credentials: 'same-origin',
@@ -935,6 +941,8 @@ function submitAnswer(_ref) {
       return response.json();
     }).then(function (json) {
       dispatch(_answerSubmitted(json["game"]));
+    }).catch(function (error) {
+      dispatch(_answerSubmissionFailed);
     });
   };
 }
