@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,20 +73,18 @@
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+/*jshint esversion: 6 */
 
-var _root = __webpack_require__(20);
+var thunkMiddleware = __webpack_require__(26).default;
 
-var _root2 = _interopRequireDefault(_root);
+var _require = __webpack_require__(6),
+    createStore = _require.createStore,
+    applyMiddleware = _require.applyMiddleware;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var reducer = __webpack_require__(12);
 
-/** Built-in value references. */
-var _Symbol = _root2.default.Symbol;
-
-exports.default = _Symbol;
+var store = createStore(reducer, applyMiddleware(thunkMiddleware));
+module.exports = store;
 
 /***/ }),
 /* 1 */
@@ -99,15 +97,37 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _baseGetTag = __webpack_require__(14);
+var _root = __webpack_require__(24);
+
+var _root2 = _interopRequireDefault(_root);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/** Built-in value references. */
+var _Symbol = _root2.default.Symbol;
+
+exports.default = _Symbol;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _baseGetTag = __webpack_require__(18);
 
 var _baseGetTag2 = _interopRequireDefault(_baseGetTag);
 
-var _getPrototype = __webpack_require__(16);
+var _getPrototype = __webpack_require__(20);
 
 var _getPrototype2 = _interopRequireDefault(_getPrototype);
 
-var _isObjectLike = __webpack_require__(21);
+var _isObjectLike = __webpack_require__(25);
 
 var _isObjectLike2 = _interopRequireDefault(_isObjectLike);
 
@@ -172,7 +192,7 @@ function isPlainObject(value) {
 exports.default = isPlainObject;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -365,7 +385,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -409,7 +429,7 @@ function compose() {
 }
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -424,11 +444,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = createStore;
 
-var _isPlainObject = __webpack_require__(1);
+var _isPlainObject = __webpack_require__(2);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = __webpack_require__(26);
+var _symbolObservable = __webpack_require__(30);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -681,7 +701,7 @@ var ActionTypes = exports.ActionTypes = {
 }
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -692,27 +712,27 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-var _createStore = __webpack_require__(4);
+var _createStore = __webpack_require__(5);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = __webpack_require__(25);
+var _combineReducers = __webpack_require__(29);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = __webpack_require__(24);
+var _bindActionCreators = __webpack_require__(28);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = __webpack_require__(23);
+var _applyMiddleware = __webpack_require__(27);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-var _compose = __webpack_require__(3);
+var _compose = __webpack_require__(4);
 
 var _compose2 = _interopRequireDefault(_compose);
 
-var _warning = __webpack_require__(6);
+var _warning = __webpack_require__(7);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -733,10 +753,10 @@ exports.combineReducers = _combineReducers2.default;
 exports.bindActionCreators = _bindActionCreators2.default;
 exports.applyMiddleware = _applyMiddleware2.default;
 exports.compose = _compose2.default;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -769,7 +789,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -799,7 +819,46 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 8 */
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function () {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function get() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function get() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -812,10 +871,12 @@ exports.selectGameInvitee = selectGameInvitee;
 exports.fetchGame = fetchGame;
 exports.fetchFriends = fetchFriends;
 exports.submitAnswer = submitAnswer;
-var store = __webpack_require__(9);
-var Levenshtein = __webpack_require__(31);
+/*jshint esversion: 6 */
 
-var _require = __webpack_require__(32),
+var store = __webpack_require__(0);
+var Levenshtein = __webpack_require__(17);
+
+var _require = __webpack_require__(15),
     _answerSubmissionStarted = _require._answerSubmissionStarted,
     _answerSubmitted = _require._answerSubmitted,
     _answerSubmissionFailed = _require._answerSubmissionFailed,
@@ -840,7 +901,7 @@ function fetchGame(gameId) {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      return dispatch(_fetchedGame(json["game"]));
+      return dispatch(_fetchedGame(json.game));
     });
   };
 }
@@ -850,7 +911,7 @@ function fetchFriends() {
     fetch('/friends', { credentials: 'same-origin' }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      dispatch(_fetchFriends(json["friends"]));
+      dispatch(_fetchFriends(json.friends));
     });
   };
 }
@@ -883,7 +944,7 @@ function submitToServer(_ref2) {
   }).then(function (response) {
     return response.json();
   }).then(function (json) {
-    dispatch(_answerSubmitted(json["game"]));
+    dispatch(_answerSubmitted(json.game));
   }).catch(function (error) {
     dispatch(_answerSubmissionFailed(error));
   });
@@ -913,35 +974,19 @@ function submitAnswer(_ref3) {
 }
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var thunkMiddleware = __webpack_require__(22).default;
+/*jshint esversion: 6 */
 
-var _require = __webpack_require__(5),
-    createStore = _require.createStore,
-    applyMiddleware = _require.applyMiddleware;
-
-var reducer = __webpack_require__(10);
-
-var store = createStore(reducer, applyMiddleware(thunkMiddleware));
-module.exports = store;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _require = __webpack_require__(5),
+var _require = __webpack_require__(6),
     combineReducers = _require.combineReducers;
 
-var lastFM = __webpack_require__(11);
-var main = __webpack_require__(12);
+var lastFM = __webpack_require__(13);
+var main = __webpack_require__(14);
 
 module.exports = combineReducers({
   lastFM: lastFM,
@@ -949,11 +994,13 @@ module.exports = combineReducers({
 });
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+/*jshint esversion: 6 */
 
 var defaultState = { searchResults: [] };
 function reducer() {
@@ -972,13 +1019,16 @@ function reducer() {
 module.exports = reducer;
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+/*jshint esversion: 6 */
+
 var defaultState = { friends: [], game: null, error: null };
+
 function reducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
   var action = arguments[1];
@@ -1015,19 +1065,205 @@ function reducer() {
 module.exports = reducer;
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = {
-  store: __webpack_require__(9),
-  actions: __webpack_require__(8)
-};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports._answerSubmissionStarted = _answerSubmissionStarted;
+exports._answerSubmitted = _answerSubmitted;
+exports._answerSubmissionFailed = _answerSubmissionFailed;
+exports._fetchFriends = _fetchFriends;
+exports._performSearch = _performSearch;
+exports._fetchedGame = _fetchedGame;
+exports._selectGameInvitee = _selectGameInvitee;
+/*jshint esversion: 6 */
+
+function _answerSubmissionStarted() {
+  return { type: "ANSWER_SUBMISSION.STARTED" };
+}
+
+function _answerSubmitted(game) {
+  return {
+    type: "ANSWER_SUBMISSION.DONE",
+    data: game
+  };
+}
+
+function _answerSubmissionFailed(error) {
+  return {
+    type: "ANSWER_SUBMISSION.FAILED",
+    data: error
+  };
+}
+
+function _fetchFriends(results) {
+  return {
+    type: "FETCH",
+    data: results
+  };
+}
+
+function _performSearch(results) {
+  return {
+    type: "SEARCH",
+    data: results
+  };
+}
+
+function _fetchedGame(game) {
+  return {
+    type: "GAME.FETCHED",
+    data: game
+  };
+}
+
+function _selectGameInvitee(friend) {
+  return {
+    type: "SELECTED_INVITEE",
+    data: friend
+  };
+}
 
 /***/ }),
-/* 14 */
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*jshint esversion: 6 */
+
+(function () {
+  "use strict";
+
+  module.exports = {
+    store: __webpack_require__(0),
+    actions: __webpack_require__(11)
+  };
+})();
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+(function (root, factory) {
+  if ("function" == 'function' && _typeof(__webpack_require__(10)) == 'object' && __webpack_require__(10)) {
+    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+      return factory(root);
+    }.call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else if (( false ? 'undefined' : _typeof(module)) == 'object' && module && module.exports) {
+    module.exports = factory(root);
+  } else {
+    root.Levenshtein = factory(root);
+  }
+})(undefined, function (root) {
+
+  function forEach(array, fn) {
+    var i, length;
+    i = -1;
+    length = array.length;
+    while (++i < length) {
+      fn(array[i], i, array);
+    }
+  }
+
+  function map(array, fn) {
+    var result;
+    result = Array(array.length);
+    forEach(array, function (val, i, array) {
+      result[i] = fn(val, i, array);
+    });
+    return result;
+  }
+
+  function reduce(array, fn, accumulator) {
+    forEach(array, function (val, i, array) {
+      accumulator = fn(val, i, array);
+    });
+    return accumulator;
+  }
+
+  // Levenshtein distance
+  function Levenshtein(str_m, str_n) {
+    var previous, current, matrix;
+    // Constructor
+    matrix = this._matrix = [];
+
+    // Sanity checks
+    if (str_m == str_n) return this.distance = 0;else if (str_m == '') return this.distance = str_n.length;else if (str_n == '') return this.distance = str_m.length;else {
+      // Danger Will Robinson
+      previous = [0];
+      forEach(str_m, function (v, i) {
+        i++, previous[i] = i;
+      });
+
+      matrix[0] = previous;
+      forEach(str_n, function (n_val, n_idx) {
+        current = [++n_idx];
+        forEach(str_m, function (m_val, m_idx) {
+          m_idx++;
+          if (str_m.charAt(m_idx - 1) == str_n.charAt(n_idx - 1)) current[m_idx] = previous[m_idx - 1];else current[m_idx] = Math.min(previous[m_idx] + 1 // Deletion
+          , current[m_idx - 1] + 1 // Insertion
+          , previous[m_idx - 1] + 1 // Subtraction
+          );
+        });
+        previous = current;
+        matrix[matrix.length] = previous;
+      });
+
+      return this.distance = current[current.length - 1];
+    }
+  }
+
+  Levenshtein.prototype.toString = Levenshtein.prototype.inspect = function inspect(no_print) {
+    var matrix, max, buff, sep, rows;
+    matrix = this.getMatrix();
+    max = reduce(matrix, function (m, o) {
+      return Math.max(m, reduce(o, Math.max, 0));
+    }, 0);
+    buff = Array((max + '').length).join(' ');
+
+    sep = [];
+    while (sep.length < (matrix[0] && matrix[0].length || 0)) {
+      sep[sep.length] = Array(buff.length + 1).join('-');
+    }sep = sep.join('-+') + '-';
+
+    rows = map(matrix, function (row) {
+      var cells;
+      cells = map(row, function (cell) {
+        return (buff + cell).slice(-buff.length);
+      });
+      return cells.join(' |') + ' ';
+    });
+
+    return rows.join("\n" + sep + "\n");
+  };
+
+  Levenshtein.prototype.getMatrix = function () {
+    return this._matrix.slice();
+  };
+
+  Levenshtein.prototype.valueOf = function () {
+    return this.distance;
+  };
+
+  return Levenshtein;
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module)))
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1037,15 +1273,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(0);
+var _Symbol2 = __webpack_require__(1);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
-var _getRawTag = __webpack_require__(17);
+var _getRawTag = __webpack_require__(21);
 
 var _getRawTag2 = _interopRequireDefault(_getRawTag);
 
-var _objectToString = __webpack_require__(18);
+var _objectToString = __webpack_require__(22);
 
 var _objectToString2 = _interopRequireDefault(_objectToString);
 
@@ -1075,7 +1311,7 @@ function baseGetTag(value) {
 exports.default = baseGetTag;
 
 /***/ }),
-/* 15 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1091,10 +1327,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
 
 exports.default = freeGlobal;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ }),
-/* 16 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1104,7 +1340,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _overArg = __webpack_require__(19);
+var _overArg = __webpack_require__(23);
 
 var _overArg2 = _interopRequireDefault(_overArg);
 
@@ -1116,7 +1352,7 @@ var getPrototype = (0, _overArg2.default)(Object.getPrototypeOf, Object);
 exports.default = getPrototype;
 
 /***/ }),
-/* 17 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1126,7 +1362,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(0);
+var _Symbol2 = __webpack_require__(1);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
@@ -1178,7 +1414,7 @@ function getRawTag(value) {
 exports.default = getRawTag;
 
 /***/ }),
-/* 18 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1211,7 +1447,7 @@ function objectToString(value) {
 exports.default = objectToString;
 
 /***/ }),
-/* 19 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1237,7 +1473,7 @@ function overArg(func, transform) {
 exports.default = overArg;
 
 /***/ }),
-/* 20 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1249,7 +1485,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _freeGlobal = __webpack_require__(15);
+var _freeGlobal = __webpack_require__(19);
 
 var _freeGlobal2 = _interopRequireDefault(_freeGlobal);
 
@@ -1264,7 +1500,7 @@ var root = _freeGlobal2.default || freeSelf || Function('return this')();
 exports.default = root;
 
 /***/ }),
-/* 21 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1307,7 +1543,7 @@ function isObjectLike(value) {
 exports.default = isObjectLike;
 
 /***/ }),
-/* 22 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1336,7 +1572,7 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 23 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1347,7 +1583,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = applyMiddleware;
 
-var _compose = __webpack_require__(3);
+var _compose = __webpack_require__(4);
 
 var _compose2 = _interopRequireDefault(_compose);
 
@@ -1409,7 +1645,7 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1471,7 +1707,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 25 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1482,13 +1718,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = combineReducers;
 
-var _createStore = __webpack_require__(4);
+var _createStore = __webpack_require__(5);
 
-var _isPlainObject = __webpack_require__(1);
+var _isPlainObject = __webpack_require__(2);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _warning = __webpack_require__(6);
+var _warning = __webpack_require__(7);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -1620,19 +1856,19 @@ function combineReducers(reducers) {
     return hasChanged ? nextState : state;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 26 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(27);
+module.exports = __webpack_require__(31);
 
 /***/ }),
-/* 27 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1642,7 +1878,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(28);
+var _ponyfill = __webpack_require__(32);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -1666,10 +1902,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(29)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(9)(module)))
 
 /***/ }),
-/* 28 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1696,223 +1932,6 @@ function symbolObservablePonyfill(root) {
 
 	return result;
 };
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function (module) {
-	if (!module.webpackPolyfill) {
-		module.deprecate = function () {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function get() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function get() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-(function (root, factory) {
-  if ("function" == 'function' && _typeof(__webpack_require__(30)) == 'object' && __webpack_require__(30)) {
-    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-      return factory(root);
-    }.call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else if (( false ? 'undefined' : _typeof(module)) == 'object' && module && module.exports) {
-    module.exports = factory(root);
-  } else {
-    root.Levenshtein = factory(root);
-  }
-})(undefined, function (root) {
-
-  function forEach(array, fn) {
-    var i, length;
-    i = -1;
-    length = array.length;
-    while (++i < length) {
-      fn(array[i], i, array);
-    }
-  }
-
-  function map(array, fn) {
-    var result;
-    result = Array(array.length);
-    forEach(array, function (val, i, array) {
-      result[i] = fn(val, i, array);
-    });
-    return result;
-  }
-
-  function reduce(array, fn, accumulator) {
-    forEach(array, function (val, i, array) {
-      accumulator = fn(val, i, array);
-    });
-    return accumulator;
-  }
-
-  // Levenshtein distance
-  function Levenshtein(str_m, str_n) {
-    var previous, current, matrix;
-    // Constructor
-    matrix = this._matrix = [];
-
-    // Sanity checks
-    if (str_m == str_n) return this.distance = 0;else if (str_m == '') return this.distance = str_n.length;else if (str_n == '') return this.distance = str_m.length;else {
-      // Danger Will Robinson
-      previous = [0];
-      forEach(str_m, function (v, i) {
-        i++, previous[i] = i;
-      });
-
-      matrix[0] = previous;
-      forEach(str_n, function (n_val, n_idx) {
-        current = [++n_idx];
-        forEach(str_m, function (m_val, m_idx) {
-          m_idx++;
-          if (str_m.charAt(m_idx - 1) == str_n.charAt(n_idx - 1)) current[m_idx] = previous[m_idx - 1];else current[m_idx] = Math.min(previous[m_idx] + 1 // Deletion
-          , current[m_idx - 1] + 1 // Insertion
-          , previous[m_idx - 1] + 1 // Subtraction
-          );
-        });
-        previous = current;
-        matrix[matrix.length] = previous;
-      });
-
-      return this.distance = current[current.length - 1];
-    }
-  }
-
-  Levenshtein.prototype.toString = Levenshtein.prototype.inspect = function inspect(no_print) {
-    var matrix, max, buff, sep, rows;
-    matrix = this.getMatrix();
-    max = reduce(matrix, function (m, o) {
-      return Math.max(m, reduce(o, Math.max, 0));
-    }, 0);
-    buff = Array((max + '').length).join(' ');
-
-    sep = [];
-    while (sep.length < (matrix[0] && matrix[0].length || 0)) {
-      sep[sep.length] = Array(buff.length + 1).join('-');
-    }sep = sep.join('-+') + '-';
-
-    rows = map(matrix, function (row) {
-      var cells;
-      cells = map(row, function (cell) {
-        return (buff + cell).slice(-buff.length);
-      });
-      return cells.join(' |') + ' ';
-    });
-
-    return rows.join("\n" + sep + "\n");
-  };
-
-  Levenshtein.prototype.getMatrix = function () {
-    return this._matrix.slice();
-  };
-
-  Levenshtein.prototype.valueOf = function () {
-    return this.distance;
-  };
-
-  return Levenshtein;
-});
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29)(module)))
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports._answerSubmissionStarted = _answerSubmissionStarted;
-exports._answerSubmitted = _answerSubmitted;
-exports._answerSubmissionFailed = _answerSubmissionFailed;
-exports._fetchFriends = _fetchFriends;
-exports._performSearch = _performSearch;
-exports._fetchedGame = _fetchedGame;
-exports._selectGameInvitee = _selectGameInvitee;
-function _answerSubmissionStarted() {
-  return { type: "ANSWER_SUBMISSION.STARTED" };
-}
-
-function _answerSubmitted(game) {
-  return {
-    type: "ANSWER_SUBMISSION.DONE",
-    data: game
-  };
-}
-
-function _answerSubmissionFailed(error) {
-  return {
-    type: "ANSWER_SUBMISSION.FAILED",
-    data: error
-  };
-}
-
-function _fetchFriends(results) {
-  return {
-    type: "FETCH",
-    data: results
-  };
-}
-
-function _performSearch(results) {
-  return {
-    type: "SEARCH",
-    data: results
-  };
-}
-
-function _fetchedGame(game) {
-  return {
-    type: "GAME.FETCHED",
-    data: game
-  };
-}
-
-function _selectGameInvitee(friend) {
-  return {
-    type: "SELECTED_INVITEE",
-    data: friend
-  };
-}
 
 /***/ })
 /******/ ])));
