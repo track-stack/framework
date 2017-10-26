@@ -1,6 +1,6 @@
 {
   "name": "trackstack",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Shared code for Track Stack",
   "main": "./lib/trackstack.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "mikekavouras",
   "license": "MIT",
   "dependencies": {
+    "levenshtein": "^1.0.5",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"
   },
