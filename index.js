@@ -77,7 +77,7 @@
 
 var thunkMiddleware = __webpack_require__(27).default;
 
-var _require = __webpack_require__(6),
+var _require = __webpack_require__(7),
     createStore = _require.createStore,
     applyMiddleware = _require.applyMiddleware;
 
@@ -88,6 +88,46 @@ module.exports = store;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/*jshint esversion: 6 */
+
+var ANSWER_SUBMISSION = exports.ANSWER_SUBMISSION = {
+  START: "ANSWER_SUBMISSION.START",
+  SUCCESS: "ANSWER_SUBMISSION.SUCCESS",
+  FAILURE: "ANSWER_SUBMISSION.FAILURE"
+};
+
+var FETCH_FRIENDS = exports.FETCH_FRIENDS = {
+  START: "FETCH_FRIENDS.START",
+  SUCCESS: "FETCH_FRIENDS.SUCCESS",
+  FAILURE: "FETCH_FRIENDS.FAILURE"
+};
+
+var LAST_FM_SEARCH = exports.LAST_FM_SEARCH = {
+  START: "LAST_FM_SEARCH.START",
+  SUCCESS: "LAST_FM_SEARCH.SUCCESS",
+  FAILURE: "LAST_FM_SEARCH.FAILURE"
+};
+
+var FETCH_GAME = exports.FETCH_GAME = {
+  START: "GAME.START",
+  SUCCESS: "GAME.SUCCESS",
+  FAILURE: "GAME.FAILURE"
+};
+
+var INVITEE = exports.INVITEE = {
+  SELECTED: "INVITEE.SELECTED"
+};
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -109,7 +149,7 @@ var _Symbol = _root2.default.Symbol;
 exports.default = _Symbol;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -192,7 +232,7 @@ function isPlainObject(value) {
 exports.default = isPlainObject;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -385,7 +425,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -429,7 +469,7 @@ function compose() {
 }
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -444,7 +484,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = createStore;
 
-var _isPlainObject = __webpack_require__(2);
+var _isPlainObject = __webpack_require__(3);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
@@ -701,7 +741,7 @@ var ActionTypes = exports.ActionTypes = {
 }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -712,7 +752,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-var _createStore = __webpack_require__(5);
+var _createStore = __webpack_require__(6);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
@@ -728,11 +768,11 @@ var _applyMiddleware = __webpack_require__(28);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-var _compose = __webpack_require__(4);
+var _compose = __webpack_require__(5);
 
 var _compose2 = _interopRequireDefault(_compose);
 
-var _warning = __webpack_require__(7);
+var _warning = __webpack_require__(8);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -753,10 +793,10 @@ exports.combineReducers = _combineReducers2.default;
 exports.bindActionCreators = _bindActionCreators2.default;
 exports.applyMiddleware = _applyMiddleware2.default;
 exports.compose = _compose2.default;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -789,7 +829,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -819,7 +859,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -849,7 +889,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -858,7 +898,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -974,24 +1014,6 @@ function submitAnswer(_ref3) {
 }
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-/*jshint esversion: 6 */
-
-var ANSWER_SUBMISSION = exports.ANSWER_SUBMISSION = {
-    STARTED: "ANSWER_SUBMISSION.STARTED",
-    DONE: "ANSWER_SUBMISSION.DONE",
-    FAILED: "ANSWER_SUBMISSION.FAILED"
-};
-
-/***/ }),
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1000,7 +1022,7 @@ var ANSWER_SUBMISSION = exports.ANSWER_SUBMISSION = {
 
 /*jshint esversion: 6 */
 
-var _require = __webpack_require__(6),
+var _require = __webpack_require__(7),
     combineReducers = _require.combineReducers;
 
 var lastFM = __webpack_require__(14);
@@ -1020,13 +1042,17 @@ module.exports = combineReducers({
 
 /*jshint esversion: 6 */
 
+var _require = __webpack_require__(1),
+    LAST_FM_SEARCH = _require.LAST_FM_SEARCH;
+
 var defaultState = { searchResults: [] };
+
 function reducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
   var action = arguments[1];
 
   switch (action.type) {
-    case 'SEARCH':
+    case LAST_FM_SEARCH.SUCCESS:
       {
         return Object.assign({}, state, { searchResults: action.data });
       }
@@ -1045,6 +1071,12 @@ module.exports = reducer;
 
 /*jshint esversion: 6 */
 
+var _require = __webpack_require__(1),
+    FETCH_FRIENDS = _require.FETCH_FRIENDS,
+    ANSWER_SUBMISSION = _require.ANSWER_SUBMISSION,
+    FETCH_GAME = _require.FETCH_GAME,
+    INVITEE = _require.INVITEE;
+
 var defaultState = { friends: [], game: null, error: null };
 
 function reducer() {
@@ -1052,27 +1084,27 @@ function reducer() {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'FETCH':
+    case FETCH_FRIENDS.SUCCES:
       {
         return Object.assign({}, state, { friends: action.data });
       }
-    case 'SELECTED_INVITEE':
+    case INVITEE.SELECTED:
       {
         return Object.assign({}, state, { invitee: action.data });
       }
-    case 'GAME.FETCHED':
+    case FETCH_GAME.SUCCESS:
       {
         return Object.assign({}, state, { game: action.data });
       }
-    case 'ANSWER_SUBMISSION.STARTED':
+    case ANSWER_SUBMISSION.START:
       {
         return Object.assign({}, state, { error: null });
       }
-    case 'ANSWER_SUBMISSION.DONE':
+    case ANSWER_SUBMISSION.SUCCESS:
       {
         return Object.assign({}, state, { game: action.data });
       }
-    case 'ANSWER_SUBMISSION.FAILED':
+    case ANSWER_SUBMISSION.FAILURE:
       {
         return Object.assign({}, state, { error: action.data });
       }
@@ -1102,8 +1134,12 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 /*jshint esversion: 6 */
 
-var _require = __webpack_require__(12),
-    ANSWER_SUBMITTED = _require.ANSWER_SUBMITTED;
+var _require = __webpack_require__(1),
+    ANSWER_SUBMISSION = _require.ANSWER_SUBMISSION,
+    FETCH_FRIENDS = _require.FETCH_FRIENDS,
+    LAST_FM_SEARCH = _require.LAST_FM_SEARCH,
+    FETCH_GAME = _require.FETCH_GAME,
+    INVITEE = _require.INVITEE;
 
 function _answerSubmissionStarted() {
   return { type: ANSWER_SUBMISSION.STARTED };
@@ -1125,28 +1161,28 @@ function _answerSubmissionFailed(error) {
 
 function _fetchFriends(results) {
   return {
-    type: "FETCH",
+    type: FETCH_FRIENDS.SUCCESS,
     data: results
   };
 }
 
 function _performSearch(results) {
   return {
-    type: "SEARCH",
+    type: LAST_FM_SEARCH.SUCCESS,
     data: results
   };
 }
 
 function _fetchedGame(game) {
   return {
-    type: "GAME.FETCHED",
+    type: FETCH_GAME.SUCCESS,
     data: game
   };
 }
 
 function _selectGameInvitee(friend) {
   return {
-    type: "SELECTED_INVITEE",
+    type: INVITEE.SELECTED,
     data: friend
   };
 }
@@ -1165,7 +1201,7 @@ function _selectGameInvitee(friend) {
 
   module.exports = {
     store: __webpack_require__(0),
-    actions: __webpack_require__(11)
+    actions: __webpack_require__(12)
   };
 })();
 
@@ -1179,7 +1215,7 @@ function _selectGameInvitee(friend) {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (root, factory) {
-  if ("function" == 'function' && _typeof(__webpack_require__(10)) == 'object' && __webpack_require__(10)) {
+  if ("function" == 'function' && _typeof(__webpack_require__(11)) == 'object' && __webpack_require__(11)) {
     !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
       return factory(root);
     }.call(exports, __webpack_require__, exports, module),
@@ -1282,7 +1318,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   return Levenshtein;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)(module)))
 
 /***/ }),
 /* 19 */
@@ -1295,7 +1331,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(1);
+var _Symbol2 = __webpack_require__(2);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
@@ -1349,7 +1385,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
 
 exports.default = freeGlobal;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
 /* 21 */
@@ -1384,7 +1420,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(1);
+var _Symbol2 = __webpack_require__(2);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
@@ -1605,7 +1641,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = applyMiddleware;
 
-var _compose = __webpack_require__(4);
+var _compose = __webpack_require__(5);
 
 var _compose2 = _interopRequireDefault(_compose);
 
@@ -1740,13 +1776,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = combineReducers;
 
-var _createStore = __webpack_require__(5);
+var _createStore = __webpack_require__(6);
 
-var _isPlainObject = __webpack_require__(2);
+var _isPlainObject = __webpack_require__(3);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _warning = __webpack_require__(7);
+var _warning = __webpack_require__(8);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -1878,7 +1914,7 @@ function combineReducers(reducers) {
     return hasChanged ? nextState : state;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 31 */
@@ -1924,7 +1960,7 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(9)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(10)(module)))
 
 /***/ }),
 /* 33 */
