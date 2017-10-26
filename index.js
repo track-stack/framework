@@ -1882,7 +1882,7 @@ function _answerSubmitted(game) {
 function _answerSubmissionFailed(error) {
   return {
     type: "ANSWER_SUBMISSION.FAILED",
-    data: ""
+    data: error
   };
 }
 
