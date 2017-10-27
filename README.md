@@ -28,3 +28,4 @@ http://ccoenraets.github.io/es6-tutorial/setup-webpack/
 **TypeScript**  
 https://stackoverflow.com/questions/31173738/typescript-getting-error-ts2304-cannot-find-name-require
 https://github.com/s-panferov/awesome-typescript-loader/issues/404
+https://stackoverflow.com/questions/43595555/webpack-cant-resolve-typescript-modules
