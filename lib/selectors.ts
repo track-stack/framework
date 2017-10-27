@@ -1,29 +1,47 @@
 /*jshint esversion: 6 */
 
-const {
+import {
   ANSWER_SUBMISSION,
   FETCH_FRIENDS,
   LAST_FM_SEARCH,
   FETCH_GAME,
   INVITEE
-} = require('./constants')
+} from './constants'
 
-export function _answerSubmissionStarted() {
+import {
+  Game
+} from './types'
+
+interface AnswerSubmissionStartType {
+  type: string
+}
+
+interface AnswerSubmittedType {
+  type: string
+  data: Game
+}
+
+interface AnswerSubmissionFailedType {
+  type: string
+  data: string
+}
+
+export function _answerSubmissionStarted(): AnswerSubmissionStartType {
   return { 
     type: ANSWER_SUBMISSION.START
   }
 }
 
-export function _answerSubmitted(game) {
+export function _answerSubmitted(game: Game): AnswerSubmittedType {
   return {
     type: ANSWER_SUBMISSION.SUCCESS,
     data: game,
   }
 }
 
-export function _answerSubmissionFailed(error) {
+export function _answerSubmissionFailed(error): AnswerSubmissionFailedType {
   return {
-    type: ANSWER_SUBMISSION.FAILED,
+    type: ANSWER_SUBMISSION.FAILURE,
     data: error
   }
 }
@@ -42,7 +60,12 @@ export function _performSearch(results) {
   }
 }
 
-export function _fetchedGame(game) {
+interface FetchGameSelector {
+  type: string
+  data: Game
+}
+
+export function _fetchedGame(game: Game): FetchGameSelector {
   return {
     type: FETCH_GAME.SUCCESS,
     data: game

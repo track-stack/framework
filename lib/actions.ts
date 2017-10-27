@@ -12,6 +12,10 @@ import {
   _selectGameInvitee,
 } from './selectors'
 
+import {
+  Game
+} from './types'
+
 export function selectGameInvitee(friend) {
   return dispatch => {
     return dispatch(_selectGameInvitee(friend))
@@ -26,7 +30,8 @@ export function fetchGame(gameId) {
         'X-Requested-With': 'XMLHttpRequest'
       }
     }).then(response => response.json()).then(json => {
-      return dispatch(_fetchedGame(json.game));
+      const game = Game.from(json.game)
+      return dispatch(_fetchedGame(game));
     })
   }
 }
@@ -59,7 +64,8 @@ function submitToServer({dispatch, gameId, answer, match, distance}) {
     body: JSON.stringify(data),
   }).then(response => response.json())
    .then(json => {
-     dispatch(_answerSubmitted(json.game))
+     const game = Game.from(json.game)
+     dispatch(_answerSubmitted(game))
    })
   .catch(error => {
     dispatch(_answerSubmissionFailed(error))

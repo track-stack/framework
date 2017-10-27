@@ -14,7 +14,15 @@ module.exports = {
         query: {
           presets: ['es2017']
         }
+      },
+      {
+        test: /\.ts|\.tsx$/,
+        use: 'ts-loader',
+        include: __dirname
       }
     ]
+  },
+  resolve: {
+    extensions: ['.ts', '.js', '.json']
   }
 }
