@@ -1708,12 +1708,14 @@ const {
 } = __webpack_require__(0);
 
 function _answerSubmissionStarted() {
-  return { type: ANSWER_SUBMISSION.STARTED };
+  return {
+    type: ANSWER_SUBMISSION.START
+  };
 }
 
 function _answerSubmitted(game) {
   return {
-    type: ANSWER_SUBMISSION.DONE,
+    type: ANSWER_SUBMISSION.SUCCESS,
     data: game
   };
 }
