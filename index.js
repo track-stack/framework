@@ -114,33 +114,34 @@ const INVITEE = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux_thunk__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_redux_thunk__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_redux__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__reducers_index__ = __webpack_require__(28);
 /*jshint esversion: 6 */
 
-const thunkMiddleware = __webpack_require__(11).default;
-const { createStore, applyMiddleware } = __webpack_require__(2);
-const reducer = __webpack_require__(27);
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
-/* harmony default export */ __webpack_exports__["a"] = (store);
+
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1_redux__["c" /* createStore */](__WEBPACK_IMPORTED_MODULE_2__reducers_index__["a" /* default */], __WEBPACK_IMPORTED_MODULE_1_redux__["a" /* applyMiddleware */](__WEBPACK_IMPORTED_MODULE_0_redux_thunk___default.a)));
 
 /***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(8);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "compose", function() { return __WEBPACK_IMPORTED_MODULE_4__compose__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
+/* unused harmony reexport bindActionCreators */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__["a"]; });
+/* unused harmony reexport compose */
 
 
 
@@ -359,7 +360,7 @@ process.umask = function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
 /* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
 
 
@@ -615,9 +616,9 @@ var ActionTypes = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(20);
 
 
 
@@ -685,7 +686,7 @@ function isPlainObject(value) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(14);
 
 
 /** Built-in value references. */
@@ -791,7 +792,7 @@ function compose() {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(1);
 /*jshint esversion: 6 */
 
@@ -807,6 +808,95 @@ const actions = __WEBPACK_IMPORTED_MODULE_0__actions__;
 
 /***/ }),
 /* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["selectGameInvitee"] = selectGameInvitee;
+/* harmony export (immutable) */ __webpack_exports__["fetchGame"] = fetchGame;
+/* harmony export (immutable) */ __webpack_exports__["fetchFriends"] = fetchFriends;
+/* harmony export (immutable) */ __webpack_exports__["submitAnswer"] = submitAnswer;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_levenshtein__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_levenshtein___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_levenshtein__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__selectors__ = __webpack_require__(32);
+/*jshint esversion: 6 */
+
+
+
+
+
+function selectGameInvitee(friend) {
+  return dispatch => {
+    return dispatch(__WEBPACK_IMPORTED_MODULE_2__selectors__["f" /* _selectGameInvitee */](friend));
+  };
+}
+
+function fetchGame(gameId) {
+  return dispatch => {
+    fetch(`/games/${gameId}`, {
+      credentials: 'same-origin',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    }).then(response => response.json()).then(json => {
+      return dispatch(__WEBPACK_IMPORTED_MODULE_2__selectors__["e" /* _fetchedGame */](json.game));
+    });
+  };
+}
+
+function fetchFriends() {
+  return dispatch => {
+    fetch('/friends', { credentials: 'same-origin' }).then(response => response.json()).then(json => {
+      dispatch(__WEBPACK_IMPORTED_MODULE_2__selectors__["d" /* _fetchFriends */](json.friends));
+    });
+  };
+}
+
+function performSearch({ answer }) {
+  const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
+  return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${answer}&api_key=${apiKey}&format=json`).then(response => response.json());
+}
+
+function submitToServer({ dispatch, gameId, answer, match, distance }) {
+  const data = { answer, match, distance };
+  fetch(`/games/${gameId}/turn`, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }).then(response => response.json()).then(json => {
+    dispatch(__WEBPACK_IMPORTED_MODULE_2__selectors__["c" /* _answerSubmitted */](json.game));
+  }).catch(error => {
+    dispatch(__WEBPACK_IMPORTED_MODULE_2__selectors__["a" /* _answerSubmissionFailed */](error));
+  });
+}
+
+function submitAnswer({ gameId, answer }) {
+  return dispatch => {
+    dispatch(__WEBPACK_IMPORTED_MODULE_2__selectors__["b" /* _answerSubmissionStarted */]());
+    performSearch({ answer }).then(json => {
+      if (json && json.results && json.results.trackmatches) {
+        const tracks = json.results.trackmatches.track;
+        if (tracks.length > 0) {
+          const match = tracks[0];
+          const distance = new __WEBPACK_IMPORTED_MODULE_1_levenshtein___default.a(match.name.toLowerCase(), answer.toLowerCase()).distance;
+          submitToServer({ dispatch, gameId, answer, match, distance });
+        } else {
+          __WEBPACK_IMPORTED_MODULE_2__selectors__["a" /* _answerSubmissionFailed */]("no match found");
+        }
+      } else {
+        __WEBPACK_IMPORTED_MODULE_2__selectors__["a" /* _answerSubmissionFailed */]("no match found");
+      }
+    });
+  };
+}
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -835,13 +925,13 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(17);
 
 
 
@@ -870,11 +960,11 @@ function baseGetTag(value) {
 /* harmony default export */ __webpack_exports__["a"] = (baseGetTag);
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(15);
 
 
 /** Detect free variable `self`. */
@@ -886,7 +976,7 @@ var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || fr
 /* harmony default export */ __webpack_exports__["a"] = (root);
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -897,7 +987,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(7)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -950,7 +1040,7 @@ function getRawTag(value) {
 /* harmony default export */ __webpack_exports__["a"] = (getRawTag);
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -978,11 +1068,11 @@ function objectToString(value) {
 /* harmony default export */ __webpack_exports__["a"] = (objectToString);
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(19);
 
 
 /** Built-in value references. */
@@ -991,7 +1081,7 @@ var getPrototype = __WEBPACK_IMPORTED_MODULE_0__overArg_js__["a" /* default */](
 /* harmony default export */ __webpack_exports__["a"] = (getPrototype);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1012,7 +1102,7 @@ function overArg(func, transform) {
 /* harmony default export */ __webpack_exports__["a"] = (overArg);
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1047,13 +1137,13 @@ function isObjectLike(value) {
 /* harmony default export */ __webpack_exports__["a"] = (isObjectLike);
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(21);
+module.exports = __webpack_require__(22);
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1063,7 +1153,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(23);
+var _ponyfill = __webpack_require__(24);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -1087,10 +1177,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(22)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(23)(module)))
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 module.exports = function (module) {
@@ -1117,7 +1207,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1146,7 +1236,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1287,11 +1377,11 @@ function combineReducers(reducers) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = bindActionCreators;
+/* unused harmony export default */
 function bindActionCreator(actionCreator, dispatch) {
   return function () {
     return dispatch(actionCreator.apply(undefined, arguments));
@@ -1341,7 +1431,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1405,184 +1495,89 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lastfm__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__main__ = __webpack_require__(30);
 /*jshint esversion: 6 */
 
-const { combineReducers } = __webpack_require__(2);
-const lastFM = __webpack_require__(28);
-const main = __webpack_require__(29);
 
-module.exports = combineReducers({
-  lastFM,
-  main
-});
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */]({
+  lastFM: __WEBPACK_IMPORTED_MODULE_1__lastfm__["a" /* default */],
+  main: __WEBPACK_IMPORTED_MODULE_2__main__["a" /* default */]
+}));
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(0);
 /*jshint esversion: 6 */
 
-const {
-  LAST_FM_SEARCH
-} = __webpack_require__(0);
+
 
 const defaultState = { searchResults: [] };
 
-function reducer(state = defaultState, action) {
+/* harmony default export */ __webpack_exports__["a"] = (function (state = defaultState, action) {
   switch (action.type) {
-    case LAST_FM_SEARCH.SUCCESS:
+    case __WEBPACK_IMPORTED_MODULE_0__constants__["LAST_FM_SEARCH"].SUCCESS:
       {
         return Object.assign({}, state, { searchResults: action.data });
       }
     default:
       return state;
   }
-}
-module.exports = reducer;
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*jshint esversion: 6 */
-
-const {
-  FETCH_FRIENDS,
-  ANSWER_SUBMISSION,
-  FETCH_GAME,
-  INVITEE
-} = __webpack_require__(0);
-
-const defaultState = { friends: [], game: null, error: null };
-
-function reducer(state = defaultState, action) {
-  switch (action.type) {
-    case FETCH_FRIENDS.SUCCESS:
-      {
-        return Object.assign({}, state, { friends: action.data });
-      }
-    case INVITEE.SELECTED:
-      {
-        return Object.assign({}, state, { invitee: action.data });
-      }
-    case FETCH_GAME.SUCCESS:
-      {
-        return Object.assign({}, state, { game: action.data });
-      }
-    case ANSWER_SUBMISSION.START:
-      {
-        return Object.assign({}, state, { error: null });
-      }
-    case ANSWER_SUBMISSION.SUCCESS:
-      {
-        return Object.assign({}, state, { game: action.data });
-      }
-    case ANSWER_SUBMISSION.FAILURE:
-      {
-        return Object.assign({}, state, { error: action.data });
-      }
-    default:
-      return state;
-  }
-}
-module.exports = reducer;
+});
 
 /***/ }),
 /* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["selectGameInvitee"] = selectGameInvitee;
-/* harmony export (immutable) */ __webpack_exports__["fetchGame"] = fetchGame;
-/* harmony export (immutable) */ __webpack_exports__["fetchFriends"] = fetchFriends;
-/* harmony export (immutable) */ __webpack_exports__["submitAnswer"] = submitAnswer;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(0);
 /*jshint esversion: 6 */
 
 
-const Levenshtein = __webpack_require__(31);
-const {
-  _answerSubmissionStarted,
-  _answerSubmitted,
-  _answerSubmissionFailed,
-  _fetchFriends,
-  _performSearch,
-  _fetchedGame,
-  _selectGameInvitee
-} = __webpack_require__(32);
 
-function selectGameInvitee(friend) {
-  return dispatch => {
-    return dispatch(_selectGameInvitee(friend));
-  };
-}
+const defaultState = { friends: [], game: null, error: null };
 
-function fetchGame(gameId) {
-  return dispatch => {
-    fetch(`/games/${gameId}`, {
-      credentials: 'same-origin',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
+/* harmony default export */ __webpack_exports__["a"] = (function (state = defaultState, action) {
+  switch (action.type) {
+    case __WEBPACK_IMPORTED_MODULE_0__constants__["FETCH_FRIENDS"].SUCCESS:
+      {
+        return Object.assign({}, state, { friends: action.data });
       }
-    }).then(response => response.json()).then(json => {
-      return dispatch(_fetchedGame(json.game));
-    });
-  };
-}
-
-function fetchFriends() {
-  return dispatch => {
-    fetch('/friends', { credentials: 'same-origin' }).then(response => response.json()).then(json => {
-      dispatch(_fetchFriends(json.friends));
-    });
-  };
-}
-
-function performSearch({ answer }) {
-  const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
-  return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${answer}&api_key=${apiKey}&format=json`).then(response => response.json());
-}
-
-function submitToServer({ dispatch, gameId, answer, match, distance }) {
-  const data = { answer, match, distance };
-  fetch(`/games/${gameId}/turn`, {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  }).then(response => response.json()).then(json => {
-    dispatch(_answerSubmitted(json.game));
-  }).catch(error => {
-    dispatch(_answerSubmissionFailed(error));
-  });
-}
-
-function submitAnswer({ gameId, answer }) {
-  return dispatch => {
-    dispatch(_answerSubmissionStarted());
-    performSearch({ answer }).then(json => {
-      if (json && json.results && json.results.trackmatches) {
-        const tracks = json.results.trackmatches.track;
-        if (tracks.length > 0) {
-          const match = tracks[0];
-          const distance = new Levenshtein(match.name.toLowerCase(), answer.toLowerCase()).distance;
-          submitToServer({ dispatch, gameId, answer, match, distance });
-        } else {
-          _answerSubmissionFailed("no match found");
-        }
-      } else {
-        _answerSubmissionFailed("no match found");
+    case __WEBPACK_IMPORTED_MODULE_0__constants__["INVITEE"].SELECTED:
+      {
+        return Object.assign({}, state, { invitee: action.data });
       }
-    });
-  };
-}
+    case __WEBPACK_IMPORTED_MODULE_0__constants__["FETCH_GAME"].SUCCESS:
+      {
+        return Object.assign({}, state, { game: action.data });
+      }
+    case __WEBPACK_IMPORTED_MODULE_0__constants__["ANSWER_SUBMISSION"].START:
+      {
+        return Object.assign({}, state, { error: null });
+      }
+    case __WEBPACK_IMPORTED_MODULE_0__constants__["ANSWER_SUBMISSION"].SUCCESS:
+      {
+        return Object.assign({}, state, { game: action.data });
+      }
+    case __WEBPACK_IMPORTED_MODULE_0__constants__["ANSWER_SUBMISSION"].FAILURE:
+      {
+        return Object.assign({}, state, { error: action.data });
+      }
+    default:
+      return state;
+  }
+});
 
 /***/ }),
 /* 31 */
@@ -1695,14 +1690,13 @@ var __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["_answerSubmissionStarted"] = _answerSubmissionStarted;
-/* harmony export (immutable) */ __webpack_exports__["_answerSubmitted"] = _answerSubmitted;
-/* harmony export (immutable) */ __webpack_exports__["_answerSubmissionFailed"] = _answerSubmissionFailed;
-/* harmony export (immutable) */ __webpack_exports__["_fetchFriends"] = _fetchFriends;
-/* harmony export (immutable) */ __webpack_exports__["_performSearch"] = _performSearch;
-/* harmony export (immutable) */ __webpack_exports__["_fetchedGame"] = _fetchedGame;
-/* harmony export (immutable) */ __webpack_exports__["_selectGameInvitee"] = _selectGameInvitee;
+/* harmony export (immutable) */ __webpack_exports__["b"] = _answerSubmissionStarted;
+/* harmony export (immutable) */ __webpack_exports__["c"] = _answerSubmitted;
+/* harmony export (immutable) */ __webpack_exports__["a"] = _answerSubmissionFailed;
+/* harmony export (immutable) */ __webpack_exports__["d"] = _fetchFriends;
+/* unused harmony export _performSearch */
+/* harmony export (immutable) */ __webpack_exports__["e"] = _fetchedGame;
+/* harmony export (immutable) */ __webpack_exports__["f"] = _selectGameInvitee;
 /*jshint esversion: 6 */
 
 const {
