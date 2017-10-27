@@ -73,26 +73,6 @@
 "use strict";
 
 
-/*jshint esversion: 6 */
-
-var thunkMiddleware = __webpack_require__(27).default;
-
-var _require = __webpack_require__(7),
-    createStore = _require.createStore,
-    applyMiddleware = _require.applyMiddleware;
-
-var reducer = __webpack_require__(13);
-
-var store = createStore(reducer, applyMiddleware(thunkMiddleware));
-module.exports = store;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -125,6 +105,26 @@ var FETCH_GAME = exports.FETCH_GAME = {
 var INVITEE = exports.INVITEE = {
   SELECTED: "INVITEE.SELECTED"
 };
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*jshint esversion: 6 */
+
+var thunkMiddleware = __webpack_require__(27).default;
+
+var _require = __webpack_require__(7),
+    createStore = _require.createStore,
+    applyMiddleware = _require.applyMiddleware;
+
+var reducer = __webpack_require__(13);
+
+var store = createStore(reducer, applyMiddleware(thunkMiddleware));
+module.exports = store;
 
 /***/ }),
 /* 2 */
@@ -913,7 +913,7 @@ exports.fetchFriends = fetchFriends;
 exports.submitAnswer = submitAnswer;
 /*jshint esversion: 6 */
 
-var store = __webpack_require__(0);
+var store = __webpack_require__(1);
 var Levenshtein = __webpack_require__(18);
 
 var _require = __webpack_require__(16),
@@ -1042,7 +1042,7 @@ module.exports = combineReducers({
 
 /*jshint esversion: 6 */
 
-var _require = __webpack_require__(1),
+var _require = __webpack_require__(0),
     LAST_FM_SEARCH = _require.LAST_FM_SEARCH;
 
 var defaultState = { searchResults: [] };
@@ -1071,7 +1071,7 @@ module.exports = reducer;
 
 /*jshint esversion: 6 */
 
-var _require = __webpack_require__(1),
+var _require = __webpack_require__(0),
     FETCH_FRIENDS = _require.FETCH_FRIENDS,
     ANSWER_SUBMISSION = _require.ANSWER_SUBMISSION,
     FETCH_GAME = _require.FETCH_GAME,
@@ -1084,7 +1084,7 @@ function reducer() {
   var action = arguments[1];
 
   switch (action.type) {
-    case FETCH_FRIENDS.SUCCES:
+    case FETCH_FRIENDS.SUCCESS:
       {
         return Object.assign({}, state, { friends: action.data });
       }
@@ -1134,7 +1134,7 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 /*jshint esversion: 6 */
 
-var _require = __webpack_require__(1),
+var _require = __webpack_require__(0),
     ANSWER_SUBMISSION = _require.ANSWER_SUBMISSION,
     FETCH_FRIENDS = _require.FETCH_FRIENDS,
     LAST_FM_SEARCH = _require.LAST_FM_SEARCH,
@@ -1200,7 +1200,7 @@ function _selectGameInvitee(friend) {
   "use strict";
 
   module.exports = {
-    store: __webpack_require__(0),
+    store: __webpack_require__(1),
     actions: __webpack_require__(12)
   };
 })();
