@@ -12,11 +12,9 @@ import {
   _selectGameInvitee,
 } from './selectors'
 
-import {
-  Game
-} from './types'
+import { Game, Friend } from './types'
 
-export function selectGameInvitee(friend) {
+export function selectGameInvitee(friend: Friend) {
   return dispatch => {
     return dispatch(_selectGameInvitee(friend))
   }
@@ -41,7 +39,10 @@ export function fetchFriends() {
     fetch('/friends', { credentials: 'same-origin' })
       .then(response => response.json())
       .then(json => {
-        dispatch(_fetchFriends(json.friends))
+        const friends: [Friend] = json.friends.map(friend => {
+          return Friend.from(friend)
+        })
+        dispatch(_fetchFriends(friends))
       })
   }
 }

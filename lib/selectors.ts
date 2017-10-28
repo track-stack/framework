@@ -8,9 +8,7 @@ import {
   INVITEE
 } from './constants'
 
-import {
-  Game
-} from './types'
+import { Game, Friend } from './types'
 
 interface AnswerSubmissionStartType {
   type: string
@@ -46,10 +44,15 @@ export function _answerSubmissionFailed(error): AnswerSubmissionFailedType {
   }
 }
 
-export function _fetchFriends(results) {
+interface FetchFriendsSelector {
+  type: string
+  data: [Friend]
+}
+
+export function _fetchFriends(friends: [Friend]) {
   return {
     type: FETCH_FRIENDS.SUCCESS,
-    data: results
+    data: friends 
   }
 }
 
@@ -72,7 +75,12 @@ export function _fetchedGame(game: Game): FetchGameSelector {
   }
 }
 
-export function _selectGameInvitee(friend) {
+interface SelectGameInviteeSelector {
+  type: string
+  data: Friend
+}
+
+export function _selectGameInvitee(friend: Friend): SelectGameInviteeSelector {
   return {
     type: INVITEE.SELECTED,
     data: friend
