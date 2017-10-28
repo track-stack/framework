@@ -809,24 +809,16 @@ function compose() {
 
 /***/ }),
 /* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__actions__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__store__);
+
 /*jshint esversion: 6 */
-
-
-
-
-const store = __WEBPACK_IMPORTED_MODULE_1__store___default.a;
-/* harmony export (immutable) */ __webpack_exports__["store"] = store;
-
-const actions = __WEBPACK_IMPORTED_MODULE_0__actions__;
-/* harmony export (immutable) */ __webpack_exports__["actions"] = actions;
+exports.__esModule = true;
+var a = __webpack_require__(12);
+var store_1 = __webpack_require__(19);
+exports.store = store_1["default"];
+exports.actions = a;
 
 
 /***/ }),

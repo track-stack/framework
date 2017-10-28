@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./lib/trackstack.js",
+  entry: "./lib/trackstack.ts",
   output: {
     path: __dirname,
     filename: "index.js",
