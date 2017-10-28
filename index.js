@@ -865,7 +865,6 @@ function fetchFriends() {
         fetch('/friends', { credentials: 'same-origin' })
             .then(function (response) { return response.json(); })
             .then(function (json) {
-            console.log(json);
             var friends = json.friends.map(function (friend) {
                 return types_1.Friend.from(friend);
             });
@@ -1171,7 +1170,6 @@ var Friend = /** @class */ (function () {
         this.picture = picture;
     }
     Friend.from = function (json) {
-        console.log(json);
         return new Friend(json.id, json.name, json.picture);
     };
     return Friend;
