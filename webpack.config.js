@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./lib/trackstack.js",
+  entry: "./lib/trackstack.ts",
   output: {
     path: __dirname,
     filename: "index.js",
@@ -14,7 +14,15 @@ module.exports = {
         query: {
           presets: ['es2017']
         }
+      },
+      {
+        test: /\.ts|\.tsx$/,
+        use: 'ts-loader',
+        include: __dirname
       }
     ]
+  },
+  resolve: {
+    extensions: ['.ts', '.js', '.json']
   }
 }

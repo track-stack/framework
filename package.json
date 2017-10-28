@@ -1,6 +1,6 @@
 {
   "name": "trackstack",
-  "version": "0.0.18",
+  "version": "0.0.20",
   "description": "Shared code for Track Stack",
   "main": "./lib/trackstack.js",
   "scripts": {
@@ -14,9 +14,12 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "@types/node": "^8.0.47",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2017": "^6.24.1",
+    "ts-loader": "^3.1.0",
+    "typescript": "^2.5.3",
     "webpack": "3.0"
   }
 }

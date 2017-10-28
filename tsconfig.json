@@ -1,0 +1,6 @@
+{
+    "files": [
+        "lib/constants.ts",
+        "lib/selectors.ts"
+    ]
+}

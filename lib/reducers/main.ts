@@ -12,22 +12,22 @@ const defaultState = { friends: [], game: null, error: null }
 export default function(state = defaultState, action) {
   switch (action.type) {
     case FETCH_FRIENDS.SUCCESS: {
-      return Object.assign({}, state, { friends: action.data });
+      return (<any>Object).assign({}, state, { friends: action.data });
     }
     case INVITEE.SELECTED: {
-      return Object.assign({}, state, { invitee: action.data });
+      return (<any>Object).assign({}, state, { invitee: action.data });
     }
     case FETCH_GAME.SUCCESS: {
-      return Object.assign({}, state, { game: action.data });
+      return (<any>Object).assign({}, state, { game: action.data });
     }
     case ANSWER_SUBMISSION.START: {
-      return Object.assign({}, state, { error: null });
+      return (<any>Object).assign({}, state, { error: null });
     }
     case ANSWER_SUBMISSION.SUCCESS: {
-      return Object.assign({}, state, { game: action.data });
+      return (<any>Object).assign({}, state, { game: action.data });
     }
       case ANSWER_SUBMISSION.FAILURE: {
-      return Object.assign({}, state, { error: action.data });
+      return (<any>Object).assign({}, state, { error: action.data });
     }
     default:
       return state;
