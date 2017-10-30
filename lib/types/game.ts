@@ -8,7 +8,7 @@ interface GamePlayers {
   opponent: Player
 }
 
-    export default class Game {
+export default class Game {
   id: number
   players: GamePlayers
   status: number
@@ -26,7 +26,7 @@ interface GamePlayers {
        return Turn.from(turn)
     })
     const players: GamePlayers = {
-      viewer: json.players.viewer, 
+      viewer: json.players.viewer,
       opponent: json.players.opponent
     }
     return new Game(json.id, players, json.status, turns)
