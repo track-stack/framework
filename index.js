@@ -153,9 +153,9 @@ exports["default"] = Match;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(9);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
@@ -381,7 +381,7 @@ process.umask = function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
 /* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
 
 
@@ -637,9 +637,9 @@ var ActionTypes = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(27);
 
 
 
@@ -707,7 +707,7 @@ function isPlainObject(value) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(21);
 
 
 /** Built-in value references. */
@@ -816,7 +816,7 @@ function compose() {
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var a = __webpack_require__(12);
-var store_1 = __webpack_require__(19);
+var store_1 = __webpack_require__(18);
 exports.store = store_1["default"];
 exports.actions = a;
 
@@ -829,9 +829,8 @@ exports.actions = a;
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var levenshtein_1 = __webpack_require__(13);
-var selectors_1 = __webpack_require__(14);
-var types_1 = __webpack_require__(15);
+var selectors_1 = __webpack_require__(13);
+var types_1 = __webpack_require__(14);
 function selectGameInvitee(friend) {
     return function (dispatch) {
         return dispatch(selectors_1._selectGameInvitee(friend));
@@ -872,8 +871,8 @@ function performSearch(_a) {
         .then(function (response) { return response.json(); });
 }
 function submitToServer(_a) {
-    var dispatch = _a.dispatch, gameId = _a.gameId, answer = _a.answer, match = _a.match, distance = _a.distance;
-    var data = { answer: answer, match: match, distance: distance };
+    var dispatch = _a.dispatch, gameId = _a.gameId, answer = _a.answer, match = _a.match;
+    var data = { answer: answer, match: match };
     fetch("/games/" + gameId + "/turn", {
         method: 'POST',
         credentials: 'same-origin',
@@ -899,8 +898,7 @@ function submitAnswer(_a) {
                 var tracks = json.results.trackmatches.track;
                 if (tracks.length > 0) {
                     var match = tracks[0];
-                    var distance = new levenshtein_1["default"](match.name.toLowerCase(), answer.toLowerCase()).distance;
-                    submitToServer({ dispatch: dispatch, gameId: gameId, answer: answer, match: match, distance: distance });
+                    submitToServer({ dispatch: dispatch, gameId: gameId, answer: answer, match: match });
                 }
                 else {
                     selectors_1._answerSubmissionFailed("no match found");
@@ -917,112 +915,6 @@ exports.submitAnswer = submitAnswer;
 
 /***/ }),
 /* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
-  if (true) {
-    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-      return factory(root);
-    }.call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else if (typeof module == 'object' && module && module.exports) {
-    module.exports = factory(root);
-  } else {
-    root.Levenshtein = factory(root);
-  }
-})(this, function (root) {
-
-  function forEach(array, fn) {
-    var i, length;
-    i = -1;
-    length = array.length;
-    while (++i < length) fn(array[i], i, array);
-  }
-
-  function map(array, fn) {
-    var result;
-    result = Array(array.length);
-    forEach(array, function (val, i, array) {
-      result[i] = fn(val, i, array);
-    });
-    return result;
-  }
-
-  function reduce(array, fn, accumulator) {
-    forEach(array, function (val, i, array) {
-      accumulator = fn(val, i, array);
-    });
-    return accumulator;
-  }
-
-  // Levenshtein distance
-  function Levenshtein(str_m, str_n) {
-    var previous, current, matrix;
-    // Constructor
-    matrix = this._matrix = [];
-
-    // Sanity checks
-    if (str_m == str_n) return this.distance = 0;else if (str_m == '') return this.distance = str_n.length;else if (str_n == '') return this.distance = str_m.length;else {
-      // Danger Will Robinson
-      previous = [0];
-      forEach(str_m, function (v, i) {
-        i++, previous[i] = i;
-      });
-
-      matrix[0] = previous;
-      forEach(str_n, function (n_val, n_idx) {
-        current = [++n_idx];
-        forEach(str_m, function (m_val, m_idx) {
-          m_idx++;
-          if (str_m.charAt(m_idx - 1) == str_n.charAt(n_idx - 1)) current[m_idx] = previous[m_idx - 1];else current[m_idx] = Math.min(previous[m_idx] + 1 // Deletion
-          , current[m_idx - 1] + 1 // Insertion
-          , previous[m_idx - 1] + 1 // Subtraction
-          );
-        });
-        previous = current;
-        matrix[matrix.length] = previous;
-      });
-
-      return this.distance = current[current.length - 1];
-    }
-  }
-
-  Levenshtein.prototype.toString = Levenshtein.prototype.inspect = function inspect(no_print) {
-    var matrix, max, buff, sep, rows;
-    matrix = this.getMatrix();
-    max = reduce(matrix, function (m, o) {
-      return Math.max(m, reduce(o, Math.max, 0));
-    }, 0);
-    buff = Array((max + '').length).join(' ');
-
-    sep = [];
-    while (sep.length < (matrix[0] && matrix[0].length || 0)) sep[sep.length] = Array(buff.length + 1).join('-');
-    sep = sep.join('-+') + '-';
-
-    rows = map(matrix, function (row) {
-      var cells;
-      cells = map(row, function (cell) {
-        return (buff + cell).slice(-buff.length);
-      });
-      return cells.join(' |') + ' ';
-    });
-
-    return rows.join("\n" + sep + "\n");
-  };
-
-  Levenshtein.prototype.getMatrix = function () {
-    return this._matrix.slice();
-  };
-
-  Levenshtein.prototype.valueOf = function () {
-    return this.distance;
-  };
-
-  return Levenshtein;
-});
-
-/***/ }),
-/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1081,6 +973,26 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 
 /***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/*jshint esversion: 6 */
+exports.__esModule = true;
+var game_1 = __webpack_require__(15);
+exports.Game = game_1["default"];
+var player_1 = __webpack_require__(16);
+exports.Player = player_1["default"];
+var match_1 = __webpack_require__(2);
+exports.Match = match_1["default"];
+var turn_1 = __webpack_require__(1);
+exports.Turn = turn_1["default"];
+var fb_friend_1 = __webpack_require__(17);
+exports.Friend = fb_friend_1["default"];
+
+
+/***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1088,26 +1000,9 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var game_1 = __webpack_require__(16);
-exports.Game = game_1["default"];
-var player_1 = __webpack_require__(17);
-exports.Player = player_1["default"];
-var match_1 = __webpack_require__(2);
-exports.Match = match_1["default"];
-var turn_1 = __webpack_require__(1);
-exports.Turn = turn_1["default"];
-var fb_friend_1 = __webpack_require__(18);
-exports.Friend = fb_friend_1["default"];
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/*jshint esversion: 6 */
-exports.__esModule = true;
+function add2(i) {
+    return i + 2;
+}
 var turn_1 = __webpack_require__(1);
 var Game = /** @class */ (function () {
     function Game(id, players, status, turns) {
@@ -1117,9 +1012,7 @@ var Game = /** @class */ (function () {
         this.turns = turns;
     }
     Game.from = function (json) {
-        var turns = json.turns.map(function (turn) {
-            return turn_1["default"].from(turn);
-        });
+        var turns = json.turns.map(function (turn) { return turn_1["default"].from(turn); });
         var players = {
             viewer: json.players.viewer,
             opponent: json.players.opponent
@@ -1132,7 +1025,7 @@ exports["default"] = Game;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1148,7 +1041,7 @@ exports["default"] = Player;
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1170,21 +1063,21 @@ exports["default"] = Friend;
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var redux_thunk_1 = __webpack_require__(20);
+var redux_thunk_1 = __webpack_require__(19);
 var redux_1 = __webpack_require__(3);
-var index_1 = __webpack_require__(36);
+var index_1 = __webpack_require__(35);
 exports["default"] = redux_1.createStore(index_1["default"], redux_1.applyMiddleware(redux_thunk_1["default"]));
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1213,13 +1106,13 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(24);
 
 
 
@@ -1248,11 +1141,11 @@ function baseGetTag(value) {
 /* harmony default export */ __webpack_exports__["a"] = (baseGetTag);
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(22);
 
 
 /** Detect free variable `self`. */
@@ -1264,7 +1157,7 @@ var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || fr
 /* harmony default export */ __webpack_exports__["a"] = (root);
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1275,7 +1168,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(8)))
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1328,7 +1221,7 @@ function getRawTag(value) {
 /* harmony default export */ __webpack_exports__["a"] = (getRawTag);
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1356,11 +1249,11 @@ function objectToString(value) {
 /* harmony default export */ __webpack_exports__["a"] = (objectToString);
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(26);
 
 
 /** Built-in value references. */
@@ -1369,7 +1262,7 @@ var getPrototype = __WEBPACK_IMPORTED_MODULE_0__overArg_js__["a" /* default */](
 /* harmony default export */ __webpack_exports__["a"] = (getPrototype);
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1390,7 +1283,7 @@ function overArg(func, transform) {
 /* harmony default export */ __webpack_exports__["a"] = (overArg);
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1425,13 +1318,13 @@ function isObjectLike(value) {
 /* harmony default export */ __webpack_exports__["a"] = (isObjectLike);
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(30);
+module.exports = __webpack_require__(29);
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1441,7 +1334,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(32);
+var _ponyfill = __webpack_require__(31);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -1465,10 +1358,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(31)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(30)(module)))
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports) {
 
 module.exports = function (module) {
@@ -1495,7 +1388,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1524,7 +1417,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1665,7 +1558,7 @@ function combineReducers(reducers) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1719,7 +1612,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1783,7 +1676,7 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1791,8 +1684,8 @@ function applyMiddleware() {
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var redux_1 = __webpack_require__(3);
-var lastfm_1 = __webpack_require__(37);
-var main_1 = __webpack_require__(38);
+var lastfm_1 = __webpack_require__(36);
+var main_1 = __webpack_require__(37);
 exports["default"] = redux_1.combineReducers({
     lastFM: lastfm_1["default"],
     main: main_1["default"]
@@ -1800,7 +1693,7 @@ exports["default"] = redux_1.combineReducers({
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1823,7 +1716,7 @@ exports["default"] = default_1;
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

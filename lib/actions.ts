@@ -1,7 +1,6 @@
 /*jshint esversion: 6 */
 
 import store from './store'
-import Levenshtein from 'levenshtein'
 import {
   _answerSubmissionStarted,
   _answerSubmitted,
@@ -53,8 +52,8 @@ function performSearch({answer}) {
     .then(response => response.json())
 }
 
-function submitToServer({dispatch, gameId, answer, match, distance}) {
-  const data = { answer, match, distance }
+function submitToServer({dispatch, gameId, answer, match}) {
+  const data = { answer, match }
   fetch(`/games/${gameId}/turn`, {
     method: 'POST',
     credentials: 'same-origin',
@@ -81,8 +80,7 @@ export function submitAnswer({gameId, answer}) {
         const tracks = json.results.trackmatches.track;
         if (tracks.length > 0) {
           const match = tracks[0];
-          const distance = new Levenshtein(match.name.toLowerCase(), answer.toLowerCase()).distance
-          submitToServer({dispatch, gameId, answer, match, distance})
+          submitToServer({dispatch, gameId, answer, match})
         } else {
           _answerSubmissionFailed("no match found")
         }
