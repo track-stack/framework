@@ -22,9 +22,7 @@ export default class Game {
   }
 
   static from(json: any): Game {
-    const turns = json.turns.map(turn => {
-       return Turn.from(turn)
-    })
+    const turns = json.turns.map(turn => Turn.from(turn))
     const players: GamePlayers = {
       viewer: json.players.viewer,
       opponent: json.players.opponent
