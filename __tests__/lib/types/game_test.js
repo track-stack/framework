@@ -1,7 +1,8 @@
 /*jshint esversion: 6 */
 
-const { Game } = require('../../../lib/types/index')
+import { Game } from '../../../lib/types'
 
 test('works', () => {
+  console.log(new Game(1, {viewer: {}, opponent: {}}, 1, []))
   expect(1).toEqual(1)
 });

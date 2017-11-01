@@ -12,7 +12,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2017']
+          presets: ['env']
         }
       },
       {
