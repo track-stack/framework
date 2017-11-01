@@ -5,8 +5,3 @@ export { default as Player } from './player'
 export { default as Match } from './match'
 export { default as Turn } from './turn'
 export { default as FBFriend } from './fb-friend'
-
-
-function sum(a: number, b: number): number {
-  return a + b
-}
