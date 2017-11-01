@@ -1061,9 +1061,6 @@ var turn_1 = __webpack_require__(1);
 exports.Turn = turn_1["default"];
 var fb_friend_1 = __webpack_require__(17);
 exports.FBFriend = fb_friend_1["default"];
-function sum(a, b) {
-    return a + b;
-}
 
 
 /***/ }),
