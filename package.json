@@ -9,6 +9,7 @@
   "author": "mikekavouras",
   "license": "MIT",
   "dependencies": {
+    "babel-preset-env": "^1.6.1",
     "levenshtein": "^1.0.5",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"
@@ -17,7 +18,6 @@
     "@types/node": "^8.0.47",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
-    "babel-preset-es2017": "^6.24.1",
     "ts-loader": "^3.1.0",
     "typescript": "^2.5.3",
     "webpack": "3.0"
