@@ -4,4 +4,9 @@ export { default as Game } from './game'
 export { default as Player } from './player'
 export { default as Match } from './match'
 export { default as Turn } from './turn'
-export { default as Friend } from './fb-friend'
+export { default as FBFriend } from './fb-friend'
+
+
+function sum(a: number, b: number): number {
+  return a + b
+}
