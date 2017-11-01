@@ -909,12 +909,11 @@ function selectGameInvitee(friend) {
 }
 exports.selectGameInvitee = selectGameInvitee;
 function fetchGame(gameId) {
+    var headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
     return function (dispatch) {
         fetch("/games/" + gameId, {
             credentials: 'same-origin',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+            headers: headers
         }).then(function (response) { return response.json(); }).then(function (json) {
             var game = types_1.Game.from(json.game);
             return dispatch(selectors_1._fetchedGame(game));
@@ -928,7 +927,7 @@ function fetchFriends() {
             .then(function (response) { return response.json(); })
             .then(function (json) {
             var friends = json.friends.map(function (friend) {
-                return types_1.Friend.from(friend);
+                return types_1.FBFriend.from(friend);
             });
             dispatch(selectors_1._fetchFriends(friends));
         });
@@ -943,14 +942,15 @@ function performSearch(_a) {
 }
 function submitToServer(_a) {
     var dispatch = _a.dispatch, gameId = _a.gameId, answer = _a.answer, match = _a.match;
+    var headers = new Headers({
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+    });
     var data = { answer: answer, match: match };
     fetch("/games/" + gameId + "/turn", {
         method: 'POST',
         credentials: 'same-origin',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify(data)
     }).then(function (response) { return response.json(); })
         .then(function (json) {
@@ -1060,7 +1060,10 @@ exports.Match = match_1["default"];
 var turn_1 = __webpack_require__(1);
 exports.Turn = turn_1["default"];
 var fb_friend_1 = __webpack_require__(17);
-exports.Friend = fb_friend_1["default"];
+exports.FBFriend = fb_friend_1["default"];
+function sum(a, b) {
+    return a + b;
+}
 
 
 /***/ }),
@@ -1116,18 +1119,18 @@ exports["default"] = Player;
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var Friend = /** @class */ (function () {
-    function Friend(id, name, picture) {
+var FBFriend = /** @class */ (function () {
+    function FBFriend(id, name, picture) {
         this.id = id;
         this.name = name;
         this.picture = picture;
     }
-    Friend.from = function (json) {
-        return new Friend(json.id, json.name, json.picture);
+    FBFriend.from = function (json) {
+        return new FBFriend(json.id, json.name, json.picture);
     };
-    return Friend;
+    return FBFriend;
 }());
-exports["default"] = Friend;
+exports["default"] = FBFriend;
 
 
 /***/ }),
@@ -1894,7 +1897,7 @@ exports["default"] = default_1;
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var constants_1 = __webpack_require__(0);
-var defaultState = { friends: [], game: null, error: null };
+var defaultState = { friends: [], game: null, error: null, invitee: null };
 function default_1(state, action) {
     if (state === void 0) { state = defaultState; }
     switch (action.type) {

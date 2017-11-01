@@ -6,7 +6,7 @@ interface FBPictureData {
   }
 }
 
-export default class Friend {
+export default class FBFriend {
     id: string
     name: string
     picture: FBPictureData
@@ -17,7 +17,7 @@ export default class Friend {
       this.picture = picture
     }
 
-    static from(json: any): Friend {
-        return new Friend(json.id, json.name, json.picture)
+    static from(json: any): FBFriend {
+      return new FBFriend(json.id, json.name, json.picture)
     }
 }

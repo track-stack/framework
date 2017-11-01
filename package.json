@@ -4,12 +4,12 @@
   "description": "Shared code for Track Stack",
   "main": "./lib/trackstack.js",
   "scripts": {
-    "test": "test.js"
+    "test": "jest",
+    "test:watch": "npm test -- --watch"
   },
   "author": "mikekavouras",
   "license": "MIT",
   "dependencies": {
-    "babel-preset-env": "^1.6.1",
     "levenshtein": "^1.0.5",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"
@@ -17,9 +17,28 @@
   "devDependencies": {
     "@types/node": "^8.0.47",
     "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^21.2.1",
+    "ts-jest": "^21.1.4",
     "ts-loader": "^3.1.0",
     "typescript": "^2.5.3",
     "webpack": "3.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(js|jsx)$": "babel-jest",
+      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "tsx"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "lib"
+    ]
   }
 }

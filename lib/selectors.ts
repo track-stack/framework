@@ -8,36 +8,36 @@ import {
   INVITEE
 } from './constants'
 
-import { Game, Friend } from './types'
+import { Game, FBFriend } from './types'
 
-interface AnswerSubmissionStartType {
+interface AnswerSubmissionStartSelector {
   type: string
 }
 
-interface AnswerSubmittedType {
+interface AnswerSubmittedSelector {
   type: string
   data: Game
 }
 
-interface AnswerSubmissionFailedType {
+interface AnswerSubmissionFailedSelector {
   type: string
   data: string
 }
 
-export function _answerSubmissionStarted(): AnswerSubmissionStartType {
+export function _answerSubmissionStarted(): AnswerSubmissionStartSelector {
   return { 
     type: ANSWER_SUBMISSION.START
   }
 }
 
-export function _answerSubmitted(game: Game): AnswerSubmittedType {
+export function _answerSubmitted(game: Game): AnswerSubmittedSelector {
   return {
     type: ANSWER_SUBMISSION.SUCCESS,
     data: game,
   }
 }
 
-export function _answerSubmissionFailed(error): AnswerSubmissionFailedType {
+export function _answerSubmissionFailed(error): AnswerSubmissionFailedSelector {
   return {
     type: ANSWER_SUBMISSION.FAILURE,
     data: error
@@ -46,10 +46,10 @@ export function _answerSubmissionFailed(error): AnswerSubmissionFailedType {
 
 interface FetchFriendsSelector {
   type: string
-  data: [Friend]
+  data: [FBFriend]
 }
 
-export function _fetchFriends(friends: [Friend]) {
+export function _fetchFriends(friends: [FBFriend]) {
   return {
     type: FETCH_FRIENDS.SUCCESS,
     data: friends 
@@ -77,10 +77,10 @@ export function _fetchedGame(game: Game): FetchGameSelector {
 
 interface SelectGameInviteeSelector {
   type: string
-  data: Friend
+  data: FBFriend
 }
 
-export function _selectGameInvitee(friend: Friend): SelectGameInviteeSelector {
+export function _selectGameInvitee(friend: FBFriend): SelectGameInviteeSelector {
   return {
     type: INVITEE.SELECTED,
     data: friend
