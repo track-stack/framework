@@ -71,28 +71,12 @@
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-exports.ANSWER_SUBMISSION = {
-    START: "ANSWER_SUBMISSION.START",
-    SUCCESS: "ANSWER_SUBMISSION.SUCCESS",
-    FAILURE: "ANSWER_SUBMISSION.FAILURE"
-};
-exports.FETCH_FRIENDS = {
-    START: "FETCH_FRIENDS.START",
-    SUCCESS: "FETCH_FRIENDS.SUCCESS",
-    FAILURE: "FETCH_FRIENDS.FAILURE"
-};
-exports.LAST_FM_SEARCH = {
-    START: "LAST_FM_SEARCH.START",
-    SUCCESS: "LAST_FM_SEARCH.SUCCESS",
-    FAILURE: "LAST_FM_SEARCH.FAILURE"
-};
-exports.FETCH_GAME = {
-    START: "GAME.START",
-    SUCCESS: "GAME.SUCCESS",
-    FAILURE: "GAME.FAILURE"
-};
-exports.INVITEE = {
-    SELECTED: "INVITEE.SELECTED"
+var action_helper_1 = __webpack_require__(14);
+exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
+exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
+exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
+exports.FETCH_GAME = action_helper_1.createActionSet('FETCH_GAME');
+exports.INVITEE = { SELECTED: "INVITEE.SELECTED"
 };
 
 
@@ -162,15 +146,15 @@ var _createStore = __webpack_require__(5);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = __webpack_require__(32);
+var _combineReducers = __webpack_require__(33);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = __webpack_require__(33);
+var _bindActionCreators = __webpack_require__(34);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = __webpack_require__(34);
+var _applyMiddleware = __webpack_require__(35);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
@@ -414,7 +398,7 @@ var _isPlainObject = __webpack_require__(6);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = __webpack_require__(28);
+var _symbolObservable = __webpack_require__(29);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -677,15 +661,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _baseGetTag = __webpack_require__(20);
+var _baseGetTag = __webpack_require__(21);
 
 var _baseGetTag2 = _interopRequireDefault(_baseGetTag);
 
-var _getPrototype = __webpack_require__(25);
+var _getPrototype = __webpack_require__(26);
 
 var _getPrototype2 = _interopRequireDefault(_getPrototype);
 
-var _isObjectLike = __webpack_require__(27);
+var _isObjectLike = __webpack_require__(28);
 
 var _isObjectLike2 = _interopRequireDefault(_isObjectLike);
 
@@ -760,7 +744,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _root = __webpack_require__(21);
+var _root = __webpack_require__(22);
 
 var _root2 = _interopRequireDefault(_root);
 
@@ -887,7 +871,7 @@ function compose() {
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var a = __webpack_require__(12);
-var store_1 = __webpack_require__(18);
+var store_1 = __webpack_require__(19);
 exports.store = store_1["default"];
 exports.actions = a;
 
@@ -901,7 +885,7 @@ exports.actions = a;
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var selectors_1 = __webpack_require__(13);
-var types_1 = __webpack_require__(14);
+var types_1 = __webpack_require__(15);
 function selectGameInvitee(friend) {
     return function (dispatch) {
         return dispatch(selectors_1._selectGameInvitee(friend));
@@ -995,7 +979,7 @@ exports.__esModule = true;
 var constants_1 = __webpack_require__(0);
 function _answerSubmissionStarted() {
     return {
-        type: constants_1.ANSWER_SUBMISSION.START
+        type: constants_1.ANSWER_SUBMISSION.PENDING
     };
 }
 exports._answerSubmissionStarted = _answerSubmissionStarted;
@@ -1008,7 +992,7 @@ function _answerSubmitted(game) {
 exports._answerSubmitted = _answerSubmitted;
 function _answerSubmissionFailed(error) {
     return {
-        type: constants_1.ANSWER_SUBMISSION.FAILURE,
+        type: constants_1.ANSWER_SUBMISSION.ERROR,
         data: error
     };
 }
@@ -1049,22 +1033,38 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 "use strict";
 
+exports.__esModule = true;
+exports.createActionSet = function (actionName) {
+    return {
+        PENDING: actionName + "_PENDING",
+        SUCCESS: actionName + "_SUCCESS",
+        ERROR: actionName + "_ERROR"
+    };
+};
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var game_1 = __webpack_require__(15);
+var game_1 = __webpack_require__(16);
 exports.Game = game_1["default"];
-var player_1 = __webpack_require__(16);
+var player_1 = __webpack_require__(17);
 exports.Player = player_1["default"];
 var match_1 = __webpack_require__(2);
 exports.Match = match_1["default"];
 var turn_1 = __webpack_require__(1);
 exports.Turn = turn_1["default"];
-var fb_friend_1 = __webpack_require__(17);
+var fb_friend_1 = __webpack_require__(18);
 exports.FBFriend = fb_friend_1["default"];
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1093,7 +1093,7 @@ exports["default"] = Game;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1109,7 +1109,7 @@ exports["default"] = Player;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1131,21 +1131,21 @@ exports["default"] = FBFriend;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var redux_thunk_1 = __webpack_require__(19);
+var redux_thunk_1 = __webpack_require__(20);
 var redux_1 = __webpack_require__(3);
-var index_1 = __webpack_require__(35);
+var index_1 = __webpack_require__(36);
 exports["default"] = redux_1.createStore(index_1["default"], redux_1.applyMiddleware(redux_thunk_1["default"]));
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1174,7 +1174,7 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1188,11 +1188,11 @@ var _Symbol2 = __webpack_require__(7);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
-var _getRawTag = __webpack_require__(23);
+var _getRawTag = __webpack_require__(24);
 
 var _getRawTag2 = _interopRequireDefault(_getRawTag);
 
-var _objectToString = __webpack_require__(24);
+var _objectToString = __webpack_require__(25);
 
 var _objectToString2 = _interopRequireDefault(_objectToString);
 
@@ -1222,7 +1222,7 @@ function baseGetTag(value) {
 exports.default = baseGetTag;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1234,7 +1234,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _freeGlobal = __webpack_require__(22);
+var _freeGlobal = __webpack_require__(23);
 
 var _freeGlobal2 = _interopRequireDefault(_freeGlobal);
 
@@ -1249,7 +1249,7 @@ var root = _freeGlobal2.default || freeSelf || Function('return this')();
 exports.default = root;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1268,7 +1268,7 @@ exports.default = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1330,7 +1330,7 @@ function getRawTag(value) {
 exports.default = getRawTag;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1363,7 +1363,7 @@ function objectToString(value) {
 exports.default = objectToString;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1373,7 +1373,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _overArg = __webpack_require__(26);
+var _overArg = __webpack_require__(27);
 
 var _overArg2 = _interopRequireDefault(_overArg);
 
@@ -1385,7 +1385,7 @@ var getPrototype = (0, _overArg2.default)(Object.getPrototypeOf, Object);
 exports.default = getPrototype;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1411,7 +1411,7 @@ function overArg(func, transform) {
 exports.default = overArg;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1454,16 +1454,16 @@ function isObjectLike(value) {
 exports.default = isObjectLike;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(29);
+module.exports = __webpack_require__(30);
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1473,7 +1473,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(31);
+var _ponyfill = __webpack_require__(32);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -1497,10 +1497,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(30)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(31)(module)))
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1530,7 +1530,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1559,7 +1559,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1711,7 +1711,7 @@ function combineReducers(reducers) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1773,7 +1773,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1846,7 +1846,7 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1854,8 +1854,8 @@ function applyMiddleware() {
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var redux_1 = __webpack_require__(3);
-var lastfm_1 = __webpack_require__(36);
-var main_1 = __webpack_require__(37);
+var lastfm_1 = __webpack_require__(37);
+var main_1 = __webpack_require__(38);
 exports["default"] = redux_1.combineReducers({
     lastFM: lastfm_1["default"],
     main: main_1["default"]
@@ -1863,7 +1863,7 @@ exports["default"] = redux_1.combineReducers({
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1886,7 +1886,7 @@ exports["default"] = default_1;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1907,13 +1907,13 @@ function default_1(state, action) {
         case constants_1.FETCH_GAME.SUCCESS: {
             return Object.assign({}, state, { game: action.data });
         }
-        case constants_1.ANSWER_SUBMISSION.START: {
+        case constants_1.ANSWER_SUBMISSION.PENDING: {
             return Object.assign({}, state, { error: null });
         }
         case constants_1.ANSWER_SUBMISSION.SUCCESS: {
             return Object.assign({}, state, { game: action.data });
         }
-        case constants_1.ANSWER_SUBMISSION.FAILURE: {
+        case constants_1.ANSWER_SUBMISSION.ERROR: {
             return Object.assign({}, state, { error: action.data });
         }
         default:

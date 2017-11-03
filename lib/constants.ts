@@ -1,29 +1,10 @@
 /*jshint esversion: 6 */
 
-export const ANSWER_SUBMISSION = {
-  START: "ANSWER_SUBMISSION.START",
-  SUCCESS: "ANSWER_SUBMISSION.SUCCESS",
-  FAILURE: "ANSWER_SUBMISSION.FAILURE"
-}
+import { createActionSet } from './utils/action-helper'
 
-export const FETCH_FRIENDS = {
-  START: "FETCH_FRIENDS.START",
-  SUCCESS: "FETCH_FRIENDS.SUCCESS",
-  FAILURE: "FETCH_FRIENDS.FAILURE"
-}
-
-export const LAST_FM_SEARCH = {
-  START: "LAST_FM_SEARCH.START",
-  SUCCESS: "LAST_FM_SEARCH.SUCCESS",
-  FAILURE: "LAST_FM_SEARCH.FAILURE"
-}
-
-export const FETCH_GAME = {
-  START: "GAME.START",
-  SUCCESS: "GAME.SUCCESS",
-  FAILURE: "GAME.FAILURE"
-}
-
-export const INVITEE = {
-  SELECTED: "INVITEE.SELECTED"
+export const ANSWER_SUBMISSION = createActionSet('ANSWER_SUBMITTED')
+export const FETCH_FRIENDS = createActionSet('FETCH_FRIENDS')
+export const LAST_FM_SEARCH = createActionSet('LAST_F_SEARCH')
+export const FETCH_GAME = createActionSet('FETCH_GAME')
+export const INVITEE = { SELECTED: "INVITEE.SELECTED"
 }

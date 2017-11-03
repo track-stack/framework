@@ -20,13 +20,13 @@ export default function(state = defaultState, action) {
     case FETCH_GAME.SUCCESS: {
       return (<any>Object).assign({}, state, { game: action.data });
     }
-    case ANSWER_SUBMISSION.START: {
+    case ANSWER_SUBMISSION.PENDING: {
       return (<any>Object).assign({}, state, { error: null });
     }
     case ANSWER_SUBMISSION.SUCCESS: {
       return (<any>Object).assign({}, state, { game: action.data });
     }
-      case ANSWER_SUBMISSION.FAILURE: {
+      case ANSWER_SUBMISSION.ERROR: {
       return (<any>Object).assign({}, state, { error: action.data });
     }
     default:

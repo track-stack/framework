@@ -26,7 +26,7 @@ interface AnswerSubmissionFailedSelector {
 
 export function _answerSubmissionStarted(): AnswerSubmissionStartSelector {
   return { 
-    type: ANSWER_SUBMISSION.START
+    type: ANSWER_SUBMISSION.PENDING
   }
 }
 
@@ -39,7 +39,7 @@ export function _answerSubmitted(game: Game): AnswerSubmittedSelector {
 
 export function _answerSubmissionFailed(error): AnswerSubmissionFailedSelector {
   return {
-    type: ANSWER_SUBMISSION.FAILURE,
+    type: ANSWER_SUBMISSION.ERROR,
     data: error
   }
 }
