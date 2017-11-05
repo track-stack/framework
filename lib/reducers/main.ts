@@ -14,7 +14,7 @@ export default function(state = defaultState, action) {
     case FETCH_FRIENDS.SUCCESS: {
       return (<any>Object).assign({}, state, { friends: action.data });
     }
-    case INVITEE.SELECTED: {
+    case INVITEE.SUCCESS: {
       return (<any>Object).assign({}, state, { invitee: action.data });
     }
     case FETCH_GAME.SUCCESS: {

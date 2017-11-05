@@ -6,5 +6,4 @@ export const ANSWER_SUBMISSION = createActionSet('ANSWER_SUBMITTED')
 export const FETCH_FRIENDS = createActionSet('FETCH_FRIENDS')
 export const LAST_FM_SEARCH = createActionSet('LAST_F_SEARCH')
 export const FETCH_GAME = createActionSet('FETCH_GAME')
-export const INVITEE = { SELECTED: "INVITEE.SELECTED"
-}
+export const INVITEE = createActionSet('INVITEE')

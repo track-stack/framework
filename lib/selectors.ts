@@ -82,7 +82,7 @@ interface SelectGameInviteeSelector {
 
 export function _selectGameInvitee(friend: FBFriend): SelectGameInviteeSelector {
   return {
-    type: INVITEE.SELECTED,
+    type: INVITEE.SUCCESS,
     data: friend
   }
 }

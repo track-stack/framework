@@ -76,8 +76,7 @@ exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
 exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
 exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
 exports.FETCH_GAME = action_helper_1.createActionSet('FETCH_GAME');
-exports.INVITEE = { SELECTED: "INVITEE.SELECTED"
-};
+exports.INVITEE = action_helper_1.createActionSet('INVITEE');
 
 
 /***/ }),
@@ -1020,7 +1019,7 @@ function _fetchedGame(game) {
 exports._fetchedGame = _fetchedGame;
 function _selectGameInvitee(friend) {
     return {
-        type: constants_1.INVITEE.SELECTED,
+        type: constants_1.INVITEE.SUCCESS,
         data: friend
     };
 }
@@ -1901,7 +1900,7 @@ function default_1(state, action) {
         case constants_1.FETCH_FRIENDS.SUCCESS: {
             return Object.assign({}, state, { friends: action.data });
         }
-        case constants_1.INVITEE.SELECTED: {
+        case constants_1.INVITEE.SUCCESS: {
             return Object.assign({}, state, { invitee: action.data });
         }
         case constants_1.FETCH_GAME.SUCCESS: {

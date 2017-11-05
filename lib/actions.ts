@@ -18,7 +18,7 @@ export function selectGameInvitee(friend: FBFriend) {
     return dispatch(_selectGameInvitee(friend))
   }
 
-  
+
 }
 
 export function fetchGame(gameId) {
@@ -40,8 +40,7 @@ export function fetchFriends() {
       .then(response => response.json())
       .then(json => {
         const friends: [FBFriend] = json.friends.map(friend => {
-          return FBFriend.from(friend)
-        })
+          return FBFriend.from(friend) })
         dispatch(_fetchFriends(friends))
       })
   }
