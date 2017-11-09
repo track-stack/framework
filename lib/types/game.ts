@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 import Player from './player'
-import Turn from './turn'
+import Round from './round'
 
 interface GamePlayers {
   viewer: Player
@@ -12,21 +12,21 @@ export default class Game {
   id: number
   players: GamePlayers
   status: number
-  turns: [Turn]
+  rounds: [Round]
 
-  constructor(id: number, players: GamePlayers, status: number, turns: [Turn]) {
+  constructor(id: number, players: GamePlayers, status: number, rounds: [Round]) {
      this.id = id
      this.players = players
      this.status = status
-     this.turns = turns
+     this.rounds = rounds
   }
 
   static from(json: any): Game {
-    const turns = json.turns.map(turn => Turn.from(turn))
+    const rounds = json.rounds.map(round => Round.from(round))
     const players: GamePlayers = {
       viewer: json.players.viewer,
       opponent: json.players.opponent
     }
-    return new Game(json.id, players, json.status, turns)
+    return new Game(json.id, players, json.status, rounds)
   }
 }

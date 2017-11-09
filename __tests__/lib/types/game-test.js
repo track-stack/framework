@@ -10,13 +10,13 @@ test("initializes an instance from json", () => {
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
     status: 1,
-    turns: []
+    rounds: []
   }
 
-  const game = new Game.from(json)
+  const game = Game.from(json)
 
   expect(game.id).toEqual(20)
-  expect(game.turns.length).toBe(0)
+  expect(game.rounds.length).toBe(0)
   expect(game.status).toEqual(1)
   expect(game.players).toEqual(json.players)
 });
