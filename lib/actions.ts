@@ -17,8 +17,6 @@ export function selectGameInvitee(friend: FBFriend) {
   return dispatch => {
     return dispatch(_selectGameInvitee(friend))
   }
-
-
 }
 
 export function fetchGame(gameId) {
@@ -64,31 +62,43 @@ function submitToServer({dispatch, gameId, answer, match}) {
     credentials: 'same-origin',
     headers: headers,
     body: JSON.stringify(data),
-  }).then(response => response.json())
-   .then(json => {
-     const game = Game.from(json.game)
-     dispatch(_answerSubmitted(game))
-   })
+  })
+  .then(response => response.json())
+  .then(json => {
+    const game = Game.from(json.game)
+    dispatch(_answerSubmitted(game))
+  })
   .catch(error => {
     dispatch(_answerSubmissionFailed(error))
   })
 }
 
+function validateStuff({previousAnswer, answer}): boolean {
+  return true
+}
+
 export function submitAnswer({gameId, answer}) {
   return dispatch => {
     dispatch(_answerSubmissionStarted())
+
     performSearch({answer}).then(json => {
-      if (json && json.results && json.results.trackmatches) {
-        const tracks = json.results.trackmatches.track;
-        if (tracks.length > 0) {
-          const match = tracks[0];
-          submitToServer({dispatch, gameId, answer, match})
-        } else {
-          _answerSubmissionFailed("no match found")
-        }
-      } else {
+      const foundTracks = json && json.results && json.results.trackmatches
+      if (!foundTracks) { 
         _answerSubmissionFailed("no match found")
+        return
       }
+
+      const tracks = json.results.trackmatches.track;
+      if (tracks.length == 0) { 
+         _answerSubmissionFailed("no match found")
+         return
+      }
+
+      // validate against previous song
+      // validate against match 
+
+      const match = tracks[0];
+      submitToServer({dispatch, gameId, answer, match})
     })
   }
 }

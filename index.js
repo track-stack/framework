@@ -957,7 +957,8 @@ function submitToServer(_a) {
         credentials: 'same-origin',
         headers: headers,
         body: JSON.stringify(data)
-    }).then(function (response) { return response.json(); })
+    })
+        .then(function (response) { return response.json(); })
         .then(function (json) {
         var game = types_1.Game.from(json.game);
         dispatch(selectors_1._answerSubmitted(game));
@@ -965,24 +966,29 @@ function submitToServer(_a) {
         dispatch(selectors_1._answerSubmissionFailed(error));
     });
 }
+function validateStuff(_a) {
+    var previousAnswer = _a.previousAnswer, answer = _a.answer;
+    return true;
+}
 function submitAnswer(_a) {
     var gameId = _a.gameId, answer = _a.answer;
     return function (dispatch) {
         dispatch(selectors_1._answerSubmissionStarted());
         performSearch({ answer: answer }).then(function (json) {
-            if (json && json.results && json.results.trackmatches) {
-                var tracks = json.results.trackmatches.track;
-                if (tracks.length > 0) {
-                    var match = tracks[0];
-                    submitToServer({ dispatch: dispatch, gameId: gameId, answer: answer, match: match });
-                }
-                else {
-                    selectors_1._answerSubmissionFailed("no match found");
-                }
-            }
-            else {
+            var foundTracks = json && json.results && json.results.trackmatches;
+            if (!foundTracks) {
                 selectors_1._answerSubmissionFailed("no match found");
+                return;
             }
+            var tracks = json.results.trackmatches.track;
+            if (tracks.length == 0) {
+                selectors_1._answerSubmissionFailed("no match found");
+                return;
+            }
+            // validate against previous song
+            // validate against match 
+            var match = tracks[0];
+            submitToServer({ dispatch: dispatch, gameId: gameId, answer: answer, match: match });
         });
     };
 }
