@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 
 import store from './store'
+import { sanitize } from './utils/string-sanitizer'
 import {
   _answerSubmissionStarted,
   _answerSubmitted,
@@ -77,7 +78,7 @@ function validateStuff({previousAnswer, answer}): boolean {
   return true
 }
 
-export function submitAnswer({gameId, answer}) {
+export function submitAnswer({gameId, answer, previousAnswer}) {
   return dispatch => {
     dispatch(_answerSubmissionStarted())
 

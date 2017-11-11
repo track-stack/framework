@@ -2,6 +2,7 @@
 
 import Player from './player'
 import Round from './round'
+import Turn from './turn'
 
 interface GamePlayers {
   viewer: Player
@@ -28,5 +29,21 @@ export default class Game {
       opponent: json.players.opponent
     }
     return new Game(json.id, players, json.status, rounds)
+  }
+
+  latestTurn(): Turn {
+    const round = this.latestRound()
+    if (!round) { return null }
+    if (!round.turns) { return null }
+    if (round.turns.length == 0) { return null }
+
+    return round.turns[round.turns.length - 1]
+  }
+
+  latestRound(): Round {
+    if (!this.rounds) { return null }
+    if (this.rounds.length === 0) { return null }
+
+    return this.rounds[this.rounds.length - 1]
   }
 }

@@ -971,7 +971,7 @@ function validateStuff(_a) {
     return true;
 }
 function submitAnswer(_a) {
-    var gameId = _a.gameId, answer = _a.answer;
+    var gameId = _a.gameId, answer = _a.answer, previousAnswer = _a.previousAnswer;
     return function (dispatch) {
         dispatch(selectors_1._answerSubmissionStarted());
         performSearch({ answer: answer }).then(function (json) {
@@ -1115,6 +1115,28 @@ var Game = /** @class */ (function () {
             opponent: json.players.opponent
         };
         return new Game(json.id, players, json.status, rounds);
+    };
+    Game.prototype.latestTurn = function () {
+        var round = this.latestRound();
+        if (!round) {
+            return null;
+        }
+        if (!round.turns) {
+            return null;
+        }
+        if (round.turns.length == 0) {
+            return null;
+        }
+        return round.turns[round.turns.length - 1];
+    };
+    Game.prototype.latestRound = function () {
+        if (!this.rounds) {
+            return null;
+        }
+        if (this.rounds.length === 0) {
+            return null;
+        }
+        return this.rounds[this.rounds.length - 1];
     };
     return Game;
 }());
