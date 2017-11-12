@@ -94,12 +94,12 @@ function sanitize(input) {
     var Patterns = {
         parensAndBrackets: /[\(\)\[\]]/g,
         hyphensAndUnderscores: /[-_]/g,
-        puncuation: /[.'!&]/g,
+        punctuation: /[.'!&]/g,
         articles: new RegExp(articlePattern, 'g'),
         whitespace: /\s+/g
     };
     // remove all puncuation and replace them with ""
-    input = input.replace(Patterns.puncuation, '');
+    input = input.replace(Patterns.punctuation, '');
     // many times, featured results, or additional producers are appended
     // to the result like so: (featuring beep and boop...)
     input = input.replace(Patterns.parensAndBrackets, '');
@@ -1062,11 +1062,8 @@ function submitToServer(_a) {
     })
         .then(function (response) { return response.json(); })
         .then(function (json) {
-        console.log("a");
         var game = types_1.Game.from(json.game);
-        console.log("b");
         dispatch(selectors_1._answerSubmitted(game));
-        console.log("c");
     })["catch"](function (error) {
         dispatch(selectors_1._answerSubmissionFailed(error));
     });
@@ -1074,6 +1071,8 @@ function submitToServer(_a) {
 // TODO: Remove logs
 function submitAnswer(_a) {
     var gameId = _a.gameId, answer = _a.answer, previousTurn = _a.previousTurn;
+    console.group = console.group || function (input) { };
+    console.groupEnd = console.groupEnd || function () { };
     return function (dispatch) {
         dispatch(selectors_1._answerSubmissionStarted());
         console.group("INPUT: " + answer);
@@ -1190,6 +1189,8 @@ exports.findMatch = findMatch;
 //
 // Returns boolean
 function validate(answer, match) {
+    console.group = console.group || function (input) { };
+    console.groupEnd = console.groupEnd || function () { };
     console.group("        Sanitizing");
     var sAnswer = string_sanitizer_1.sanitize(answer);
     var sArtist = string_sanitizer_1.sanitize(match.artist);
@@ -1245,6 +1246,7 @@ function stemmed(word) {
 //
 // Returns a boolean
 function hasIntersection(str1, str2) {
+    console.group = console.group || function (input) { };
     console.group("        Comparing Names");
     var name1Stemmed = string_sanitizer_1.sanitize(str1).split(" ").map(function (word) { return stemmed(word); });
     var name2Stemmed = string_sanitizer_1.sanitize(str2).split(" ").map(function (word) { return stemmed(word); });
