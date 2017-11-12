@@ -50,6 +50,8 @@ export function findMatch(userInput: string, tracks: any[]): any {
 //
 // Returns boolean
 export function validate(answer: string, match: {artist: string, name: string}): boolean {
+  console.group = console.group || function(input: string) {}
+  console.groupEnd = console.groupEnd || function() {}
   console.group("        Sanitizing")
 
   const sAnswer = sanitize(answer)
@@ -95,7 +97,7 @@ export function validate(answer: string, match: {artist: string, name: string}):
 function stemmed(word: string): string {
   if (word === "delivery") { return "deliver" }
   if (word === "trappin") { return "trap" }
-  if (word === "american") { return "america" }
+  if (word === "american") {}
   return stem(word)
 }
 
@@ -106,6 +108,7 @@ function stemmed(word: string): string {
 //
 // Returns a boolean
 export function hasIntersection(str1: string, str2: string): boolean {
+  console.group = console.group || function(input: string) {}
   console.group("        Comparing Names")
 
   const name1Stemmed = sanitize(str1).split(" ").map(word => stemmed(word))

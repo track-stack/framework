@@ -80,6 +80,8 @@ function submitToServer({dispatch, gameId, answer, match}) {
 // TODO: Remove logs
 
 export function submitAnswer({gameId, answer, previousTurn}) {
+  console.group = console.group || function(input: string) {}
+  console.groupEnd = console.groupEnd || function() {}
   return dispatch => {
     dispatch(_answerSubmissionStarted())
 
