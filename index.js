@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,7 +71,7 @@
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var action_helper_1 = __webpack_require__(17);
+var action_helper_1 = __webpack_require__(20);
 exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
 exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
 exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
@@ -94,7 +94,7 @@ function sanitize(input) {
     var Patterns = {
         parensAndBrackets: /[\(\)\[\]]/g,
         hyphensAndUnderscores: /[-_]/g,
-        puncuation: /[.']/g,
+        puncuation: /[.'!&]/g,
         articles: new RegExp(articlePattern, 'g'),
         whitespace: /\s+/g
     };
@@ -120,9 +120,70 @@ exports.sanitize = sanitize;
 
 "use strict";
 
+
+var stemmer = {},
+    cache = {};
+
+module.exports = stemmer;
+
+stemmer.except = function (word, exceptions) {
+  if (exceptions instanceof Array) {
+    if (~exceptions.indexOf(word)) return word;
+  } else {
+    for (var k in exceptions) {
+      if (k === word) return exceptions[k];
+    }
+  }
+  return false;
+};
+
+// word - String
+// offset - Integer (optional)
+// replace - Key/Value Array of pattern, string, and function.
+stemmer.among = function among(word, offset, replace) {
+  if (replace == null) return among(word, 0, offset);
+
+  // Store the intial value of the word.
+  var initial = word.slice(),
+      pattern,
+      replacement;
+
+  for (var i = 0; i < replace.length; i += 2) {
+    pattern = replace[i];
+    pattern = cache[pattern] || (cache[pattern] = new RegExp(replace[i] + "$"));
+    replacement = replace[i + 1];
+
+    if (typeof replacement === "function") {
+      word = word.replace(pattern, function (m) {
+        var off = arguments["" + (arguments.length - 2)];
+        if (off >= offset) {
+          return replacement.apply(null, arguments);
+        } else {
+          return m + " ";
+        }
+      });
+    } else {
+      word = word.replace(pattern, function (m) {
+        var off = arguments["" + (arguments.length - 2)];
+        return off >= offset ? replacement : m + " ";
+      });
+    }
+
+    if (word !== initial) break;
+  }
+
+  return word.replace(/ /g, "");
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var turn_1 = __webpack_require__(3);
+var turn_1 = __webpack_require__(4);
 var Round = /** @class */ (function () {
     function Round(turns) {
         this.turns = turns || new Array();
@@ -140,16 +201,16 @@ exports["default"] = Round;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var match_1 = __webpack_require__(4);
+var match_1 = __webpack_require__(5);
 var Turn = /** @class */ (function () {
-    function Turn(userId, answer, distance, hasExactNameMatch, hasExactArtistMatch, userPhoto, match) {
+    function Turn(userId, answer, distance, hasExactNameMatch, hasExactArtistMatch, userPhoto, match, createdAt) {
         this.userId = userId;
         this.answer = answer;
         this.distance = distance;
@@ -157,10 +218,11 @@ var Turn = /** @class */ (function () {
         this.hasExactArtistMatch = hasExactArtistMatch;
         this.userPhoto = userPhoto;
         this.match = match;
+        this.createdAt = new Date(createdAt);
     }
     Turn.from = function (json) {
         var match = match_1["default"].from(json.match);
-        return new Turn(json.user_id, json.answer, json.distance, json.has_exact_name_match, json.has_exact_artist_match, json.user_photo, match);
+        return new Turn(json.user_id, json.answer, json.distance, json.has_exact_name_match, json.has_exact_artist_match, json.user_photo, match, json.created_at);
     };
     return Turn;
 }());
@@ -168,7 +230,7 @@ exports["default"] = Turn;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -190,7 +252,7 @@ exports["default"] = Match;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -201,27 +263,27 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-var _createStore = __webpack_require__(7);
+var _createStore = __webpack_require__(8);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = __webpack_require__(36);
+var _combineReducers = __webpack_require__(39);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = __webpack_require__(37);
+var _bindActionCreators = __webpack_require__(40);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = __webpack_require__(38);
+var _applyMiddleware = __webpack_require__(41);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-var _compose = __webpack_require__(12);
+var _compose = __webpack_require__(13);
 
 var _compose2 = _interopRequireDefault(_compose);
 
-var _warning = __webpack_require__(11);
+var _warning = __webpack_require__(12);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -242,10 +304,10 @@ exports.combineReducers = _combineReducers2.default;
 exports.bindActionCreators = _bindActionCreators2.default;
 exports.applyMiddleware = _applyMiddleware2.default;
 exports.compose = _compose2.default;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -438,7 +500,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -453,11 +515,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = createStore;
 
-var _isPlainObject = __webpack_require__(8);
+var _isPlainObject = __webpack_require__(9);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = __webpack_require__(32);
+var _symbolObservable = __webpack_require__(35);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -710,7 +772,7 @@ var ActionTypes = exports.ActionTypes = {
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -720,15 +782,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _baseGetTag = __webpack_require__(24);
+var _baseGetTag = __webpack_require__(27);
 
 var _baseGetTag2 = _interopRequireDefault(_baseGetTag);
 
-var _getPrototype = __webpack_require__(29);
+var _getPrototype = __webpack_require__(32);
 
 var _getPrototype2 = _interopRequireDefault(_getPrototype);
 
-var _isObjectLike = __webpack_require__(31);
+var _isObjectLike = __webpack_require__(34);
 
 var _isObjectLike2 = _interopRequireDefault(_isObjectLike);
 
@@ -793,7 +855,7 @@ function isPlainObject(value) {
 exports.default = isPlainObject;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -803,7 +865,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _root = __webpack_require__(25);
+var _root = __webpack_require__(28);
 
 var _root2 = _interopRequireDefault(_root);
 
@@ -815,7 +877,7 @@ var _Symbol = _root2.default.Symbol;
 exports.default = _Symbol;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -845,7 +907,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -878,7 +940,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -922,20 +984,6 @@ function compose() {
 }
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/*jshint esversion: 6 */
-exports.__esModule = true;
-var a = __webpack_require__(14);
-var store_1 = __webpack_require__(22);
-exports.store = store_1["default"];
-exports.actions = a;
-
-
-/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -943,10 +991,24 @@ exports.actions = a;
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var answer_validator_1 = __webpack_require__(15);
+var a = __webpack_require__(15);
+var store_1 = __webpack_require__(25);
+exports.store = store_1["default"];
+exports.actions = a;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/*jshint esversion: 6 */
+exports.__esModule = true;
+var answer_validator_1 = __webpack_require__(16);
 var string_sanitizer_1 = __webpack_require__(1);
-var selectors_1 = __webpack_require__(16);
-var types_1 = __webpack_require__(18);
+var selectors_1 = __webpack_require__(19);
+var types_1 = __webpack_require__(21);
 function selectGameInvitee(friend) {
     return function (dispatch) {
         return dispatch(selectors_1._selectGameInvitee(friend));
@@ -1000,37 +1062,21 @@ function submitToServer(_a) {
     })
         .then(function (response) { return response.json(); })
         .then(function (json) {
+        console.log("a");
         var game = types_1.Game.from(json.game);
+        console.log("b");
         dispatch(selectors_1._answerSubmitted(game));
+        console.log("c");
     })["catch"](function (error) {
         dispatch(selectors_1._answerSubmissionFailed(error));
     });
-}
-function validateAnswer(tracks, answer) {
-    var match = null;
-    var limit = Math.min(tracks.length, 5);
-    // Iterate through the first up-to-5 matches for more accuracy
-    for (var i = 0; i < limit; i++) {
-        var _a = tracks[i], artist = _a.artist, name_1 = _a.name;
-        console.log("%c    Match found: " + name_1 + " - " + artist, 'color: #42A143');
-        console.log("      Validating...");
-        if (answer_validator_1.validate(answer, { artist: artist, name: name_1 })) {
-            match = tracks[i];
-            console.log('%c        valid match!', 'color: #42A143');
-            break;
-        }
-        else {
-            console.log('%c        not a valid match', 'color: #A62F2F');
-        }
-    }
-    return match;
 }
 // TODO: Remove logs
 function submitAnswer(_a) {
     var gameId = _a.gameId, answer = _a.answer, previousTurn = _a.previousTurn;
     return function (dispatch) {
         dispatch(selectors_1._answerSubmissionStarted());
-        console.log("%c INPUT: " + answer, 'font-weight: bold');
+        console.group("INPUT: " + answer);
         console.log('  Searching Last.FM...');
         // TODO: sanitization here may be too agressive
         // Removing "by" and "-" may be enough
@@ -1042,6 +1088,7 @@ function submitAnswer(_a) {
             if (!foundTracks) {
                 selectors_1._answerSubmissionFailed('no match found');
                 console.log('%c    No match found', 'color: #A62F2F');
+                console.groupEnd();
                 return;
             }
             // Bail earily if the results are empty
@@ -1049,16 +1096,38 @@ function submitAnswer(_a) {
             if (tracks.length == 0) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
+                console.groupEnd();
                 return;
             }
             // Attempt to find a match 
-            var match = validateAnswer(tracks, answer);
+            var match = answer_validator_1.findMatch(answer, tracks);
             // Bail earily we didn't find a match
             if (!match) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
+                console.groupEnd();
                 return;
             }
+            // validate match against previous turn
+            var hasOverlap = answer_validator_1.hasIntersection(match.name, previousTurn.match.name);
+            // Bail early if there's no overlap
+            if (!hasOverlap) {
+                selectors_1._answerSubmissionFailed("Does not have any similar words with the previous answer");
+                console.log('%c        No similiary to previous answer', 'color: #A62F2F');
+                console.groupEnd();
+                return;
+            }
+            console.group("        Comparing Artists");
+            console.log("%c        " + match.artist + ", " + previousTurn.match.artist, 'color: #4070B7');
+            console.groupEnd();
+            if (match.artist === previousTurn.match.artist) {
+                selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row");
+                console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F");
+                console.groupEnd();
+                return;
+            }
+            // validate match against first turn
+            console.groupEnd();
             // Submit our answer and match to the server
             submitToServer({ dispatch: dispatch, gameId: gameId, answer: answer, match: match });
         });
@@ -1068,7 +1137,7 @@ exports.submitAnswer = submitAnswer;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1087,21 +1156,48 @@ exports.__esModule = true;
  *   validate(userInput, match)
 */
 var string_sanitizer_1 = __webpack_require__(1);
+var stem = __webpack_require__(17);
+// Public: Returns the result that matches the user's input
+// 
+// userInput: string - User-generated input
+// tracks: any[] - Track results from Last.fm
+// Returns any 
+function findMatch(userInput, tracks) {
+    var match = null;
+    var limit = Math.min(tracks.length, 5);
+    // Iterate through the first up-to-5 matches for more accuracy
+    for (var i = 0; i < limit; i++) {
+        var _a = tracks[i], artist = _a.artist, name_1 = _a.name;
+        console.log("%c    Match found: " + name_1 + " - " + artist, 'color: #42A143');
+        console.log("      Validating...");
+        if (validate(userInput, { artist: artist, name: name_1 })) {
+            match = tracks[i];
+            console.log('%c        valid match!', 'color: #42A143');
+            break;
+        }
+        else {
+            console.log('%c        not a valid match', 'color: #A62F2F');
+        }
+    }
+    return match;
+}
+exports.findMatch = findMatch;
 // Public: Sanitizes the input and determines whether or not the 
 // user-generated input is similar enough to the provided match
 // 
 // answer: string - User-generated input
 // match: {string, string} - An object that contains the artist and song name from Last.fm
 //
-// Returns boolean 
+// Returns boolean
 function validate(answer, match) {
+    console.group("        Sanitizing");
     var sAnswer = string_sanitizer_1.sanitize(answer);
     var sArtist = string_sanitizer_1.sanitize(match.artist);
     var sName = string_sanitizer_1.sanitize(match.name);
-    console.log("        Sanitizing...");
-    console.log("%c          answer: " + sAnswer, 'color: #4070B7');
-    console.log("%c          match.name: " + sName, 'color: #4070B7');
-    console.log("%c          match.artist: " + sArtist, 'color: #4070B7');
+    console.log("%c        answer: " + sAnswer, 'color: #4070B7');
+    console.log("%c        match.name: " + sName, 'color: #4070B7');
+    console.log("%c        match.artist: " + sArtist, 'color: #4070B7');
+    console.groupEnd();
     var Patterns = {
         name: new RegExp(sName, 'g'),
         artist: new RegExp(sArtist, 'g')
@@ -1124,10 +1220,212 @@ function validate(answer, match) {
     return false;
 }
 exports.validate = validate;
+// Internal: A single abstraction to provide a custom layer on top
+// of the porter-stemmer algorithm 
+//
+// word - string
+// 
+// Returns a string
+function stemmed(word) {
+    if (word === "delivery") {
+        return "deliver";
+    }
+    if (word === "trappin") {
+        return "trap";
+    }
+    if (word === "american") {
+        return "america";
+    }
+    return stem(word);
+}
+// Public: Finds the intersection between two strings (based on stems)
+// 
+// str1 - string
+// str2 - string
+//
+// Returns a boolean
+function hasIntersection(str1, str2) {
+    console.group("        Comparing Names");
+    var name1Stemmed = string_sanitizer_1.sanitize(str1).split(" ").map(function (word) { return stemmed(word); });
+    var name2Stemmed = string_sanitizer_1.sanitize(str2).split(" ").map(function (word) { return stemmed(word); });
+    console.log("%c        stems: " + name1Stemmed, 'color: #4070B7');
+    console.log("%c        stems: " + name2Stemmed, 'color: #4070B7');
+    var longerWordStemmed = name1Stemmed.length > name2Stemmed.length ? name1Stemmed : name2Stemmed;
+    var shorterWordStemmed = longerWordStemmed == name1Stemmed ? name2Stemmed : name1Stemmed;
+    var results = longerWordStemmed.filter(function (word) { return shorterWordStemmed.indexOf(word) !== -1; });
+    var foundOverlap = results.length > 0;
+    console.groupEnd();
+    return foundOverlap;
+}
+exports.hasIntersection = hasIntersection;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var stemmer = __webpack_require__(2);
+
+exports = module.exports = __webpack_require__(18);
+
+exports.among = stemmer.among;
+exports.except = stemmer.except;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var stemmer = __webpack_require__(2),
+    alphabet = "abcdefghijklmnopqrstuvwxyz",
+    vowels = "aeiouy",
+    consonants = alphabet.replace(RegExp("[" + vowels + "]", "g"), "") + "Y",
+    v_wxy = vowels + "wxY",
+    valid_li = "cdeghkmnrt",
+    r1_re = RegExp("^.*?([" + vowels + "][^" + vowels + "]|$)"),
+    r1_spec = /^(gener|commun|arsen)/,
+    doubles = /(bb|dd|ff|gg|mm|nn|pp|rr|tt)$/,
+    y_cons = RegExp("([" + vowels + "])y", "g"),
+    y_suff = RegExp("(.[^" + vowels + "])[yY]$"),
+    exceptions1 = { skis: "ski",
+  skies: "sky",
+  dying: "die",
+  lying: "lie",
+  tying: "tie",
+
+  idly: "idl",
+  gently: "gentl",
+  ugly: "ugli",
+  early: "earli",
+  only: "onli",
+  singly: "singl",
+
+  sky: "sky",
+  news: "news",
+  howe: "howe",
+
+  atlas: "atlas",
+  cosmos: "cosmos",
+  bias: "bias",
+  andes: "andes"
+},
+    exceptions2 = ["inning", "outing", "canning", "herring", "earring", "proceed", "exceed", "succeed"];
+
+module.exports = function (word) {
+  // Exceptions 1
+  var stop = stemmer.except(word, exceptions1);
+  if (stop) return stop;
+
+  // No stemming for short words.
+  if (word.length < 3) return word;
+
+  // Y = "y" as a consonant.
+  if (word[0] === "y") word = "Y" + word.substr(1);
+  word = word.replace(y_cons, "$1Y");
+
+  // Identify the regions of the word.
+  var r1, m;
+  if (m = r1_spec.exec(word)) {
+    r1 = m[0].length;
+  } else {
+    r1 = r1_re.exec(word)[0].length;
+  }
+
+  var r2 = r1 + r1_re.exec(word.substr(r1))[0].length;
+
+  // Step 0
+  word = word.replace(/^'/, "");
+  word = word.replace(/'(s'?)?$/, "");
+
+  // Step 1a
+  word = stemmer.among(word, ["sses", "ss", "(ied|ies)", function (match, _, offset) {
+    return offset > 1 ? "i" : "ie";
+  }, "([" + vowels + "].*?[^us])s", function (match, m1) {
+    return m1;
+  }]);
+
+  stop = stemmer.except(word, exceptions2);
+  if (stop) return stop;
+
+  // Step 1b
+  word = stemmer.among(word, ["(eed|eedly)", function (match, _, offset) {
+    return offset >= r1 ? "ee" : match + " ";
+  }, "([" + vowels + "].*?)(ed|edly|ing|ingly)", function (match, prefix, suffix, off) {
+    if (/(?:at|bl|iz)$/.test(prefix)) {
+      return prefix + "e";
+    } else if (doubles.test(prefix)) {
+      return prefix.substr(0, prefix.length - 1);
+    } else if (shortv(word.substr(0, off + prefix.length)) && off + prefix.length <= r1) {
+      return prefix + "e";
+    } else {
+      return prefix;
+    }
+  }]);
+
+  // Step 1c
+  word = word.replace(y_suff, "$1i");
+
+  // Step 2
+  word = stemmer.among(word, r1, ["(izer|ization)", "ize", "(ational|ation|ator)", "ate", "enci", "ence", "anci", "ance", "abli", "able", "entli", "ent", "tional", "tion", "(alism|aliti|alli)", "al", "fulness", "ful", "(ousli|ousness)", "ous", "(iveness|iviti)", "ive", "(biliti|bli)", "ble", "ogi", function (m, off) {
+    return word[off - 1] === "l" ? "og" : "ogi";
+  }, "fulli", "ful", "lessli", "less", "li", function (m, off) {
+    return ~valid_li.indexOf(word[off - 1]) ? "" : "li";
+  }]);
+
+  // Step 3
+  word = stemmer.among(word, r1, ["ational", "ate", "tional", "tion", "alize", "al", "(icate|iciti|ical)", "ic", "(ful|ness)", "", "ative", function (m, off) {
+    return off >= r2 ? "" : "ative";
+  }]);
+
+  // Step 4
+  word = stemmer.among(word, r2, ["(al|ance|ence|er|ic|able|ible|ant|ement|ment|ent|ism|ate|iti|ous|ive|ize)", "", "ion", function (m, off) {
+    return ~"st".indexOf(word[off - 1]) ? "" : m;
+  }]);
+
+  // Step 5
+  word = stemmer.among(word, r1, ["e", function (m, off) {
+    return off >= r2 || !shortv(word, off - 2) ? "" : "e";
+  }, "l", function (m, off) {
+    return word[off - 1] === "l" && off >= r2 ? "" : "l";
+  }]);
+
+  word = word.replace(/Y/g, "y");
+
+  return word;
+};
+
+// Check for a short syllable at the given index.
+// Examples:
+//
+//   rap
+//   trap
+//   entrap
+//
+// NOT short
+//
+//   uproot
+//   bestow
+//   disturb
+//
+function shortv(word, i) {
+  if (i == null) i = word.length - 2;
+  if (word.length < 3) i = 0; //return true
+  return !!(!~vowels.indexOf(word[i - 1]) && ~vowels.indexOf(word[i]) && !~v_wxy.indexOf(word[i + 1]) || i === 0 && ~vowels.indexOf(word[i]) && !~vowels.indexOf(word[i + 1]));
+}
+
+// Check if the word is short.
+function short(word, r1) {
+  var l = word.length;
+  return r1 >= l && shortv(word, l - 2);
+}
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1186,7 +1484,7 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 
 /***/ }),
-/* 17 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1202,36 +1500,36 @@ exports.createActionSet = function (actionName) {
 
 
 /***/ }),
-/* 18 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var game_1 = __webpack_require__(19);
+var game_1 = __webpack_require__(22);
 exports.Game = game_1["default"];
-var player_1 = __webpack_require__(20);
+var player_1 = __webpack_require__(23);
 exports.Player = player_1["default"];
-var match_1 = __webpack_require__(4);
+var match_1 = __webpack_require__(5);
 exports.Match = match_1["default"];
-var turn_1 = __webpack_require__(3);
+var turn_1 = __webpack_require__(4);
 exports.Turn = turn_1["default"];
-var fb_friend_1 = __webpack_require__(21);
+var fb_friend_1 = __webpack_require__(24);
 exports.FBFriend = fb_friend_1["default"];
-var round_1 = __webpack_require__(2);
+var round_1 = __webpack_require__(3);
 exports.Round = round_1["default"];
 
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var round_1 = __webpack_require__(2);
+var round_1 = __webpack_require__(3);
 var Game = /** @class */ (function () {
     function Game(id, players, status, rounds) {
         this.id = id;
@@ -1275,7 +1573,7 @@ exports["default"] = Game;
 
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1291,7 +1589,7 @@ exports["default"] = Player;
 
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1313,21 +1611,21 @@ exports["default"] = FBFriend;
 
 
 /***/ }),
-/* 22 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var redux_thunk_1 = __webpack_require__(23);
-var redux_1 = __webpack_require__(5);
-var index_1 = __webpack_require__(39);
+var redux_thunk_1 = __webpack_require__(26);
+var redux_1 = __webpack_require__(6);
+var index_1 = __webpack_require__(42);
 exports["default"] = redux_1.createStore(index_1["default"], redux_1.applyMiddleware(redux_thunk_1["default"]));
 
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1356,7 +1654,7 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 24 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1366,15 +1664,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(9);
+var _Symbol2 = __webpack_require__(10);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
-var _getRawTag = __webpack_require__(27);
+var _getRawTag = __webpack_require__(30);
 
 var _getRawTag2 = _interopRequireDefault(_getRawTag);
 
-var _objectToString = __webpack_require__(28);
+var _objectToString = __webpack_require__(31);
 
 var _objectToString2 = _interopRequireDefault(_objectToString);
 
@@ -1404,7 +1702,7 @@ function baseGetTag(value) {
 exports.default = baseGetTag;
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1416,7 +1714,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _freeGlobal = __webpack_require__(26);
+var _freeGlobal = __webpack_require__(29);
 
 var _freeGlobal2 = _interopRequireDefault(_freeGlobal);
 
@@ -1431,7 +1729,7 @@ var root = _freeGlobal2.default || freeSelf || Function('return this')();
 exports.default = root;
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1447,10 +1745,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
 
 exports.default = freeGlobal;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
-/* 27 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1460,7 +1758,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(9);
+var _Symbol2 = __webpack_require__(10);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
@@ -1512,7 +1810,7 @@ function getRawTag(value) {
 exports.default = getRawTag;
 
 /***/ }),
-/* 28 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1545,7 +1843,7 @@ function objectToString(value) {
 exports.default = objectToString;
 
 /***/ }),
-/* 29 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1555,7 +1853,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _overArg = __webpack_require__(30);
+var _overArg = __webpack_require__(33);
 
 var _overArg2 = _interopRequireDefault(_overArg);
 
@@ -1567,7 +1865,7 @@ var getPrototype = (0, _overArg2.default)(Object.getPrototypeOf, Object);
 exports.default = getPrototype;
 
 /***/ }),
-/* 30 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1593,7 +1891,7 @@ function overArg(func, transform) {
 exports.default = overArg;
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1636,16 +1934,16 @@ function isObjectLike(value) {
 exports.default = isObjectLike;
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(33);
+module.exports = __webpack_require__(36);
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1655,7 +1953,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(35);
+var _ponyfill = __webpack_require__(38);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -1679,10 +1977,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10), __webpack_require__(34)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(37)(module)))
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1712,7 +2010,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 35 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1741,7 +2039,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 36 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1752,13 +2050,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = combineReducers;
 
-var _createStore = __webpack_require__(7);
+var _createStore = __webpack_require__(8);
 
-var _isPlainObject = __webpack_require__(8);
+var _isPlainObject = __webpack_require__(9);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _warning = __webpack_require__(11);
+var _warning = __webpack_require__(12);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -1890,10 +2188,10 @@ function combineReducers(reducers) {
     return hasChanged ? nextState : state;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 37 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1955,7 +2253,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 38 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1966,7 +2264,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = applyMiddleware;
 
-var _compose = __webpack_require__(12);
+var _compose = __webpack_require__(13);
 
 var _compose2 = _interopRequireDefault(_compose);
 
@@ -2028,16 +2326,16 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 39 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var redux_1 = __webpack_require__(5);
-var lastfm_1 = __webpack_require__(40);
-var main_1 = __webpack_require__(41);
+var redux_1 = __webpack_require__(6);
+var lastfm_1 = __webpack_require__(43);
+var main_1 = __webpack_require__(44);
 exports["default"] = redux_1.combineReducers({
     lastFM: lastfm_1["default"],
     main: main_1["default"]
@@ -2045,7 +2343,7 @@ exports["default"] = redux_1.combineReducers({
 
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2068,7 +2366,7 @@ exports["default"] = default_1;
 
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -9,7 +9,7 @@ export function sanitize(input: string): string {
   const Patterns = {
     parensAndBrackets: /[\(\)\[\]]/g,
     hyphensAndUnderscores: /[-_]/g,
-    puncuation: /[.']/g,
+    puncuation: /[.'!&]/g,
     articles: new RegExp(articlePattern, 'g'),
     whitespace: /\s+/g
   }

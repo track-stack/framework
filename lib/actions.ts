@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 import store from './store'
-import { validate } from './utils/answer-validator'
+import { findMatch, hasIntersection } from './utils/answer-validator'
 import { sanitize } from './utils/string-sanitizer'
 import {
   _answerSubmissionStarted,
@@ -9,8 +9,7 @@ import {
   _answerSubmissionFailed ,
   _fetchFriends,
   _performSearch,
-  _fetchedGame,
-  _selectGameInvitee,
+  _fetchedGame, _selectGameInvitee,
 } from './selectors'
 
 import { Game, FBFriend } from './types'
@@ -67,33 +66,15 @@ function submitToServer({dispatch, gameId, answer, match}) {
   })
   .then(response => response.json())
   .then(json => {
+    console.log("a")
     const game = Game.from(json.game)
+    console.log("b")
     dispatch(_answerSubmitted(game))
+    console.log("c")
   })
   .catch(error => {
     dispatch(_answerSubmissionFailed(error))
   })
-}
-
-function validateAnswer(tracks: any[], answer: string) {
-  let match = null
-  const limit = Math.min(tracks.length, 5)
-
-  // Iterate through the first up-to-5 matches for more accuracy
-  for (let i = 0; i < limit; i++) {
-    const { artist, name } = tracks[i]
-    console.log(`%c    Match found: ${name} - ${artist}`, 'color: #42A143')
-    console.log("      Validating...")
-    if (validate(answer, { artist, name })) {
-      match = tracks[i]
-      console.log('%c        valid match!', 'color: #42A143')
-      break
-    } else {
-      console.log('%c        not a valid match', 'color: #A62F2F')
-    }
-  }
-
-  return match
 }
 
 // TODO: Remove logs
@@ -102,7 +83,7 @@ export function submitAnswer({gameId, answer, previousTurn}) {
   return dispatch => {
     dispatch(_answerSubmissionStarted())
 
-    console.log(`%c INPUT: ${answer}`, 'font-weight: bold')
+    console.group(`INPUT: ${answer}`)
     console.log('  Searching Last.FM...')
 
     // TODO: sanitization here may be too agressive
@@ -117,26 +98,53 @@ export function submitAnswer({gameId, answer, previousTurn}) {
       if (!foundTracks) {
         _answerSubmissionFailed('no match found')
         console.log('%c    No match found', 'color: #A62F2F')
+        console.groupEnd()
         return
       }
 
       // Bail earily if the results are empty
-      const tracks = json.results.trackmatches.track;
+      const tracks: any[] = json.results.trackmatches.track;
       if (tracks.length == 0) {
         _answerSubmissionFailed("no match found")
         console.log('%c    No match found', 'color: #A62F2F')
+        console.groupEnd()
         return
       }
 
       // Attempt to find a match 
-      const match = validateAnswer(tracks, answer)
+      const match: {artist: string, name: string} = findMatch(answer, tracks)
 
       // Bail earily we didn't find a match
       if (!match) {
         _answerSubmissionFailed("no match found")
         console.log('%c    No match found', 'color: #A62F2F')
+        console.groupEnd()
         return
       }
+
+      // validate match against previous turn
+      const hasOverlap = hasIntersection(match.name, previousTurn.match.name)
+
+      // Bail early if there's no overlap
+      if (!hasOverlap) {
+        _answerSubmissionFailed("Does not have any similar words with the previous answer")
+        console.log('%c        No similiary to previous answer', 'color: #A62F2F')
+        console.groupEnd()
+        return
+      }
+      
+      console.group("        Comparing Artists")
+      console.log(`%c        ${match.artist}, ${previousTurn.match.artist}`, 'color: #4070B7')
+      console.groupEnd()
+      if (match.artist === previousTurn.match.artist) {
+        _answerSubmissionFailed("Can't play the same artist twice in a row")
+        console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F")
+        console.groupEnd()
+        return
+      }
+      // validate match against first turn
+
+      console.groupEnd()
 
       // Submit our answer and match to the server
       submitToServer({dispatch, gameId, answer, match})
