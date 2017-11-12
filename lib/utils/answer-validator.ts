@@ -1,24 +1,28 @@
 /*jshint esversion: 6 */
 
+/* answer-validator.ts
+ * 
+ * Determines whether or not user generated input matches a result
+ * returned from the Last.fm API
+ * 
+ * example: 
+ *   
+ *   const userInput = "elvis hound dog"
+ *   const match = {artist: "Elvis Presley", name: "Hound Dog"}
+ *   validate(userInput, match)
+*/
+
 import { sanitize } from './string-sanitizer'
 
-interface AnswerValidation {
-  exactArtistMatch: boolean
-  exactNameMatch: boolean
-  confidence: number
-  valid: boolean
-}
-
-export function validate(answer: string, previousAnswer: string, match: {artist: string, name: string}): AnswerValidation {
-  const result: AnswerValidation = {
-    valid: false,
-    exactArtistMatch: false,
-    exactNameMatch: false,
-    confidence: 0.0
-  }
-
+// Public: Sanitizes the input and determines whether or not the 
+// user-generated input is similar enough to the provided match
+// 
+// answer: string - User-generated input
+// match: {string, string} - An object that contains the artist and song name from Last.fm
+//
+// Returns boolean 
+export function validate(answer: string, match: {artist: string, name: string}): boolean {
   const sAnswer = sanitize(answer)
-  const sPreviousAnswer = sanitize(previousAnswer)
   const sArtist = sanitize(match.artist)
   const sName = sanitize(match.name)
 
@@ -33,21 +37,11 @@ export function validate(answer: string, previousAnswer: string, match: {artist:
   }
 
   let nameMatch = sAnswer.match(Patterns.name)
-  if (nameMatch && nameMatch.length > 0) {
-    result.exactNameMatch = true
-  }
-
   let artistMatch = sAnswer.match(Patterns.artist) 
-  if (artistMatch && artistMatch.length > 0) {
-    result.exactArtistMatch = true
-  }
 
   // if we have an exact match then we're 👌🏼
   if (nameMatch && artistMatch) {
-    result.confidence = 100.0
-    result.valid = true
-  
-    return result
+    return true
   }
 
   // see if the artist exists in the match
@@ -56,13 +50,9 @@ export function validate(answer: string, previousAnswer: string, match: {artist:
     const answerWithoutName = sAnswer.replace(nameMatchReg, "").trim()
     artistMatch = sArtist.match(answerWithoutName)
     if (artistMatch && artistMatch.length > 0) {
-      result.exactArtistMatch = true
-      result.confidence = 100.0
-      result.valid = true
-
-      return result
+      return true
     }
   }
 
-  return result
+  return false
 } 

@@ -1006,15 +1006,15 @@ function submitToServer(_a) {
         dispatch(selectors_1._answerSubmissionFailed(error));
     });
 }
-function validateAnswer(tracks, _a) {
-    var answer = _a.answer, previousAnswer = _a.previousAnswer;
+function validateAnswer(tracks, answer) {
     var match = null;
     var limit = Math.min(tracks.length, 5);
+    // Iterate through the first up-to-5 matches for more accuracy
     for (var i = 0; i < limit; i++) {
-        var _b = tracks[i], artist = _b.artist, name_1 = _b.name;
+        var _a = tracks[i], artist = _a.artist, name_1 = _a.name;
         console.log("%c    Match found: " + name_1 + " - " + artist, 'color: #42A143');
         console.log("      Validating...");
-        if (answer_validator_1.validate(answer, previousAnswer, { artist: artist, name: name_1 }).valid) {
+        if (answer_validator_1.validate(answer, { artist: artist, name: name_1 })) {
             match = tracks[i];
             console.log('%c        valid match!', 'color: #42A143');
             break;
@@ -1027,7 +1027,7 @@ function validateAnswer(tracks, _a) {
 }
 // TODO: Remove logs
 function submitAnswer(_a) {
-    var gameId = _a.gameId, answer = _a.answer, previousAnswer = _a.previousAnswer;
+    var gameId = _a.gameId, answer = _a.answer, previousTurn = _a.previousTurn;
     return function (dispatch) {
         dispatch(selectors_1._answerSubmissionStarted());
         console.log("%c INPUT: " + answer, 'font-weight: bold');
@@ -1035,25 +1035,31 @@ function submitAnswer(_a) {
         // TODO: sanitization here may be too agressive
         // Removing "by" and "-" may be enough
         var sanitizedAnswer = string_sanitizer_1.sanitize(answer);
+        // search Last.fm
         performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
+            // Bail early if the response lacks the required json structure
             var foundTracks = json && json.results && json.results.trackmatches;
             if (!foundTracks) {
                 selectors_1._answerSubmissionFailed('no match found');
                 console.log('%c    No match found', 'color: #A62F2F');
                 return;
             }
+            // Bail earily if the results are empty
             var tracks = json.results.trackmatches.track;
             if (tracks.length == 0) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
                 return;
             }
-            var match = validateAnswer(tracks, { answer: answer, previousAnswer: previousAnswer });
+            // Attempt to find a match 
+            var match = validateAnswer(tracks, answer);
+            // Bail earily we didn't find a match
             if (!match) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
                 return;
             }
+            // Submit our answer and match to the server
             submitToServer({ dispatch: dispatch, gameId: gameId, answer: answer, match: match });
         });
     };
@@ -1069,16 +1075,27 @@ exports.submitAnswer = submitAnswer;
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
+/* answer-validator.ts
+ *
+ * Determines whether or not user generated input matches a result
+ * returned from the Last.fm API
+ *
+ * example:
+ *
+ *   const userInput = "elvis hound dog"
+ *   const match = {artist: "Elvis Presley", name: "Hound Dog"}
+ *   validate(userInput, match)
+*/
 var string_sanitizer_1 = __webpack_require__(1);
-function validate(answer, previousAnswer, match) {
-    var result = {
-        valid: false,
-        exactArtistMatch: false,
-        exactNameMatch: false,
-        confidence: 0.0
-    };
+// Public: Sanitizes the input and determines whether or not the 
+// user-generated input is similar enough to the provided match
+// 
+// answer: string - User-generated input
+// match: {string, string} - An object that contains the artist and song name from Last.fm
+//
+// Returns boolean 
+function validate(answer, match) {
     var sAnswer = string_sanitizer_1.sanitize(answer);
-    var sPreviousAnswer = string_sanitizer_1.sanitize(previousAnswer);
     var sArtist = string_sanitizer_1.sanitize(match.artist);
     var sName = string_sanitizer_1.sanitize(match.name);
     console.log("        Sanitizing...");
@@ -1090,18 +1107,10 @@ function validate(answer, previousAnswer, match) {
         artist: new RegExp(sArtist, 'g')
     };
     var nameMatch = sAnswer.match(Patterns.name);
-    if (nameMatch && nameMatch.length > 0) {
-        result.exactNameMatch = true;
-    }
     var artistMatch = sAnswer.match(Patterns.artist);
-    if (artistMatch && artistMatch.length > 0) {
-        result.exactArtistMatch = true;
-    }
     // if we have an exact match then we're 👌🏼
     if (nameMatch && artistMatch) {
-        result.confidence = 100.0;
-        result.valid = true;
-        return result;
+        return true;
     }
     // see if the artist exists in the match
     if (nameMatch && !artistMatch) {
@@ -1109,13 +1118,10 @@ function validate(answer, previousAnswer, match) {
         var answerWithoutName = sAnswer.replace(nameMatchReg, "").trim();
         artistMatch = sArtist.match(answerWithoutName);
         if (artistMatch && artistMatch.length > 0) {
-            result.exactArtistMatch = true;
-            result.confidence = 100.0;
-            result.valid = true;
-            return result;
+            return true;
         }
     }
-    return result;
+    return false;
 }
 exports.validate = validate;
 

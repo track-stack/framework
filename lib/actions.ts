@@ -75,15 +75,16 @@ function submitToServer({dispatch, gameId, answer, match}) {
   })
 }
 
-function validateAnswer(tracks: any[], {answer, previousAnswer}) {
+function validateAnswer(tracks: any[], answer: string) {
   let match = null
   const limit = Math.min(tracks.length, 5)
 
+  // Iterate through the first up-to-5 matches for more accuracy
   for (let i = 0; i < limit; i++) {
     const { artist, name } = tracks[i]
     console.log(`%c    Match found: ${name} - ${artist}`, 'color: #42A143')
     console.log("      Validating...")
-    if (validate(answer, previousAnswer, { artist, name }).valid) {
+    if (validate(answer, { artist, name })) {
       match = tracks[i]
       console.log('%c        valid match!', 'color: #42A143')
       break
@@ -97,7 +98,7 @@ function validateAnswer(tracks: any[], {answer, previousAnswer}) {
 
 // TODO: Remove logs
 
-export function submitAnswer({gameId, answer, previousAnswer}) {
+export function submitAnswer({gameId, answer, previousTurn}) {
   return dispatch => {
     dispatch(_answerSubmissionStarted())
 
@@ -107,7 +108,11 @@ export function submitAnswer({gameId, answer, previousAnswer}) {
     // TODO: sanitization here may be too agressive
     // Removing "by" and "-" may be enough
     const sanitizedAnswer = sanitize(answer)
+
+    // search Last.fm
     performSearch({sanitizedAnswer}).then(json => {
+
+      // Bail early if the response lacks the required json structure
       const foundTracks = json && json.results && json.results.trackmatches
       if (!foundTracks) {
         _answerSubmissionFailed('no match found')
@@ -115,6 +120,7 @@ export function submitAnswer({gameId, answer, previousAnswer}) {
         return
       }
 
+      // Bail earily if the results are empty
       const tracks = json.results.trackmatches.track;
       if (tracks.length == 0) {
         _answerSubmissionFailed("no match found")
@@ -122,13 +128,17 @@ export function submitAnswer({gameId, answer, previousAnswer}) {
         return
       }
 
-      const match = validateAnswer(tracks, {answer, previousAnswer})
+      // Attempt to find a match 
+      const match = validateAnswer(tracks, answer)
 
+      // Bail earily we didn't find a match
       if (!match) {
         _answerSubmissionFailed("no match found")
         console.log('%c    No match found', 'color: #A62F2F')
         return
       }
+
+      // Submit our answer and match to the server
       submitToServer({dispatch, gameId, answer, match})
     })
   }
