@@ -3,15 +3,19 @@
 export function sanitize(input: string): string {
   input = input.toLowerCase()
 
-  const blacklist = "a|an|and|the|in"
+  const blacklist = "a|an|and|the|in|by"
   const articlePattern = `\\b(${blacklist})\\b`
 
   const Patterns = {
     parensAndBrackets: /[\(\)\[\]]/g,
     hyphensAndUnderscores: /[-_]/g,
+    puncuation: /[.']/g,
     articles: new RegExp(articlePattern, 'g'),
     whitespace: /\s+/g
   }
+
+  // remove all puncuation and replace them with ""
+  input = input.replace(Patterns.puncuation, '')
 
   // many times, featured results, or additional producers are appended
   // to the result like so: (featuring beep and boop...)
@@ -28,4 +32,3 @@ export function sanitize(input: string): string {
 
   return input.trim()
 }
-
