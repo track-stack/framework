@@ -4,8 +4,8 @@ import { Game } from '../../../lib/types'
 
 test("initializes an instance from json", () => {
   const json = {
-    id: 20, 
-    players: { 
+    id: 20,
+    players: {
       viewer: {id: 1, name: "Mike", image: "https://image.png"},
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
@@ -24,8 +24,8 @@ test("initializes an instance from json", () => {
 // #latestRound
 test("returns null if there are no rounds", () => {
   const json = {
-    id: 20, 
-    players: { 
+    id: 20,
+    players: {
       viewer: {id: 1, name: "Mike", image: "https://image.png"},
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
@@ -41,8 +41,8 @@ test("returns null if there are no rounds", () => {
 // #latestTurn
 test("returns null if there are no rounds", () => {
   const json = {
-    id: 20, 
-    players: { 
+    id: 20,
+    players: {
       viewer: {id: 1, name: "Mike", image: "https://image.png"},
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
@@ -57,8 +57,8 @@ test("returns null if there are no rounds", () => {
 
 test("returns null if there are no turns", () => {
   const json = {
-    id: 20, 
-    players: { 
+    id: 20,
+    players: {
       viewer: {id: 1, name: "Mike", image: "https://image.png"},
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
@@ -73,8 +73,8 @@ test("returns null if there are no turns", () => {
 
 test("returns the latest turn", () => {
   const json = {
-    id: 20, 
-    players: { 
+    id: 20,
+    players: {
       viewer: {id: 1, name: "Mike", image: "https://image.png"},
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
@@ -98,3 +98,4 @@ test("returns the latest turn", () => {
   expect(latestTurn).not.toBe(null)
   expect(latestTurn.answer).toBe("three futures - torres")
 })
+
