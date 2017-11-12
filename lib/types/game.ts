@@ -13,9 +13,9 @@ export default class Game {
   id: number
   players: GamePlayers
   status: number
-  rounds: [Round]
+  rounds: Round[]
 
-  constructor(id: number, players: GamePlayers, status: number, rounds: [Round]) {
+  constructor(id: number, players: GamePlayers, status: number, rounds: Round[]) {
      this.id = id
      this.players = players
      this.status = status
