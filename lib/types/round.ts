@@ -5,7 +5,7 @@ import Turn from './turn'
 export default class Round {
   turns: Turn[]
 
-  constructor(turns?: Turn[] | null) {
+  constructor(turns?: Turn[]) {
     this.turns = turns || new Array<Turn>()
   }
 

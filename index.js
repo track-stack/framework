@@ -1025,6 +1025,7 @@ function validateAnswer(tracks, _a) {
     }
     return match;
 }
+// TODO: Remove logs
 function submitAnswer(_a) {
     var gameId = _a.gameId, answer = _a.answer, previousAnswer = _a.previousAnswer;
     return function (dispatch) {
@@ -1039,21 +1040,18 @@ function submitAnswer(_a) {
             if (!foundTracks) {
                 selectors_1._answerSubmissionFailed('no match found');
                 console.log('%c    No match found', 'color: #A62F2F');
-                console.groupEnd();
                 return;
             }
             var tracks = json.results.trackmatches.track;
             if (tracks.length == 0) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
-                console.groupEnd();
                 return;
             }
             var match = validateAnswer(tracks, { answer: answer, previousAnswer: previousAnswer });
             if (!match) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
-                console.groupEnd();
                 return;
             }
             submitToServer({ dispatch: dispatch, gameId: gameId, answer: answer, match: match });

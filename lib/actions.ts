@@ -109,18 +109,16 @@ export function submitAnswer({gameId, answer, previousAnswer}) {
     const sanitizedAnswer = sanitize(answer)
     performSearch({sanitizedAnswer}).then(json => {
       const foundTracks = json && json.results && json.results.trackmatches
-      if (!foundTracks) { 
+      if (!foundTracks) {
         _answerSubmissionFailed('no match found')
         console.log('%c    No match found', 'color: #A62F2F')
-        console.groupEnd()
         return
       }
 
       const tracks = json.results.trackmatches.track;
-      if (tracks.length == 0) { 
+      if (tracks.length == 0) {
         _answerSubmissionFailed("no match found")
         console.log('%c    No match found', 'color: #A62F2F')
-        console.groupEnd()
         return
       }
 
@@ -129,7 +127,6 @@ export function submitAnswer({gameId, answer, previousAnswer}) {
       if (!match) {
         _answerSubmissionFailed("no match found")
         console.log('%c    No match found', 'color: #A62F2F')
-        console.groupEnd()
         return
       }
       submitToServer({dispatch, gameId, answer, match})
