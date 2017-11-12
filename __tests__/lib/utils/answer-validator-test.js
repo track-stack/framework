@@ -1,7 +1,12 @@
 /*jshint esversion: 6 */
 
-import { validate } from '../../../lib/utils/answer-validator'
+import { 
+  validate, 
+  findMatch,
+  hasIntersection
+} from '../../../lib/utils/answer-validator'
 
+// #validate
 test("exact matches", () => {
   const answer = "three futures - torres"
   const match = {
@@ -10,4 +15,15 @@ test("exact matches", () => {
   }
 
   const result = validate(answer, match)  
+})
+
+// #findSimilarity
+test("with overlap", () => {
+  const result = hasIntersection("Trap Queen", "Trapped")
+  expect(result).toBe(true)
+})
+
+test("without overlap", () => {
+  const result = hasIntersection("Happy Together", "Beautiful Boy")
+  expect(result).toBe(false)
 })

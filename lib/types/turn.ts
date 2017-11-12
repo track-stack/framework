@@ -10,8 +10,9 @@ export default class Turn {
   hasExactArtistMatch: boolean
   userPhoto: string
   match: Match
+  createdAt: Date
 
-  constructor(userId: number, answer: string, distance: number, hasExactNameMatch: boolean, hasExactArtistMatch: boolean, userPhoto: string, match: Match) {
+  constructor(userId: number, answer: string, distance: number, hasExactNameMatch: boolean, hasExactArtistMatch: boolean, userPhoto: string, match: Match, createdAt: string) {
     this.userId = userId
     this.answer = answer
     this.distance = distance
@@ -19,6 +20,7 @@ export default class Turn {
     this.hasExactArtistMatch = hasExactArtistMatch
     this.userPhoto = userPhoto
     this.match = match
+    this.createdAt = new Date(createdAt)
   }
 
   static from(json: any): Turn {
@@ -30,7 +32,8 @@ export default class Turn {
       json.has_exact_name_match,
       json.has_exact_artist_match,
       json.user_photo,
-      match
+      match,
+      json.created_at
     )
   }
 }
