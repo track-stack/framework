@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 
 import store from './store'
+import { validate } from './utils/answer-validator'
 import { sanitize } from './utils/string-sanitizer'
 import {
   _answerSubmissionStarted,
@@ -45,9 +46,9 @@ export function fetchFriends() {
   }
 }
 
-function performSearch({answer}) {
+function performSearch({sanitizedAnswer}) {
   const apiKey = "80b1866e815a8d2ddf83757bd97fdc76"
-  return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${answer}&api_key=${apiKey}&format=json`)
+  return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
     .then(response => response.json())
 }
 
@@ -74,31 +75,63 @@ function submitToServer({dispatch, gameId, answer, match}) {
   })
 }
 
-function validateStuff({previousAnswer, answer}): boolean {
-  return true
+function validateAnswer(tracks: any[], {answer, previousAnswer}) {
+  let match = null
+  const limit = Math.min(tracks.length, 5)
+
+  for (let i = 0; i < limit; i++) {
+    const { artist, name } = tracks[i]
+    console.log(`%c    Match found: ${name} - ${artist}`, 'color: #42A143')
+    console.log("      Validating...")
+    if (validate(answer, previousAnswer, { artist, name }).valid) {
+      match = tracks[i]
+      console.log('%c        valid match!', 'color: #42A143')
+      break
+    } else {
+      console.log('%c        not a valid match', 'color: #A62F2F')
+    }
+  }
+
+  return match
 }
+
+// TODO: Remove logs
 
 export function submitAnswer({gameId, answer, previousAnswer}) {
   return dispatch => {
     dispatch(_answerSubmissionStarted())
 
-    performSearch({answer}).then(json => {
+    console.log(`%c INPUT: ${answer}`, 'font-weight: bold')
+    console.log('  Searching Last.FM...')
+
+    // TODO: sanitization here may be too agressive
+    // Removing "by" and "-" may be enough
+    const sanitizedAnswer = sanitize(answer)
+    performSearch({sanitizedAnswer}).then(json => {
       const foundTracks = json && json.results && json.results.trackmatches
       if (!foundTracks) { 
-        _answerSubmissionFailed("no match found")
+        _answerSubmissionFailed('no match found')
+        console.log('%c    No match found', 'color: #A62F2F')
+        console.groupEnd()
         return
       }
 
       const tracks = json.results.trackmatches.track;
       if (tracks.length == 0) { 
-         _answerSubmissionFailed("no match found")
-         return
+        _answerSubmissionFailed("no match found")
+        console.log('%c    No match found', 'color: #A62F2F')
+        console.groupEnd()
+        return
       }
 
-      // validate against previous song
-      // validate against match 
+      const match = validateAnswer(tracks, {answer, previousAnswer})
 
-      const match = tracks[0];
+      if (!match) {
+        _answerSubmissionFailed("no match found")
+        console.log('%c    No match found', 'color: #A62F2F')
+        console.groupEnd()
+        return
+      }
       submitToServer({dispatch, gameId, answer, match})
     })
   }
