@@ -66,11 +66,8 @@ function submitToServer({dispatch, gameId, answer, match}) {
   })
   .then(response => response.json())
   .then(json => {
-    console.log("a")
     const game = Game.from(json.game)
-    console.log("b")
     dispatch(_answerSubmitted(game))
-    console.log("c")
   })
   .catch(error => {
     dispatch(_answerSubmissionFailed(error))

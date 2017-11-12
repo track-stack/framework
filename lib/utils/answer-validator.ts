@@ -97,7 +97,7 @@ export function validate(answer: string, match: {artist: string, name: string}):
 function stemmed(word: string): string {
   if (word === "delivery") { return "deliver" }
   if (word === "trappin") { return "trap" }
-  if (word === "american") {}
+  if (word === "american") { return "america" }
   return stem(word)
 }
 
