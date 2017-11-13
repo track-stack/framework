@@ -1,31 +1,26 @@
 /*jshint esversion: 6 */
 
-/* answer-validator.ts
+/* turn-processor.ts
  * 
- * Determines whether or not user generated input matches a result
- * returned from the Last.fm API
- * 
- * example: 
- *   
- *   const userInput = "elvis hound dog"
- *   const match = {artist: "Elvis Presley", name: "Hound Dog"}
- *   validate(userInput, match)
+ * A suite of functions designed to process user-generated input 
+ * at various stages of the turn validation process
 */
 
-import { sanitize } from './string-sanitizer'
+import { sanitize } from './sanitizer'
 import * as stem from 'stem-porter'
 
-// Public: Returns the result that matches the user's input
+// Public: Given user-generated input and an array of
+// tracks (json) from Last.fm, returns the track that 
+// approximately matches the user-generated input.
 // 
 // userInput: string - User-generated input
-// tracks: any[] - Track results from Last.fm
+// tracks: any[] - An array of tracks (json) from the Last.fm
 
 // Returns any 
 export function findMatch(userInput: string, tracks: any[]): any {
   let match = null
   const limit = Math.min(tracks.length, 5)
 
-  // Iterate through the first up-to-5 matches for more accuracy
   for (let i = 0; i < limit; i++) {
     const { artist, name } = tracks[i]
     console.log(`%c    Match found: ${name} - ${artist}`, 'color: #42A143')
@@ -42,21 +37,21 @@ export function findMatch(userInput: string, tracks: any[]): any {
   return match
 }
 
-// Public: Sanitizes the input and determines whether or not the 
-// user-generated input is similar enough to the provided match
+// Public: Given user-generated input and a single track (json) from the Last.fm API,
+// tries to determine if the track provided is the track referenced by the user
 // 
 // answer: string - User-generated input
-// match: {string, string} - An object that contains the artist and song name from Last.fm
+// track: {string, string} - An object that contains the artist and song name from Last.fm
 //
 // Returns boolean
-export function validate(answer: string, match: {artist: string, name: string}): boolean {
+export function validate(answer: string, track: {artist: string, name: string}): boolean {
   console.group = console.group || function(input: string) {}
   console.groupEnd = console.groupEnd || function() {}
   console.group("        Sanitizing")
 
   const sAnswer = sanitize(answer)
-  const sArtist = sanitize(match.artist)
-  const sName = sanitize(match.name)
+  const sArtist = sanitize(track.artist)
+  const sName = sanitize(track.name)
 
   console.log(`%c        answer: ${sAnswer}`, 'color: #4070B7')
   console.log(`%c        match.name: ${sName}`, 'color: #4070B7')
@@ -88,9 +83,9 @@ export function validate(answer: string, match: {artist: string, name: string}):
   return false
 } 
 
-// Internal: A single abstraction to provide a custom layer on top
-// of the porter-stemmer algorithm 
-//
+// Internal: A layer of abstraction, which provides an opportunity
+// to add inject custom behavior into stemming algorithm
+// 
 // word - string
 // 
 // Returns a string
@@ -98,29 +93,34 @@ function stemmed(word: string): string {
   if (word === "delivery") { return "deliver" }
   if (word === "trappin") { return "trap" }
   if (word === "american") { return "america" }
+
+  // defer to the algo
   return stem(word)
 }
 
-// Public: Finds the intersection between two strings (based on stems)
+// Public: Given two string, calculates whether there are overlapping words between
+// the two strings after reducing each word to its stem.
 // 
-// str1 - string
-// str2 - string
+// left - string
+// right - string
 //
 // Returns a boolean
-export function hasIntersection(str1: string, str2: string): boolean {
+export function hasIntersection(left: string, right: string): boolean {
   console.group = console.group || function(input: string) {}
   console.group("        Comparing Names")
 
-  const name1Stemmed = sanitize(str1).split(" ").map(word => stemmed(word))
-  const name2Stemmed = sanitize(str2).split(" ").map(word => stemmed(word))
+  const lStemmed = sanitize(left).split(" ").map(word => stemmed(word))
+  const rStemmed = sanitize(right).split(" ").map(word => stemmed(word))
 
-  console.log(`%c        stems: ${name1Stemmed}`, 'color: #4070B7')
-  console.log(`%c        stems: ${name2Stemmed}`, 'color: #4070B7')
+  console.log(`%c        stems: ${lStemmed}`, 'color: #4070B7')
+  console.log(`%c        stems: ${rStemmed}`, 'color: #4070B7')
         
-  let longerWordStemmed = name1Stemmed.length > name2Stemmed.length ? name1Stemmed : name2Stemmed
-  let shorterWordStemmed = longerWordStemmed == name1Stemmed ? name2Stemmed : name1Stemmed
+  const long = lStemmed.length > rStemmed.length ? lStemmed : rStemmed 
+  const short = long == lStemmed ? rStemmed : lStemmed 
 
-  const results = longerWordStemmed.filter(word => shorterWordStemmed.indexOf(word) !== -1)
+  const results = long.filter(word => {
+    return short.indexOf(word) !== -1
+  })
 
   const foundOverlap = results.length > 0
 

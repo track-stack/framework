@@ -4,7 +4,7 @@ import {
   validate, 
   findMatch,
   hasIntersection
-} from '../../../lib/utils/answer-validator'
+} from '../../../lib/utils/turn-processor'
 
 // #validate
 test("exact matches", () => {

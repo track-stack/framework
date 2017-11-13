@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-import { sanitize } from '../../../lib/utils/string-sanitizer'
+import { sanitize } from '../../../lib/utils/sanitizer'
 
 test("strips parentheses", () => {
   const nameAndArtist = "song name by artist (featuring other artist)"

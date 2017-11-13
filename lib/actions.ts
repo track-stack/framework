@@ -1,8 +1,8 @@
 /*jshint esversion: 6 */
 
 import store from './store'
-import { findMatch, hasIntersection } from './utils/answer-validator'
-import { sanitize } from './utils/string-sanitizer'
+import { findMatch, hasIntersection } from './utils/turn-processor'
+import { sanitize } from './utils/sanitizer'
 import {
   _answerSubmissionStarted,
   _answerSubmitted,
