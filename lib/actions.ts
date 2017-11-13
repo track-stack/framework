@@ -121,26 +121,29 @@ export function submitAnswer({gameId, answer, previousTurn}) {
         return
       }
 
-      // validate match against previous turn
-      const hasOverlap = hasIntersection(match.name, previousTurn.match.name)
+      if (previousTurn) {
+        // validate match against previous turn
+        const hasOverlap = hasIntersection(match.name, previousTurn.match.name)
 
-      // Bail early if there's no overlap
-      if (!hasOverlap) {
-        _answerSubmissionFailed("Does not have any similar words with the previous answer")
-        console.log('%c        No similiary to previous answer', 'color: #A62F2F')
+        // Bail early if there's no overlap
+        if (!hasOverlap) {
+          _answerSubmissionFailed("Does not have any similar words with the previous answer")
+          console.log('%c        No similiary to previous answer', 'color: #A62F2F')
+          console.groupEnd()
+          return
+        }
+        
+        console.group("        Comparing Artists")
+        console.log(`%c        ${match.artist}, ${previousTurn.match.artist}`, 'color: #4070B7')
         console.groupEnd()
-        return
+        if (match.artist === previousTurn.match.artist) {
+          _answerSubmissionFailed("Can't play the same artist twice in a row")
+          console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F")
+          console.groupEnd()
+          return
+        }
       }
-      
-      console.group("        Comparing Artists")
-      console.log(`%c        ${match.artist}, ${previousTurn.match.artist}`, 'color: #4070B7')
-      console.groupEnd()
-      if (match.artist === previousTurn.match.artist) {
-        _answerSubmissionFailed("Can't play the same artist twice in a row")
-        console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F")
-        console.groupEnd()
-        return
-      }
+
       // validate match against first turn
 
       console.groupEnd()
