@@ -14,7 +14,7 @@ import * as stem from 'stem-porter'
 // approximately matches the user-generated input.
 // 
 // userInput: string - User-generated input
-// tracks: any[] - An array of tracks (json) from the Last.fm
+// tracks: any[] - An array of tracks (json) from Last.fm
 
 // Returns any 
 export function findMatch(userInput: string, tracks: any[]): any {
@@ -38,7 +38,7 @@ export function findMatch(userInput: string, tracks: any[]): any {
 }
 
 // Public: Given user-generated input and a single track (json) from the Last.fm API,
-// tries to determine if the track provided is the track referenced by the user
+// tries to determine if the track provided is the track referenced in the user's input
 // 
 // answer: string - User-generated input
 // track: {string, string} - An object that contains the artist and song name from Last.fm

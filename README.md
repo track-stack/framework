@@ -1,5 +1,5 @@
 [![CircleCI](https://circleci.com/gh/track-stack/framework.svg?style=svg)](https://circleci.com/gh/track-stack/framework)
-
+[![npm version](https://img.shields.io/npm/v/trackstack.svg)](https://www.npmjs.com/package/trackstack)
 # Framework
 
 Shared code between web and mobile
@@ -9,17 +9,17 @@ Shared code between web and mobile
 $ webpack --watch --colors --progress
 ```
 
+### Testing
+```basb
+yarn test
+```
+
 ### Publishing
 ```bash
 $ bin/publish
 ```
 
 ### Trouble shooting
-
-Make sure the code compiles:
-```bash
-$ uglifyjs index.js
-```
 
 https://webpack.js.org/configuration/output/  
 https://github.com/webpack/webpack/issues/2030  

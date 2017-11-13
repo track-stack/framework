@@ -101,7 +101,7 @@ export function submitAnswer({gameId, answer, previousTurn}) {
         return
       }
 
-      // Bail earily if the results are empty
+      // Bail early if the results are empty
       const tracks: any[] = json.results.trackmatches.track;
       if (tracks.length == 0) {
         _answerSubmissionFailed("no match found")
@@ -113,7 +113,7 @@ export function submitAnswer({gameId, answer, previousTurn}) {
       // Attempt to find a match 
       const match: {artist: string, name: string} = findMatch(answer, tracks)
 
-      // Bail earily we didn't find a match
+      // Bail early we didn't find a match
       if (!match) {
         _answerSubmissionFailed("no match found")
         console.log('%c    No match found', 'color: #A62F2F')

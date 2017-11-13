@@ -994,7 +994,7 @@ function submitAnswer(_a) {
                 console.groupEnd();
                 return;
             }
-            // Bail earily if the results are empty
+            // Bail early if the results are empty
             var tracks = json.results.trackmatches.track;
             if (tracks.length == 0) {
                 selectors_1._answerSubmissionFailed("no match found");
@@ -1004,7 +1004,7 @@ function submitAnswer(_a) {
             }
             // Attempt to find a match 
             var match = turn_processor_1.findMatch(answer, tracks);
-            // Bail earily we didn't find a match
+            // Bail early we didn't find a match
             if (!match) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
@@ -2127,7 +2127,7 @@ var stem = __webpack_require__(43);
 // approximately matches the user-generated input.
 // 
 // userInput: string - User-generated input
-// tracks: any[] - An array of tracks (json) from the Last.fm
+// tracks: any[] - An array of tracks (json) from Last.fm
 // Returns any 
 function findMatch(userInput, tracks) {
     var match = null;
@@ -2149,7 +2149,7 @@ function findMatch(userInput, tracks) {
 }
 exports.findMatch = findMatch;
 // Public: Given user-generated input and a single track (json) from the Last.fm API,
-// tries to determine if the track provided is the track referenced by the user
+// tries to determine if the track provided is the track referenced in the user's input
 // 
 // answer: string - User-generated input
 // track: {string, string} - An object that contains the artist and song name from Last.fm
