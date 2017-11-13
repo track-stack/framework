@@ -9,17 +9,17 @@ Shared code between web and mobile
 $ webpack --watch --colors --progress
 ```
 
+### Testing
+```basb
+yarn test
+```
+
 ### Publishing
 ```bash
 $ bin/publish
 ```
 
 ### Trouble shooting
-
-Make sure the code compiles:
-```bash
-$ uglifyjs index.js
-```
 
 https://webpack.js.org/configuration/output/  
 https://github.com/webpack/webpack/issues/2030  
