@@ -1,5 +1,5 @@
 [![CircleCI](https://circleci.com/gh/track-stack/framework.svg?style=svg)](https://circleci.com/gh/track-stack/framework)
-[![npm version](https://badge.fury.io/js/trackstack.svg)](https://badge.fury.io/js/trackstack)
+[![npm version](https://img.shields.io/npm/v/trackstack.svg)](https://www.npmjs.com/package/trackstack)
 # Framework
 
 Shared code between web and mobile
