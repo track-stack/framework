@@ -10,19 +10,19 @@ test("initializes an instance from json", () => {
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
     status: 1,
-    rounds: []
+    stacks: []
   }
 
   const game = Game.from(json)
 
   expect(game.id).toEqual(20)
-  expect(game.rounds.length).toBe(0)
+  expect(game.stacks.length).toBe(0)
   expect(game.status).toEqual(1)
   expect(game.players).toEqual(json.players)
 });
 
-// #latestRound
-test("returns null if there are no rounds", () => {
+// #latestStack
+test("returns null if there are no stacks", () => {
   const json = {
     id: 20,
     players: {
@@ -30,16 +30,16 @@ test("returns null if there are no rounds", () => {
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
     status: 1,
-    rounds: []
+    stacks: []
   }
 
   const game = Game.from(json)
 
-  expect(game.latestRound()).toBe(null)
+  expect(game.latestStack()).toBe(null)
 })
 
 // #latestTurn
-test("returns null if there are no rounds", () => {
+test("returns null if there are no stacks", () => {
   const json = {
     id: 20,
     players: {
@@ -47,7 +47,7 @@ test("returns null if there are no rounds", () => {
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
     status: 1,
-    rounds: []
+    stacks: []
   }
 
   const game = Game.from(json)
@@ -63,7 +63,7 @@ test("returns null if there are no turns", () => {
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
     status: 1,
-    rounds: [{turns: []}]
+    stacks: [{turns: []}]
   }
 
   const game = Game.from(json)
@@ -79,7 +79,7 @@ test("returns the latest turn", () => {
       opponent: {id: 2, name: "Meagan", image: "https://image.png"}
     },
     status: 1,
-    rounds: [{turns: [
+    stacks: [{turns: [
       {
         answer: "three futures - torres",
         created_at: "2017-11-11T16:37:26.591Z",
