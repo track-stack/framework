@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 import Player from './player'
-import Round from './round'
+import Stack from './stack'
 import Turn from './turn'
 
 interface GamePlayers {
@@ -13,37 +13,37 @@ export default class Game {
   id: number
   players: GamePlayers
   status: number
-  rounds: Round[]
+  stacks: Stack[]
 
-  constructor(id: number, players: GamePlayers, status: number, rounds: Round[]) {
+  constructor(id: number, players: GamePlayers, status: number, stacks: Stack[]) {
      this.id = id
      this.players = players
      this.status = status
-     this.rounds = rounds
+     this.stacks = stacks
   }
 
   static from(json: any): Game {
-    const rounds = json.rounds.map(round => Round.from(round))
+    const stacks = json.stacks.map(stack => Stack.from(stack))
     const players: GamePlayers = {
       viewer: json.players.viewer,
       opponent: json.players.opponent
     }
-    return new Game(json.id, players, json.status, rounds)
+    return new Game(json.id, players, json.status, stacks)
   }
 
   latestTurn(): Turn {
-    const round = this.latestRound()
-    if (!round) { return null }
-    if (!round.turns) { return null }
-    if (round.turns.length == 0) { return null }
+    const stack = this.latestStack()
+    if (!stack) { return null }
+    if (!stack.turns) { return null }
+    if (stack.turns.length == 0) { return null }
 
-    return round.turns[round.turns.length - 1]
+    return stack.turns[stack.turns.length - 1]
   }
 
-  latestRound(): Round {
-    if (!this.rounds) { return null }
-    if (this.rounds.length === 0) { return null }
+  latestStack(): Stack {
+    if (!this.stacks) { return null }
+    if (this.stacks.length === 0) { return null }
 
-    return this.rounds[this.rounds.length - 1]
+    return this.stacks[this.stacks.length - 1]
   }
 }

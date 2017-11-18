@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-import { Round } from '../../../lib/types'
+import { Stack } from '../../../lib/types'
 
 test("initializes an instance from json", () => {
   const json = {
@@ -17,6 +17,6 @@ test("initializes an instance from json", () => {
     user_photo: "https://image.png"
   }
 
-  const round = Round.from({turns: [json]})
-  expect(round.turns.length).toBe(1)
+  const stack = Stack.from({turns: [json]})
+  expect(stack.turns.length).toBe(1)
 })

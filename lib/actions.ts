@@ -136,6 +136,7 @@ export function submitAnswer({gameId, answer, previousTurn}) {
         console.group("        Comparing Artists")
         console.log(`%c        ${match.artist}, ${previousTurn.match.artist}`, 'color: #4070B7')
         console.groupEnd()
+        // Bail early if the 2 artists are the same
         if (match.artist === previousTurn.match.artist) {
           _answerSubmissionFailed("Can't play the same artist twice in a row")
           console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F")

@@ -2,16 +2,16 @@
 
 import Turn from './turn'
 
-export default class Round {
+export default class Stack {
   turns: Turn[]
 
   constructor(turns?: Turn[]) {
     this.turns = turns || new Array<Turn>()
   }
 
-  static from(json: any): Round {
-    if (!json.turns) { return new Round() }
+  static from(json: any): Stack {
+    if (!json.turns) { return new Stack() }
     const turns = json.turns.map(turn => Turn.from(turn))
-    return new Round(turns)
+    return new Stack(turns)
   }
 }
