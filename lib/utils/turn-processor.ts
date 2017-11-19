@@ -74,8 +74,7 @@ export function validate(answer: string, track: {artist: string, name: string}):
   if (nameMatch && !artistMatch) {
     const nameMatchReg = new RegExp(sName, "gi")
     const answerWithoutName = sAnswer.replace(nameMatchReg, "").trim()
-    artistMatch = sArtist.match(answerWithoutName)
-    if (artistMatch && artistMatch.length > 0) {
+    if (hasIntersection(sArtist, answerWithoutName)) {
       return true
     }
   }

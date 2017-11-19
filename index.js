@@ -90,10 +90,15 @@ exports.__esModule = true;
 var BLACKLIST = "a|an|and|the|in|by";
 var REGEX = {
     hyphensAndUnderscores: /[-_]/g,
-    characters: /[.'!&\(\)\[\]]/g,
+    characters: /[.'!&+\(\)\[\]]/g,
     articles: new RegExp("\\b(" + BLACKLIST + ")\\b", 'g'),
     whitespace: /\s+/g
 };
+// Public: Puts the input string through a series of regex filters
+// 
+// input - string
+// 
+// Returns a string
 function sanitize(input) {
     input = input.toLowerCase();
     input = input.replace(REGEX.characters, '');
@@ -176,15 +181,21 @@ stemmer.among = function among(word, offset, replace) {
 exports.__esModule = true;
 var turn_1 = __webpack_require__(4);
 var Stack = /** @class */ (function () {
-    function Stack(turns) {
+    function Stack(turns, canEnd, gameId, ended) {
         this.turns = turns || new Array();
+        this.canEnd = canEnd;
+        this.gameId = gameId;
+        this.ended = ended;
     }
+    Stack.prototype.lastTurn = function () {
+        return this.turns[this.turns.length - 1];
+    };
+    Stack.prototype.firstTurn = function () {
+        return this.turns[0];
+    };
     Stack.from = function (json) {
-        if (!json.turns) {
-            return new Stack();
-        }
         var turns = json.turns.map(function (turn) { return turn_1["default"].from(turn); });
-        return new Stack(turns);
+        return new Stack(turns, json.can_end, json.game_id, json.ended);
     };
     return Stack;
 }());
@@ -1038,13 +1049,16 @@ function performSearch(_a) {
     return fetch("http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + sanitizedAnswer + "&api_key=" + apiKey + "&format=json")
         .then(function (response) { return response.json(); });
 }
-function submitToServer(_a) {
-    var dispatch = _a.dispatch, gameId = _a.gameId, answer = _a.answer, match = _a.match;
+function submitToServer(dispatch, gameId, answer, match, gameOver) {
     var headers = new Headers({
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/json'
     });
-    var data = { answer: answer, match: match };
+    var data = {
+        answer: answer,
+        match: match,
+        game_over: gameOver
+    };
     fetch("/games/" + gameId + "/turn", {
         method: 'POST',
         credentials: 'same-origin',
@@ -1060,15 +1074,14 @@ function submitToServer(_a) {
     });
 }
 // TODO: Remove logs
-function submitAnswer(_a) {
-    var gameId = _a.gameId, answer = _a.answer, previousTurn = _a.previousTurn;
+function submitAnswer(answer, stack) {
     console.group = console.group || function (input) { };
     console.groupEnd = console.groupEnd || function () { };
     return function (dispatch) {
         dispatch(selectors_1._answerSubmissionStarted());
         console.group("INPUT: " + answer);
         console.log('  Searching Last.FM...');
-        // TODO: sanitization here may be too agressive
+        // TODO: full sanitization before searching may be too agressive
         // Removing "by" and "-" may be enough
         var sanitizedAnswer = sanitizer_1.sanitize(answer);
         // search Last.fm
@@ -1098,31 +1111,40 @@ function submitAnswer(_a) {
                 console.groupEnd();
                 return;
             }
-            if (previousTurn) {
-                // validate match against previous turn
-                var hasOverlap = turn_processor_1.hasIntersection(match.name, previousTurn.match.name);
-                // Bail early if there's no overlap
-                if (!hasOverlap) {
-                    selectors_1._answerSubmissionFailed("Does not have any similar words with the previous answer");
-                    console.log('%c        No similiary to previous answer', 'color: #A62F2F');
-                    console.groupEnd();
-                    return;
-                }
-                console.group("        Comparing Artists");
-                console.log("%c        " + match.artist + ", " + previousTurn.match.artist, 'color: #4070B7');
+            var previousTurn = stack.lastTurn();
+            var hasOverlapWithPreviousTurn = turn_processor_1.hasIntersection(sanitizer_1.sanitize(match.name), sanitizer_1.sanitize(previousTurn.match.name));
+            // validate match against previous turn
+            // Bail early if there's no overlap
+            if (!hasOverlapWithPreviousTurn) {
+                selectors_1._answerSubmissionFailed("Does not have any similar words with the previous answer");
+                console.log('%c        No similiary to previous answer', 'color: #A62F2F');
                 console.groupEnd();
-                // Bail early if the 2 artists are the same
-                if (match.artist === previousTurn.match.artist) {
-                    selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row");
-                    console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F");
+                return;
+            }
+            console.group("        Comparing Artists");
+            console.log("%c        " + match.artist + ", " + previousTurn.match.artist, 'color: #4070B7');
+            console.groupEnd();
+            // Bail early if the 2 artists are the same
+            if (match.artist === previousTurn.match.artist) {
+                selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row");
+                console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F");
+                console.groupEnd();
+                return;
+            }
+            // validate match against first turn
+            if (stack.canEnd) {
+                var firstTurn = stack.firstTurn();
+                var hasOverlapWithFirstTurn = turn_processor_1.hasIntersection(match.name, firstTurn.match.name);
+                // winner
+                if (hasOverlapWithFirstTurn) {
                     console.groupEnd();
+                    submitToServer(dispatch, stack.gameId, answer, match, true);
                     return;
                 }
             }
-            // validate match against first turn
             console.groupEnd();
             // Submit our answer and match to the server
-            submitToServer({ dispatch: dispatch, gameId: gameId, answer: answer, match: match });
+            submitToServer(dispatch, stack.gameId, answer, match, false);
         });
     };
 }
@@ -1202,8 +1224,7 @@ function validate(answer, track) {
     if (nameMatch && !artistMatch) {
         var nameMatchReg = new RegExp(sName, "gi");
         var answerWithoutName = sAnswer.replace(nameMatchReg, "").trim();
-        artistMatch = sArtist.match(answerWithoutName);
-        if (artistMatch && artistMatch.length > 0) {
+        if (hasIntersection(sArtist, answerWithoutName)) {
             return true;
         }
     }
@@ -1540,8 +1561,8 @@ var Game = /** @class */ (function () {
         };
         return new Game(json.id, players, json.status, stacks);
     };
-    Game.prototype.latestTurn = function () {
-        var stack = this.latestStack();
+    Game.prototype.lastTurn = function () {
+        var stack = this.lastStack();
         if (!stack) {
             return null;
         }
@@ -1551,9 +1572,9 @@ var Game = /** @class */ (function () {
         if (stack.turns.length == 0) {
             return null;
         }
-        return stack.turns[stack.turns.length - 1];
+        return stack.lastTurn();
     };
-    Game.prototype.latestStack = function () {
+    Game.prototype.lastStack = function () {
         if (!this.stacks) {
             return null;
         }
