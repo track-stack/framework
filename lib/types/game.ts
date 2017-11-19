@@ -31,16 +31,16 @@ export default class Game {
     return new Game(json.id, players, json.status, stacks)
   }
 
-  latestTurn(): Turn {
-    const stack = this.latestStack()
+  lastTurn(): Turn {
+    const stack = this.lastStack()
     if (!stack) { return null }
     if (!stack.turns) { return null }
     if (stack.turns.length == 0) { return null }
 
-    return stack.turns[stack.turns.length - 1]
+    return stack.lastTurn()
   }
 
-  latestStack(): Stack {
+  lastStack(): Stack {
     if (!this.stacks) { return null }
     if (this.stacks.length === 0) { return null }
 

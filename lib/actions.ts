@@ -12,7 +12,7 @@ import {
   _fetchedGame, _selectGameInvitee,
 } from './selectors'
 
-import { Game, FBFriend } from './types'
+import { Game, FBFriend, Stack } from './types'
 
 export function selectGameInvitee(friend: FBFriend) {
   return dispatch => {
@@ -51,12 +51,16 @@ function performSearch({sanitizedAnswer}) {
     .then(response => response.json())
 }
 
-function submitToServer({dispatch, gameId, answer, match}) {
+function submitToServer(dispatch, gameId, answer, match, gameOver) {
   const headers = new Headers({
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json'
   })
-  const data = { answer, match }
+  const data = { 
+    answer: answer, 
+    match: match,
+    game_over: gameOver
+  }
 
   fetch(`/games/${gameId}/turn`, {
     method: 'POST',
@@ -76,7 +80,7 @@ function submitToServer({dispatch, gameId, answer, match}) {
 
 // TODO: Remove logs
 
-export function submitAnswer({gameId, answer, previousTurn}) {
+export function submitAnswer(answer: string, stack: Stack) {
   console.group = console.group || function(input: string) {}
   console.groupEnd = console.groupEnd || function() {}
   return dispatch => {
@@ -85,7 +89,7 @@ export function submitAnswer({gameId, answer, previousTurn}) {
     console.group(`INPUT: ${answer}`)
     console.log('  Searching Last.FM...')
 
-    // TODO: sanitization here may be too agressive
+    // TODO: full sanitization before searching may be too agressive
     // Removing "by" and "-" may be enough
     const sanitizedAnswer = sanitize(answer)
 
@@ -121,36 +125,47 @@ export function submitAnswer({gameId, answer, previousTurn}) {
         return
       }
 
-      if (previousTurn) {
-        // validate match against previous turn
-        const hasOverlap = hasIntersection(match.name, previousTurn.match.name)
+      const previousTurn = stack.lastTurn()
+      const hasOverlapWithPreviousTurn = hasIntersection(sanitize(match.name), sanitize(previousTurn.match.name))
 
-        // Bail early if there's no overlap
-        if (!hasOverlap) {
-          _answerSubmissionFailed("Does not have any similar words with the previous answer")
-          console.log('%c        No similiary to previous answer', 'color: #A62F2F')
-          console.groupEnd()
-          return
-        }
-        
-        console.group("        Comparing Artists")
-        console.log(`%c        ${match.artist}, ${previousTurn.match.artist}`, 'color: #4070B7')
+      // validate match against previous turn
+
+      // Bail early if there's no overlap
+      if (!hasOverlapWithPreviousTurn) {
+        _answerSubmissionFailed("Does not have any similar words with the previous answer")
+        console.log('%c        No similiary to previous answer', 'color: #A62F2F')
         console.groupEnd()
-        // Bail early if the 2 artists are the same
-        if (match.artist === previousTurn.match.artist) {
-          _answerSubmissionFailed("Can't play the same artist twice in a row")
-          console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F")
+        return
+      }
+      
+      console.group("        Comparing Artists")
+      console.log(`%c        ${match.artist}, ${previousTurn.match.artist}`, 'color: #4070B7')
+      console.groupEnd()
+      // Bail early if the 2 artists are the same
+      if (match.artist === previousTurn.match.artist) {
+        _answerSubmissionFailed("Can't play the same artist twice in a row")
+        console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F")
+        console.groupEnd()
+        return
+      }
+
+      // validate match against first turn
+      if (stack.canEnd) {
+        const firstTurn = stack.firstTurn()
+        const hasOverlapWithFirstTurn = hasIntersection(match.name, firstTurn.match.name) 
+
+        // winner
+        if (hasOverlapWithFirstTurn) {
           console.groupEnd()
+          submitToServer(dispatch, stack.gameId, answer, match, true)
           return
         }
       }
 
-      // validate match against first turn
-
       console.groupEnd()
 
       // Submit our answer and match to the server
-      submitToServer({dispatch, gameId, answer, match})
+      submitToServer(dispatch, stack.gameId, answer, match, false)
     })
   }
 }
