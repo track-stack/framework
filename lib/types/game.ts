@@ -40,6 +40,15 @@ export default class Game {
     return stack.lastTurn()
   }
 
+  firstTurn(): Turn {
+    const stack = this.lastStack()
+    if (!stack) { return null }
+    if (!stack.turns) { return null }
+    if (stack.turns.length == 0) { return null }
+
+    return stack.firstTurn()
+  }
+
   lastStack(): Stack {
     if (!this.stacks) { return null }
     if (this.stacks.length === 0) { return null }

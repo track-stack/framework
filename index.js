@@ -1080,10 +1080,13 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
 function submitAnswer(answer, stack) {
     console.group = console.group || function (input) { };
     console.groupEnd = console.groupEnd || function () { };
+    window.Logger = window.Logger || { log: function (str) { } };
     return function (dispatch) {
         dispatch(selectors_1._answerSubmissionStarted());
         console.group("INPUT: " + answer);
-        console.log('  Searching Last.FM...');
+        console.log('  Searching Last.fm...');
+        window.Logger.log("<b>INPUT: " + answer + "</b>");
+        window.Logger.log('  Searching Last.fm...');
         // TODO: full sanitization before searching may be too agressive
         // Removing "by" and "-" may be enough
         var sanitizedAnswer = sanitizer_1.sanitize(answer);
@@ -1094,6 +1097,7 @@ function submitAnswer(answer, stack) {
             if (!foundTracks) {
                 selectors_1._answerSubmissionFailed('no match found');
                 console.log('%c    No match found', 'color: #A62F2F');
+                window.Logger.log('    No match found');
                 console.groupEnd();
                 return;
             }
@@ -1102,6 +1106,7 @@ function submitAnswer(answer, stack) {
             if (tracks.length == 0) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
+                window.Logger.log('    No match found');
                 console.groupEnd();
                 return;
             }
@@ -1111,32 +1116,41 @@ function submitAnswer(answer, stack) {
             if (!match) {
                 selectors_1._answerSubmissionFailed("no match found");
                 console.log('%c    No match found', 'color: #A62F2F');
+                window.Logger('    No match found');
                 console.groupEnd();
                 return;
             }
-            var previousTurn = stack.lastTurn();
+            console.group("        Comparing previous turn");
+            window.Logger.log("<b>        Comparing pervious turn</b>");
+            var previousTurn = stack.firstTurn();
             var hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
             // validate match against previous turn
             // Bail early if there's no overlap
             if (!hasOverlapWithPreviousTurn) {
                 selectors_1._answerSubmissionFailed("Does not have any similar words with the previous answer");
                 console.log('%c        No similiary to previous answer', 'color: #A62F2F');
+                window.Logger.log('        No similiary to previous answer');
                 console.groupEnd();
                 return;
             }
-            console.group("        Comparing Artists");
+            console.group("<span style='color:blue'>        Comparing Artists</span>");
             console.log("%c        " + match.artist + ", " + previousTurn.match.artist, 'color: #4070B7');
             console.groupEnd();
+            window.Logger.log("<b>        Comparing Artists</b>");
+            window.Logger.log("          " + match.artist + ", " + previousTurn.match.artist);
             // Bail early if the 2 artists are the same
             if (match.artist === previousTurn.match.artist) {
                 selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row");
                 console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F");
+                window.Logger.log("        Can't play the same artist twice in a row");
                 console.groupEnd();
                 return;
             }
             // validate match against first turn
             if (stack.canEnd) {
-                var firstTurn = stack.firstTurn();
+                console.group("        Comparing first turn");
+                window.Logger.log("<b>        Comparing first turn</b>");
+                var firstTurn = stack.lastTurn();
                 var hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
                 // winner
                 if (hasOverlapWithFirstTurn) {
@@ -1177,19 +1191,24 @@ var stem = __webpack_require__(17);
 // tracks: any[] - An array of tracks (json) from Last.fm
 // Returns any 
 function findMatch(userInput, tracks) {
+    window.Logger = window.Logger || { log: function (str) { } };
     var match = null;
     var limit = Math.min(tracks.length, 5);
     for (var i = 0; i < limit; i++) {
         var _a = tracks[i], artist = _a.artist, name_1 = _a.name;
         console.log("%c    Match found: " + name_1 + " - " + artist, 'color: #42A143');
+        window.Logger.log("<span class=\"green\">    Match found: " + name_1 + " - " + artist + "</span>");
         console.log("      Validating...");
+        window.Logger.log("      Validating...");
         if (validate(userInput, { artist: artist, name: name_1 })) {
             match = tracks[i];
             console.log('%c        valid match!', 'color: #42A143');
+            window.Logger.log('<span class="green">        valid match!</span>');
             break;
         }
         else {
             console.log('%c        not a valid match', 'color: #A62F2F');
+            window.Logger.log('<span class="red">        not a valid match</span>');
         }
     }
     return match;
@@ -1205,13 +1224,18 @@ exports.findMatch = findMatch;
 function validate(answer, track) {
     console.group = console.group || function (input) { };
     console.groupEnd = console.groupEnd || function () { };
+    window.Logger = window.Logger || { log: function (str) { } };
     console.group("        Sanitizing");
+    window.Logger.log("<b>        Sanitizing</b>");
     var sAnswer = sanitizer_1.sanitize(answer);
     var sArtist = sanitizer_1.sanitize(track.artist);
     var sName = sanitizer_1.sanitize(track.name);
-    console.log("%c        answer: " + sAnswer, 'color: #4070B7');
-    console.log("%c        match.name: " + sName, 'color: #4070B7');
-    console.log("%c        match.artist: " + sArtist, 'color: #4070B7');
+    console.log("%c          answer: " + sAnswer, 'color: #4070B7');
+    console.log("%c          match.name: " + sName, 'color: #4070B7');
+    console.log("%c          match.artist: " + sArtist, 'color: #4070B7');
+    window.Logger.log("          answer: " + sAnswer);
+    window.Logger.log("          match.name: " + sName);
+    window.Logger.log("          match.artist: " + sArtist);
     console.groupEnd();
     var Patterns = {
         name: new RegExp(sName, 'g'),
@@ -1259,15 +1283,17 @@ function stringHasIntersection(left, right) {
 exports.stringHasIntersection = stringHasIntersection;
 function matchHasIntersection(left, right) {
     console.group = console.group || function (input) { };
-    console.group("        Comparing Names");
+    window.Logger = window.Logger || { log: function (str) { } };
     var leftStr = [left.name, left.artist].join(" ");
     var rightStr = [right.name, right.artist].join(" ");
     var sLeft = sanitizer_1.sanitize(leftStr);
     var sRight = sanitizer_1.sanitize(rightStr);
     var lStemmed = sanitizer_1.sanitize(sLeft).split(" ").map(function (word) { return stemmed(word); });
     var rStemmed = sanitizer_1.sanitize(sRight).split(" ").map(function (word) { return stemmed(word); });
-    console.log("%c        stems: " + lStemmed, 'color: #4070B7');
-    console.log("%c        stems: " + rStemmed, 'color: #4070B7');
+    console.log("%c          stems: " + lStemmed, 'color: #4070B7');
+    console.log("%c          stems: " + rStemmed, 'color: #4070B7');
+    window.Logger.log("          stems: " + lStemmed);
+    window.Logger.log("          stems: " + rStemmed);
     var long = lStemmed.length > rStemmed.length ? lStemmed : rStemmed;
     var short = long == lStemmed ? rStemmed : lStemmed;
     var results = long.filter(function (word) {
@@ -1577,6 +1603,19 @@ var Game = /** @class */ (function () {
             return null;
         }
         return stack.lastTurn();
+    };
+    Game.prototype.firstTurn = function () {
+        var stack = this.lastStack();
+        if (!stack) {
+            return null;
+        }
+        if (!stack.turns) {
+            return null;
+        }
+        if (stack.turns.length == 0) {
+            return null;
+        }
+        return stack.firstTurn();
     };
     Game.prototype.lastStack = function () {
         if (!this.stacks) {
