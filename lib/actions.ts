@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 import store from './store'
-import { findMatch, hasIntersection } from './utils/turn-processor'
+import { findMatch, matchHasIntersection } from './utils/turn-processor'
 import { sanitize } from './utils/sanitizer'
 import {
   _answerSubmissionStarted,
@@ -126,7 +126,7 @@ export function submitAnswer(answer: string, stack: Stack) {
       }
 
       const previousTurn = stack.lastTurn()
-      const hasOverlapWithPreviousTurn = hasIntersection(match, previousTurn.match)
+      const hasOverlapWithPreviousTurn = matchHasIntersection(match, previousTurn.match)
 
       // validate match against previous turn
 
@@ -152,7 +152,7 @@ export function submitAnswer(answer: string, stack: Stack) {
       // validate match against first turn
       if (stack.canEnd) {
         const firstTurn = stack.firstTurn()
-        const hasOverlapWithFirstTurn = hasIntersection(match, firstTurn.match)
+        const hasOverlapWithFirstTurn = matchHasIntersection(match, firstTurn.match)
 
         // winner
         if (hasOverlapWithFirstTurn) {

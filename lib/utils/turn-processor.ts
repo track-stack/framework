@@ -74,7 +74,7 @@ export function validate(answer: string, track: {artist: string, name: string}):
   if (nameMatch && !artistMatch) {
     const nameMatchReg = new RegExp(sName, "gi")
     const answerWithoutName = sAnswer.replace(nameMatchReg, "").trim()
-    if (hasIntersection(sArtist, answerWithoutName)) {
+    if (stringHasIntersection(sArtist, answerWithoutName)) {
       return true
     }
   }
@@ -108,7 +108,12 @@ interface Match {
   name: string
   artist: string
 }
-export function hasIntersection(left: Match, right: Match): boolean {
+
+export function stringHasIntersection(left: string, right: string): boolean {
+  return matchHasIntersection({artist: left, name: ""}, {artist: right, name: ""})
+}
+
+export function matchHasIntersection(left: Match, right: Match): boolean {
   console.group = console.group || function(input: string) {}
   console.group("        Comparing Names")
 

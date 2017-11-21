@@ -3,7 +3,7 @@
 import { 
   validate, 
   findMatch,
-  hasIntersection
+  matchHasIntersection 
 } from '../../../lib/utils/turn-processor'
 
 // #validate
@@ -33,26 +33,26 @@ test("returns true if the submitted artist is present in the match", () => {
 
 // #findSimilarity
 test("with overlap", () => {
-  const result = hasIntersection({name: "Trap Queen"}, {artist: "Trapped"})
+  const result = matchHasIntersection({name: "Trap Queen"}, {artist: "Trapped"})
   expect(result).toBe(true)
 })
 
 test("without overlap", () => {
-  const result = hasIntersection({name: "Happy Together"}, {name: "Beautiful Boy"})
+  const result = matchHasIntersection({name: "Happy Together"}, {name: "Beautiful Boy"})
   expect(result).toBe(false)
 })
 
 test("with numbers", () => {
-  const result = hasIntersection({name: "baby 182"}, {artist: "blink-182"})
+  const result = matchHasIntersection({name: "baby 182"}, {artist: "blink-182"})
   expect(result).toBe(true)
 })
 
 test("with abbreviations", () => {
-  const result = hasIntersection({artist: "M.I.A"}, {artist: "N.W.A"})
+  const result = matchHasIntersection({artist: "M.I.A"}, {artist: "N.W.A"})
   expect(result).toBe(true)
 })
 
 test("with abbreviations 2", () => {
-  const result = hasIntersection({artist: "M.I.A"}, {artist: "I am them"})
+  const result = matchHasIntersection({artist: "M.I.A"}, {artist: "I am them"})
   expect(result).toBe(true)
 })

@@ -1112,7 +1112,7 @@ function submitAnswer(answer, stack) {
                 return;
             }
             var previousTurn = stack.lastTurn();
-            var hasOverlapWithPreviousTurn = turn_processor_1.hasIntersection(sanitizer_1.sanitize(match.name), sanitizer_1.sanitize(previousTurn.match.name));
+            var hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
             // validate match against previous turn
             // Bail early if there's no overlap
             if (!hasOverlapWithPreviousTurn) {
@@ -1134,7 +1134,7 @@ function submitAnswer(answer, stack) {
             // validate match against first turn
             if (stack.canEnd) {
                 var firstTurn = stack.firstTurn();
-                var hasOverlapWithFirstTurn = turn_processor_1.hasIntersection(match.name, firstTurn.match.name);
+                var hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
                 // winner
                 if (hasOverlapWithFirstTurn) {
                     console.groupEnd();
@@ -1224,7 +1224,7 @@ function validate(answer, track) {
     if (nameMatch && !artistMatch) {
         var nameMatchReg = new RegExp(sName, "gi");
         var answerWithoutName = sAnswer.replace(nameMatchReg, "").trim();
-        if (hasIntersection(sArtist, answerWithoutName)) {
+        if (stringHasIntersection(sArtist, answerWithoutName)) {
             return true;
         }
     }
