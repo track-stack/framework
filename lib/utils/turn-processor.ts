@@ -104,12 +104,20 @@ function stemmed(word: string): string {
 // right - string
 //
 // Returns a boolean
-export function hasIntersection(left: string, right: string): boolean {
+interface Match {
+  name: string
+  artist: string
+}
+export function hasIntersection(left: Match, right: Match): boolean {
   console.group = console.group || function(input: string) {}
   console.group("        Comparing Names")
 
-  const lStemmed = sanitize(left).split(" ").map(word => stemmed(word))
-  const rStemmed = sanitize(right).split(" ").map(word => stemmed(word))
+  const leftStr = [left.name, left.artist].join(" ")
+  const rightStr = [right.name, right.artist].join(" ")
+  const sLeft = sanitize(leftStr)
+  const sRight = sanitize(rightStr)
+  const lStemmed = sanitize(sLeft).split(" ").map(word => stemmed(word))
+  const rStemmed = sanitize(sRight).split(" ").map(word => stemmed(word))
 
   console.log(`%c        stems: ${lStemmed}`, 'color: #4070B7')
   console.log(`%c        stems: ${rStemmed}`, 'color: #4070B7')

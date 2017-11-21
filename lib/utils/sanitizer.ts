@@ -1,13 +1,21 @@
 /*jshint esversion: 6 */
 
-const BLACKLIST = "a|an|and|the|in|by"
+const BLACKLIST = "and|the|by"
 
 const REGEX = {
-  hyphensAndUnderscores: /[-_]/g,
-  characters: /[.'!&+\(\)\[\]]/g,
+  characters: /[.!&+\(\)\[\]\-_]/g,
   articles: new RegExp(`\\b(${BLACKLIST})\\b`, 'g'),
+  apostrophe: /[']/g,
   whitespace: /\s+/g
 }
+
+const FILTERS: ((string) => string)[] = [
+  (input: string) => input.toLowerCase(),
+  (input: string) => input.replace(REGEX.characters, ' '),
+  (input: string) => input.replace(REGEX.articles, ''),
+  (input: string) => input.replace(REGEX.apostrophe, ''),
+  (input: string) => input.replace(REGEX.whitespace, ' ')
+]
 
 // Public: Puts the input string through a series of regex filters
 // 
@@ -15,11 +23,7 @@ const REGEX = {
 // 
 // Returns a string
 export function sanitize(input: string): string {
-  input = input.toLowerCase()
-  input = input.replace(REGEX.characters, '')
-  input = input.replace(REGEX.articles, '')
-  input = input.replace(REGEX.hyphensAndUnderscores, ' ')
-  input = input.replace(REGEX.whitespace, ' ')
+  FILTERS.forEach(filter => input = filter(input))
 
   return input.trim()
 }

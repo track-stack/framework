@@ -17,7 +17,7 @@ test("strips brackets", () => {
 test("strips articles", () => {
   const stringWithArticles = "The something in the way and she the moves A"
   const result = sanitize(stringWithArticles)
-  expect(result).toEqual("something way she moves")
+  expect(result).toEqual("something in way she moves a")
 })
 
 test("strips ' and .", () => {

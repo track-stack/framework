@@ -126,7 +126,7 @@ export function submitAnswer(answer: string, stack: Stack) {
       }
 
       const previousTurn = stack.lastTurn()
-      const hasOverlapWithPreviousTurn = hasIntersection(sanitize(match.name), sanitize(previousTurn.match.name))
+      const hasOverlapWithPreviousTurn = hasIntersection(match, previousTurn.match)
 
       // validate match against previous turn
 
@@ -152,7 +152,7 @@ export function submitAnswer(answer: string, stack: Stack) {
       // validate match against first turn
       if (stack.canEnd) {
         const firstTurn = stack.firstTurn()
-        const hasOverlapWithFirstTurn = hasIntersection(match.name, firstTurn.match.name) 
+        const hasOverlapWithFirstTurn = hasIntersection(match, firstTurn.match)
 
         // winner
         if (hasOverlapWithFirstTurn) {
