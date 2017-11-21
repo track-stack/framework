@@ -87,24 +87,27 @@ exports.INVITEE = action_helper_1.createActionSet('INVITEE');
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var BLACKLIST = "a|an|and|the|in|by";
+var BLACKLIST = "and|the|by";
 var REGEX = {
-    hyphensAndUnderscores: /[-_]/g,
-    characters: /[.'!&+\(\)\[\]]/g,
+    characters: /[.!&+\(\)\[\]\-_]/g,
     articles: new RegExp("\\b(" + BLACKLIST + ")\\b", 'g'),
+    apostrophe: /[']/g,
     whitespace: /\s+/g
 };
+var FILTERS = [
+    function (input) { return input.toLowerCase(); },
+    function (input) { return input.replace(REGEX.characters, ' '); },
+    function (input) { return input.replace(REGEX.articles, ''); },
+    function (input) { return input.replace(REGEX.apostrophe, ''); },
+    function (input) { return input.replace(REGEX.whitespace, ' '); }
+];
 // Public: Puts the input string through a series of regex filters
 // 
 // input - string
 // 
 // Returns a string
 function sanitize(input) {
-    input = input.toLowerCase();
-    input = input.replace(REGEX.characters, '');
-    input = input.replace(REGEX.articles, '');
-    input = input.replace(REGEX.hyphensAndUnderscores, ' ');
-    input = input.replace(REGEX.whitespace, ' ');
+    FILTERS.forEach(function (filter) { return input = filter(input); });
     return input.trim();
 }
 exports.sanitize = sanitize;
@@ -1250,18 +1253,19 @@ function stemmed(word) {
     // defer to the algo
     return stem(word);
 }
-// Public: Given two string, calculates whether there are overlapping words between
-// the two strings after reducing each word to its stem.
-// 
-// left - string
-// right - string
-//
-// Returns a boolean
-function hasIntersection(left, right) {
+function stringHasIntersection(left, right) {
+    return matchHasIntersection({ artist: left, name: "" }, { artist: right, name: "" });
+}
+exports.stringHasIntersection = stringHasIntersection;
+function matchHasIntersection(left, right) {
     console.group = console.group || function (input) { };
     console.group("        Comparing Names");
-    var lStemmed = sanitizer_1.sanitize(left).split(" ").map(function (word) { return stemmed(word); });
-    var rStemmed = sanitizer_1.sanitize(right).split(" ").map(function (word) { return stemmed(word); });
+    var leftStr = [left.name, left.artist].join(" ");
+    var rightStr = [right.name, right.artist].join(" ");
+    var sLeft = sanitizer_1.sanitize(leftStr);
+    var sRight = sanitizer_1.sanitize(rightStr);
+    var lStemmed = sanitizer_1.sanitize(sLeft).split(" ").map(function (word) { return stemmed(word); });
+    var rStemmed = sanitizer_1.sanitize(sRight).split(" ").map(function (word) { return stemmed(word); });
     console.log("%c        stems: " + lStemmed, 'color: #4070B7');
     console.log("%c        stems: " + rStemmed, 'color: #4070B7');
     var long = lStemmed.length > rStemmed.length ? lStemmed : rStemmed;
@@ -1273,7 +1277,7 @@ function hasIntersection(left, right) {
     console.groupEnd();
     return foundOverlap;
 }
-exports.hasIntersection = hasIntersection;
+exports.matchHasIntersection = matchHasIntersection;
 
 
 /***/ }),
