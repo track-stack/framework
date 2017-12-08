@@ -7,6 +7,7 @@
 */
 
 import { sanitize } from './sanitizer'
+import wordComponents from './word-components'
 import * as stem from 'stem-porter'
 
 declare global {
@@ -140,14 +141,29 @@ export function matchHasIntersection(left: Match, right: Match): boolean {
   const rightStr = [right.name, right.artist].join(" ")
 
   // Sanitize each string
+  // (e.g. "dont let me down beatles")
   const sLeft = sanitize(leftStr)
   const sRight = sanitize(rightStr)
 
+  // Split the strings
+  // (e.g. ["dont", "let", "me", "down", "beatles"])
+  const lSplit = sLeft.split(" ")
+  const rSplit = sRight.split(" ")
+
   // Split words into their basic components
+  const lComponents = lSplit.reduce((acc, word) => {
+    const found = wordComponents[word]
+    return found ? acc.concat(found) : acc.concat([word])
+  }, [])
+
+  const rComponents = rSplit.reduce((acc, word) => {
+    const found = wordComponents[word]
+    return found ? acc.concat(found) : acc.concat([word])
+  }, [])
 
   // Stem the words of each string
-  const lStemmed = sanitize(sLeft).split(" ").map(word => stemmed(word))
-  const rStemmed = sanitize(sRight).split(" ").map(word => stemmed(word))
+  const lStemmed = lComponents.map(word => stemmed(word))
+  const rStemmed = rComponents.map(word => stemmed(word))
 
   console.log(`%c          stems: ${lStemmed}`, 'color: #4070B7')
   console.log(`%c          stems: ${rStemmed}`, 'color: #4070B7')

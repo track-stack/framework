@@ -3,7 +3,7 @@
 const BLACKLIST = "and|the|by|ft|remix"
 
 const REGEX = {
-  characters: /[.!&+\(\)\[\]\-_]/g,
+  characters: /[,.!&+\(\)\[\]\-_]/g,
   articles: new RegExp(`\\b(${BLACKLIST})\\b`, 'g'),
   apostrophe: /[']/g,
   whitespace: /\s+/g

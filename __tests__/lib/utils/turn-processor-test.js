@@ -31,9 +31,17 @@ test("returns true if the submitted artist is present in the match", () => {
   expect(result).toBe(true)
 })
 
-// #findSimilarity
+// #matchHasIntersection
 test("with overlap", () => {
   const result = matchHasIntersection({name: "Trap Queen"}, {artist: "Trapped"})
+  expect(result).toBe(true)
+})
+
+test("with encoded names", () => {
+  let result = matchHasIntersection({artist: "Aerodynamic"}, {artist: "Aerosmith"})
+  expect(result).toBe(true)
+
+  result = matchHasIntersection({artist: "$ave"}, {name: "Jesus Saves, I Spend"})
   expect(result).toBe(true)
 })
 
