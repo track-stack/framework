@@ -5,7 +5,8 @@
   "main": "./lib/trackstack.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "repl": "local-repl"
   },
   "author": "mikekavouras",
   "license": "MIT",
@@ -23,6 +24,7 @@
     "babel-preset-env": "^1.6.1",
     "faker": "^4.1.0",
     "jest": "^21.2.1",
+    "local-repl": "^3.1.0",
     "ts-jest": "^21.1.4",
     "ts-loader": "^3.1.0",
     "typescript": "^2.5.3",
@@ -42,5 +44,8 @@
       "node_modules",
       "lib"
     ]
-  }
+  },
+  "repl": [
+    { "name" : "sanitize", "module" : "./lib/utils/sanitizer" }
+  ]
 }

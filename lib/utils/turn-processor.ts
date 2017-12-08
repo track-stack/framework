@@ -10,10 +10,6 @@ import { sanitize } from './sanitizer'
 import wordComponents from './word-components'
 import * as stem from 'stem-porter'
 
-declare global {
-  interface Window { Logger: any }
-}
-
 // Public: Given user-generated input and an array of
 // tracks (json) from Last.fm, returns the track that
 // approximately matches the user-generated input.
@@ -23,25 +19,17 @@ declare global {
 
 // Returns any
 export function findMatch(userInput: string, tracks: any[]): any {
-  window.Logger = window.Logger || {log: function(str) {}}
-
   let match = null
   const limit = Math.min(tracks.length, 5)
 
   for (let i = 0; i < limit; i++) {
     const { artist, name } = tracks[i]
-    console.log(`%c    Match found: ${name} - ${artist}`, 'color: #42A143')
-    window.Logger.log(`<span class="green">    Match found: ${name} - ${artist}</span>`)
-    console.log("      Validating...")
-    window.Logger.log("      Validating...")
     if (validate(userInput, { artist, name })) {
       match = tracks[i]
       console.log('%c        valid match!', 'color: #42A143')
-      window.Logger.log('<span class="green">        valid match!</span>')
       break
     } else {
       console.log('%c        not a valid match', 'color: #A62F2F')
-      window.Logger.log('<span class="red">        not a valid match</span>')
     }
   }
 
@@ -56,26 +44,9 @@ export function findMatch(userInput: string, tracks: any[]): any {
 //
 // Returns boolean
 export function validate(answer: string, track: {artist: string, name: string}): boolean {
-  console.group = console.group || function(input: string) {}
-  console.groupEnd = console.groupEnd || function() {}
-  window.Logger = window.Logger || {log: function(str) {}}
-
-  console.group("        Sanitizing")
-  window.Logger.log("<b>        Sanitizing</b>")
-
   const sAnswer = sanitize(answer)
   const sArtist = sanitize(track.artist)
   const sName = sanitize(track.name)
-
-  console.log(`%c          answer: ${sAnswer}`, 'color: #4070B7')
-  console.log(`%c          match.name: ${sName}`, 'color: #4070B7')
-  console.log(`%c          match.artist: ${sArtist}`, 'color: #4070B7')
-
-  window.Logger.log(`          answer: ${sAnswer}`)
-  window.Logger.log(`          match.name: ${sName}`)
-  window.Logger.log(`          match.artist: ${sArtist}`)
-
-  console.groupEnd()
 
   const Patterns = {
     name: new RegExp(sName, 'g'),
@@ -131,55 +102,44 @@ export function stringHasIntersection(left: string, right: string): boolean {
   return matchHasIntersection({artist: left, name: ""}, {artist: right, name: ""})
 }
 
+// Private: Runs a string through a transform function which considers
+// our custom word component mappings
+//
+// str - string
+//
+// Returns a string
+function stringThroughComponentTransform(str: string): string {
+ return str.split(' ').reduce((acc, word) => {
+    const lower = word.toLowerCase()
+    const components = wordComponents[lower]
+    const words = components ? components : [word]
+    return acc.concat(words)
+  }, []).join(' ')
+}
+
+// Private: Given a string, returns an array of transformed (see stringThroughComponentTransform),
+// stemmed words.
+// 
+// str - string
+//
+// Returns a string[]
+function stemmedComponents(str: string): string[] {
+  const transformed = stringThroughComponentTransform(str)
+  const sanitized = sanitize(transformed)
+
+  return sanitized.split(' ').map(word => stemmed(word))
+}
+
 export function matchHasIntersection(left: Match, right: Match): boolean {
-  console.group = console.group || function(input: string) {}
-  window.Logger = window.Logger || {log: function(str) {}}
+  const aComponents = stemmedComponents([left.name, left.artist].join(' '))
+  const bComponents = stemmedComponents([right.name, right.artist].join(' '))
 
-  // The full string that qualifies for comparison is the song name + artist name
-  // (e.g. "Don't Let Me Down The Beatles")
-  const leftStr = [left.name, left.artist].join(" ")
-  const rightStr = [right.name, right.artist].join(" ")
-
-  // Sanitize each string
-  // (e.g. "dont let me down beatles")
-  const sLeft = sanitize(leftStr)
-  const sRight = sanitize(rightStr)
-
-  // Split the strings
-  // (e.g. ["dont", "let", "me", "down", "beatles"])
-  const lSplit = sLeft.split(" ")
-  const rSplit = sRight.split(" ")
-
-  // Split words into their basic components
-  const lComponents = lSplit.reduce((acc, word) => {
-    const found = wordComponents[word]
-    return found ? acc.concat(found) : acc.concat([word])
-  }, [])
-
-  const rComponents = rSplit.reduce((acc, word) => {
-    const found = wordComponents[word]
-    return found ? acc.concat(found) : acc.concat([word])
-  }, [])
-
-  // Stem the words of each string
-  const lStemmed = lComponents.map(word => stemmed(word))
-  const rStemmed = rComponents.map(word => stemmed(word))
-
-  console.log(`%c          stems: ${lStemmed}`, 'color: #4070B7')
-  console.log(`%c          stems: ${rStemmed}`, 'color: #4070B7')
-
-  window.Logger.log(`          stems: ${lStemmed}`)
-  window.Logger.log(`          stems: ${rStemmed}`)
-
-  const long = lStemmed.length > rStemmed.length ? lStemmed : rStemmed
-  const short = long == lStemmed ? rStemmed : lStemmed
+  const long = aComponents.length > bComponents.length ? aComponents : bComponents 
+  const short = long == aComponents ? bComponents : aComponents 
 
   const results = long.filter(word => {
     return short.indexOf(word) !== -1
   })
 
-  const foundOverlap = results.length > 0
-
-  console.groupEnd()
-  return foundOverlap
+  return results.length > 0
 }

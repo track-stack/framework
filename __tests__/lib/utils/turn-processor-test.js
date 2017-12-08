@@ -43,6 +43,9 @@ test("with encoded names", () => {
 
   result = matchHasIntersection({artist: "$ave"}, {name: "Jesus Saves, I Spend"})
   expect(result).toBe(true)
+
+  result = matchHasIntersection({artist: "curt@!n$"}, {name: "closed curtains"})
+  expect(result).toBe(true)
 })
 
 test("without overlap", () => {
