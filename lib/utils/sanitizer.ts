@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-const BLACKLIST = "and|the|by"
+const BLACKLIST = "and|the|by|ft|remix"
 
 const REGEX = {
   characters: /[.!&+\(\)\[\]\-_]/g,
