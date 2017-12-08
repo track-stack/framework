@@ -3,6 +3,7 @@
 import store from './store'
 import { findMatch, matchHasIntersection } from './utils/turn-processor'
 import { sanitize } from './utils/sanitizer'
+import { lastFMResponseVerifier } from './utils/lastfm-response-verifier'
 import {
   _answerSubmissionStarted,
   _answerSubmitted,
@@ -100,23 +101,14 @@ export function submitAnswer(answer: string, stack: Stack) {
     // search Last.fm
     performSearch({sanitizedAnswer}).then(json => {
 
-      // Bail early if the response lacks the required json structure
-      const foundTracks = json && json.results && json.results.trackmatches
-      if (!foundTracks) {
-        _answerSubmissionFailed('no match found')
-        console.log('%c    No match found', 'color: #A62F2F')
-        window.Logger.log('    No match found')
-        console.groupEnd()
-        return
-      }
+      // confirm that our input matches at least 1 track (check the top 5 results)
+      // confirm that our match passes the test against the previous turn
+      // if the stack can be ended, cofirm that our match passes the test against the first turn
 
-      // Bail early if the results are empty
-      const tracks: any[] = json.results.trackmatches.track;
-      if (tracks.length == 0) {
-        _answerSubmissionFailed("no match found")
-        console.log('%c    No match found', 'color: #A62F2F')
-        window.Logger.log('    No match found')
-        console.groupEnd()
+      // make sure we get a response from Last.fm
+      const tracks = lastFMResponseVerifier(json)
+      if (tracks.length === 0) {
+        _answerSubmissionFailed('no match found')
         return
       }
 

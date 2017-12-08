@@ -71,7 +71,7 @@
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var action_helper_1 = __webpack_require__(20);
+var action_helper_1 = __webpack_require__(21);
 exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
 exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
 exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
@@ -87,7 +87,7 @@ exports.INVITEE = action_helper_1.createActionSet('INVITEE');
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var BLACKLIST = "and|the|by";
+var BLACKLIST = "and|the|by|ft|remix";
 var REGEX = {
     characters: /[.!&+\(\)\[\]\-_]/g,
     articles: new RegExp("\\b(" + BLACKLIST + ")\\b", 'g'),
@@ -272,15 +272,15 @@ var _createStore = __webpack_require__(8);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = __webpack_require__(39);
+var _combineReducers = __webpack_require__(40);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = __webpack_require__(40);
+var _bindActionCreators = __webpack_require__(41);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = __webpack_require__(41);
+var _applyMiddleware = __webpack_require__(42);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
@@ -524,7 +524,7 @@ var _isPlainObject = __webpack_require__(9);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = __webpack_require__(35);
+var _symbolObservable = __webpack_require__(36);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -787,15 +787,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _baseGetTag = __webpack_require__(27);
+var _baseGetTag = __webpack_require__(28);
 
 var _baseGetTag2 = _interopRequireDefault(_baseGetTag);
 
-var _getPrototype = __webpack_require__(32);
+var _getPrototype = __webpack_require__(33);
 
 var _getPrototype2 = _interopRequireDefault(_getPrototype);
 
-var _isObjectLike = __webpack_require__(34);
+var _isObjectLike = __webpack_require__(35);
 
 var _isObjectLike2 = _interopRequireDefault(_isObjectLike);
 
@@ -870,7 +870,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _root = __webpack_require__(28);
+var _root = __webpack_require__(29);
 
 var _root2 = _interopRequireDefault(_root);
 
@@ -997,7 +997,7 @@ function compose() {
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var a = __webpack_require__(15);
-var store_1 = __webpack_require__(25);
+var store_1 = __webpack_require__(26);
 exports.store = store_1["default"];
 exports.actions = a;
 
@@ -1012,8 +1012,9 @@ exports.actions = a;
 exports.__esModule = true;
 var turn_processor_1 = __webpack_require__(16);
 var sanitizer_1 = __webpack_require__(1);
-var selectors_1 = __webpack_require__(19);
-var types_1 = __webpack_require__(21);
+var lastfm_response_verifier_1 = __webpack_require__(19);
+var selectors_1 = __webpack_require__(20);
+var types_1 = __webpack_require__(22);
 function selectGameInvitee(friend) {
     return function (dispatch) {
         return dispatch(selectors_1._selectGameInvitee(friend));
@@ -1092,22 +1093,13 @@ function submitAnswer(answer, stack) {
         var sanitizedAnswer = sanitizer_1.sanitize(answer);
         // search Last.fm
         performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
-            // Bail early if the response lacks the required json structure
-            var foundTracks = json && json.results && json.results.trackmatches;
-            if (!foundTracks) {
+            // confirm that our input matches at least 1 track (check the top 5 results)
+            // confirm that our match passes the test against the previous turn
+            // if the stack can be ended, cofirm that our match passes the test against the first turn
+            // make sure we get a response from Last.fm
+            var tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
+            if (tracks.length === 0) {
                 selectors_1._answerSubmissionFailed('no match found');
-                console.log('%c    No match found', 'color: #A62F2F');
-                window.Logger.log('    No match found');
-                console.groupEnd();
-                return;
-            }
-            // Bail early if the results are empty
-            var tracks = json.results.trackmatches.track;
-            if (tracks.length == 0) {
-                selectors_1._answerSubmissionFailed("no match found");
-                console.log('%c    No match found', 'color: #A62F2F');
-                window.Logger.log('    No match found');
-                console.groupEnd();
                 return;
             }
             // Attempt to find a match 
@@ -1184,12 +1176,12 @@ exports.__esModule = true;
 var sanitizer_1 = __webpack_require__(1);
 var stem = __webpack_require__(17);
 // Public: Given user-generated input and an array of
-// tracks (json) from Last.fm, returns the track that 
+// tracks (json) from Last.fm, returns the track that
 // approximately matches the user-generated input.
-// 
+//
 // userInput: string - User-generated input
 // tracks: any[] - An array of tracks (json) from Last.fm
-// Returns any 
+// Returns any
 function findMatch(userInput, tracks) {
     window.Logger = window.Logger || { log: function (str) { } };
     var match = null;
@@ -1216,7 +1208,7 @@ function findMatch(userInput, tracks) {
 exports.findMatch = findMatch;
 // Public: Given user-generated input and a single track (json) from the Last.fm API,
 // tries to determine if the track provided is the track referenced in the user's input
-// 
+//
 // answer: string - User-generated input
 // track: {string, string} - An object that contains the artist and song name from Last.fm
 //
@@ -1260,9 +1252,9 @@ function validate(answer, track) {
 exports.validate = validate;
 // Internal: A layer of abstraction, which provides an opportunity
 // to add inject custom behavior into stemming algorithm
-// 
+//
 // word - string
-// 
+//
 // Returns a string
 function stemmed(word) {
     if (word === "delivery") {
@@ -1284,10 +1276,15 @@ exports.stringHasIntersection = stringHasIntersection;
 function matchHasIntersection(left, right) {
     console.group = console.group || function (input) { };
     window.Logger = window.Logger || { log: function (str) { } };
+    // The full string that qualifies for comparison is the song name + artist name
+    // (e.g. "Don't Let Me Down The Beatles")
     var leftStr = [left.name, left.artist].join(" ");
     var rightStr = [right.name, right.artist].join(" ");
+    // Sanitize each string
     var sLeft = sanitizer_1.sanitize(leftStr);
     var sRight = sanitizer_1.sanitize(rightStr);
+    // Split words into their basic components
+    // Stem the words of each string
     var lStemmed = sanitizer_1.sanitize(sLeft).split(" ").map(function (word) { return stemmed(word); });
     var rStemmed = sanitizer_1.sanitize(sRight).split(" ").map(function (word) { return stemmed(word); });
     console.log("%c          stems: " + lStemmed, 'color: #4070B7');
@@ -1478,6 +1475,36 @@ function short(word, r1) {
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
+function lastFMResponseVerifier(json) {
+    // Bail early if the response lacks the required json structure
+    var foundTracks = json && json.results && json.results.trackmatches;
+    if (!foundTracks) {
+        console.log('%c    No match found', 'color: #A62F2F');
+        window.Logger.log('    No match found');
+        console.groupEnd();
+        return [];
+    }
+    // Bail early if the results are empty
+    var tracks = json.results.trackmatches.track;
+    if (tracks.length == 0) {
+        console.log('%c    No match found', 'color: #A62F2F');
+        window.Logger.log('    No match found');
+        console.groupEnd();
+        return [];
+    }
+    return tracks;
+}
+exports.lastFMResponseVerifier = lastFMResponseVerifier;
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/*jshint esversion: 6 */
+exports.__esModule = true;
 var constants_1 = __webpack_require__(0);
 function _answerSubmissionStarted() {
     return {
@@ -1530,7 +1557,7 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1546,29 +1573,29 @@ exports.createActionSet = function (actionName) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var game_1 = __webpack_require__(22);
+var game_1 = __webpack_require__(23);
 exports.Game = game_1["default"];
-var player_1 = __webpack_require__(23);
+var player_1 = __webpack_require__(24);
 exports.Player = player_1["default"];
 var match_1 = __webpack_require__(5);
 exports.Match = match_1["default"];
 var turn_1 = __webpack_require__(4);
 exports.Turn = turn_1["default"];
-var fb_friend_1 = __webpack_require__(24);
+var fb_friend_1 = __webpack_require__(25);
 exports.FBFriend = fb_friend_1["default"];
 var stack_1 = __webpack_require__(3);
 exports.Stack = stack_1["default"];
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1632,7 +1659,7 @@ exports["default"] = Game;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1648,7 +1675,7 @@ exports["default"] = Player;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1670,21 +1697,21 @@ exports["default"] = FBFriend;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var redux_thunk_1 = __webpack_require__(26);
+var redux_thunk_1 = __webpack_require__(27);
 var redux_1 = __webpack_require__(6);
-var index_1 = __webpack_require__(42);
+var index_1 = __webpack_require__(43);
 exports["default"] = redux_1.createStore(index_1["default"], redux_1.applyMiddleware(redux_thunk_1["default"]));
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1713,7 +1740,7 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1727,11 +1754,11 @@ var _Symbol2 = __webpack_require__(10);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
-var _getRawTag = __webpack_require__(30);
+var _getRawTag = __webpack_require__(31);
 
 var _getRawTag2 = _interopRequireDefault(_getRawTag);
 
-var _objectToString = __webpack_require__(31);
+var _objectToString = __webpack_require__(32);
 
 var _objectToString2 = _interopRequireDefault(_objectToString);
 
@@ -1761,7 +1788,7 @@ function baseGetTag(value) {
 exports.default = baseGetTag;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1773,7 +1800,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _freeGlobal = __webpack_require__(29);
+var _freeGlobal = __webpack_require__(30);
 
 var _freeGlobal2 = _interopRequireDefault(_freeGlobal);
 
@@ -1788,7 +1815,7 @@ var root = _freeGlobal2.default || freeSelf || Function('return this')();
 exports.default = root;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1807,7 +1834,7 @@ exports.default = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1869,7 +1896,7 @@ function getRawTag(value) {
 exports.default = getRawTag;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1902,7 +1929,7 @@ function objectToString(value) {
 exports.default = objectToString;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1912,7 +1939,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _overArg = __webpack_require__(33);
+var _overArg = __webpack_require__(34);
 
 var _overArg2 = _interopRequireDefault(_overArg);
 
@@ -1924,7 +1951,7 @@ var getPrototype = (0, _overArg2.default)(Object.getPrototypeOf, Object);
 exports.default = getPrototype;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1950,7 +1977,7 @@ function overArg(func, transform) {
 exports.default = overArg;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1993,16 +2020,16 @@ function isObjectLike(value) {
 exports.default = isObjectLike;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(36);
+module.exports = __webpack_require__(37);
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2012,7 +2039,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(38);
+var _ponyfill = __webpack_require__(39);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -2036,10 +2063,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(37)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(38)(module)))
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2069,7 +2096,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2098,7 +2125,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2250,7 +2277,7 @@ function combineReducers(reducers) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2312,7 +2339,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2385,7 +2412,7 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2393,8 +2420,8 @@ function applyMiddleware() {
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var redux_1 = __webpack_require__(6);
-var lastfm_1 = __webpack_require__(43);
-var main_1 = __webpack_require__(44);
+var lastfm_1 = __webpack_require__(44);
+var main_1 = __webpack_require__(45);
 exports["default"] = redux_1.combineReducers({
     lastFM: lastfm_1["default"],
     main: main_1["default"]
@@ -2402,7 +2429,7 @@ exports["default"] = redux_1.combineReducers({
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2425,7 +2452,7 @@ exports["default"] = default_1;
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
