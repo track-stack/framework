@@ -1079,15 +1079,8 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
 }
 // TODO: Remove logs
 function submitAnswer(answer, stack) {
-    console.group = console.group || function (input) { };
-    console.groupEnd = console.groupEnd || function () { };
-    window.Logger = window.Logger || { log: function (str) { } };
     return function (dispatch) {
         dispatch(selectors_1._answerSubmissionStarted());
-        console.group("INPUT: " + answer);
-        console.log('  Searching Last.fm...');
-        window.Logger.log("<b>INPUT: " + answer + "</b>");
-        window.Logger.log('  Searching Last.fm...');
         // TODO: full sanitization before searching may be too agressive
         // Removing "by" and "-" may be enough
         var sanitizedAnswer = sanitizer_1.sanitize(answer);
@@ -1107,41 +1100,23 @@ function submitAnswer(answer, stack) {
             // Bail early we didn't find a match
             if (!match) {
                 selectors_1._answerSubmissionFailed("no match found");
-                console.log('%c    No match found', 'color: #A62F2F');
-                window.Logger('    No match found');
-                console.groupEnd();
                 return;
             }
-            console.group("        Comparing previous turn");
-            window.Logger.log("<b>        Comparing pervious turn</b>");
             var previousTurn = stack.firstTurn();
             var hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
             // validate match against previous turn
             // Bail early if there's no overlap
             if (!hasOverlapWithPreviousTurn) {
                 selectors_1._answerSubmissionFailed("Does not have any similar words with the previous answer");
-                console.log('%c        No similiary to previous answer', 'color: #A62F2F');
-                window.Logger.log('        No similiary to previous answer');
-                console.groupEnd();
                 return;
             }
-            console.group("<span style='color:blue'>        Comparing Artists</span>");
-            console.log("%c        " + match.artist + ", " + previousTurn.match.artist, 'color: #4070B7');
-            console.groupEnd();
-            window.Logger.log("<b>        Comparing Artists</b>");
-            window.Logger.log("          " + match.artist + ", " + previousTurn.match.artist);
             // Bail early if the 2 artists are the same
             if (match.artist === previousTurn.match.artist) {
                 selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row");
-                console.log("%c        Can't play the same artist twice in a row", "color: #A62F2F");
-                window.Logger.log("        Can't play the same artist twice in a row");
-                console.groupEnd();
                 return;
             }
             // validate match against first turn
             if (stack.canEnd) {
-                console.group("        Comparing first turn");
-                window.Logger.log("<b>        Comparing first turn</b>");
                 var firstTurn = stack.lastTurn();
                 var hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
                 // winner
@@ -1151,7 +1126,6 @@ function submitAnswer(answer, stack) {
                     return;
                 }
             }
-            console.groupEnd();
             // Submit our answer and match to the server
             submitToServer(dispatch, stack.gameId, answer, match, false);
         });
@@ -7435,17 +7409,11 @@ function lastFMResponseVerifier(json) {
     // Bail early if the response lacks the required json structure
     var foundTracks = json && json.results && json.results.trackmatches;
     if (!foundTracks) {
-        console.log('%c    No match found', 'color: #A62F2F');
-        window.Logger.log('    No match found');
-        console.groupEnd();
         return [];
     }
     // Bail early if the results are empty
     var tracks = json.results.trackmatches.track;
     if (tracks.length == 0) {
-        console.log('%c    No match found', 'color: #A62F2F');
-        window.Logger.log('    No match found');
-        console.groupEnd();
         return [];
     }
     return tracks;
