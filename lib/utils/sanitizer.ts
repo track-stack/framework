@@ -1,20 +1,14 @@
 /*jshint esversion: 6 */
 
-const BLACKLIST = "and|the|by|ft|remix"
-
-const REGEX = {
-  characters: /[&@,.&+\(\)\[\]\-_]/g,
-  articles: new RegExp(`\\b(${BLACKLIST})\\b`, 'g'),
-  apostrophe: /['!]/g,
-  whitespace: /\s+/g
-}
+const BLACKLIST = "and|the|by|ft|remix|feat"
 
 const FILTERS: ((string) => string)[] = [
   (input: string) => input.toLowerCase(),
-  (input: string) => input.replace(REGEX.characters, ' '),
-  (input: string) => input.replace(REGEX.articles, ''),
-  (input: string) => input.replace(REGEX.apostrophe, ''),
-  (input: string) => input.replace(REGEX.whitespace, ' ')
+  (input: string) => input.replace(/[,.+\(\)\[\]\-_]/g, ' '),
+  (input: string) => input.replace(/[$!]/g, 's'),
+  (input: string) => input.replace(new RegExp(`\\b(${BLACKLIST})\\b`, 'g'), ''),
+  (input: string) => input.replace(/['&@]/g, ''),
+  (input: string) => input.replace(/\s+/g, ' ')
 ]
 
 // Public: Puts the input string through a series of regex filters
