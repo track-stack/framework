@@ -119,8 +119,6 @@ function stemmedComponents(str: string): string[] {
   const sanitized = sanitize(transformed)
   const result = splitDigits(sanitized)
 
-  console.log(result)
-
   return result.split(' ').map(word => stem(word))
 }
 

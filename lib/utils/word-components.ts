@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-const components = {
+export default {
   '100' : ['1', '0', 'hundred'],
   '200' : ['2', '0', 'hundred'],
   '300' : ['3', '0', 'hundred'],
@@ -227,7 +227,6 @@ const components = {
   'ashlee' : ['ashley'], 
   'ashworth' : ['ash', 'worth'], 
   'askin' : ['ask'], 
-  'asshole' : ['ass', 'hole'],
   'asshole' : ['ass', 'hole'],
   'assistant' : ['assist'], 
   'astr' : ['a', 's', 't', 'r'],
@@ -1193,7 +1192,7 @@ const components = {
   'd4l' : ['d', '4 l'],
   'dabbin' : ['dab'], 
   'dabrat' : ['da', 'brat'],
-  'daddy' : ['dad']
+  'daddy' : ['dad'],
   'daddies' : ['dad'], 
   'dallask' : ['dallas', 'k'],
   'daly' : ['daily'], 
@@ -1455,7 +1454,7 @@ const components = {
   'drawin' : ['draw'], 
   'drawn' : ['draw'], 
   'dreadful' : ['dread'], 
-  'dreamer' : ['dream']
+  'dreamer' : ['dream'],
   'dreamers' : ['dream'], 
   'dreamgirl' : ['dream', 'girl'],
   'dreamgirls' : ['dream', 'girl'],
@@ -1928,7 +1927,6 @@ const components = {
   'forsaken' : ['forsake'], 
   'fortress' : ['fort'],
   'forty' : ['forty', '4', '0'],
-  'hundredth' : ['hundred'],
   'founder' : ['found'],
   'four' : ['4'],
   'fourfiveseconds' : ['four', 'five', 'second'],
@@ -3186,7 +3184,6 @@ const components = {
   'lovedance' : ['love', 'dance'],
   'lovefool' : ['love', 'fool'],
   'lovegame' : ['love', 'game'],
-  'babywipe' : ['baby', 'wipe'],
   'loveless' : ['love'], 
   'lovelies' : ['love'], 
   'lovelife' : ['love', 'life'],
@@ -4992,7 +4989,6 @@ const components = {
   'stories' : ['story'], 
   'stormbringer' : ['storm', 'bring'],
   'stormy' : ['storm'],
-  'pressa' : ['press'],
   'streamer' : ['stream'],
   'streamers' : ['stream'],
   'stormzy' : ['storm'],
@@ -5196,7 +5192,6 @@ const components = {
   'tailfeather' : ['tail', 'feather'],
   'tailgate' : ['tail', 'gate'],
   'tailgates' : ['tail', 'gate'],
-  'tailgates' : ['tail', 'gate'],
   'taillight' : ['tail', 'light'],
   'taillights' : ['tail', 'light'],
   'tailspin' : ['tail', 'spin'],
@@ -5210,7 +5205,6 @@ const components = {
   'taller' : ['tall'], 
   'tallest' : ['tall'], 
   'tammi' : ['tammy'], 
-  'tanker' : ['tank'],
   'tanker' : ['tank'],
   'tanline' : ['tan', 'line'],
   'tanlines' : ['tan', 'line'],
@@ -6119,7 +6113,6 @@ const components = {
   'youngbleed' : ['young', 'bleed'],
   'youngbloods' : ['young', 'blood'],
   'youngblood' : ['young', 'blood'],
-  'yungblud' : ['young', 'blood'],
   'youngbloodz' : ['young', 'blood'],
   'youngbodzy' : ['young', 'body'],
   'youngboy' : ['young', 'boy'],
@@ -6310,5 +6303,3 @@ const components = {
   'fucc' : ['fuck'], 
   'mindstate' : ['mind', 'state']
 }
-
-export default components
