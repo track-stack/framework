@@ -89,7 +89,6 @@ export function submitAnswer(answer: string, stack: Stack) {
     // Removing "by" and "-" may be enough
     const sanitizedAnswer = sanitize(answer)
 
-    // search Last.fm
     performSearch({sanitizedAnswer}).then(json => {
 
       // confirm that our input matches at least 1 track (check the top 5 results)
@@ -115,11 +114,10 @@ export function submitAnswer(answer: string, stack: Stack) {
       const previousTurn = stack.firstTurn()
       const hasOverlapWithPreviousTurn = matchHasIntersection(match, previousTurn.match)
 
-      // validate match against previous turn
 
-      // Bail early if there's no overlap
+      // Bail early if there's no overlap with previous turn
       if (!hasOverlapWithPreviousTurn) {
-        _answerSubmissionFailed("Does not have any similar words with the previous answer")
+        _answerSubmissionFailed("No similarity to the previous track")
         return
       }
       
@@ -129,14 +127,19 @@ export function submitAnswer(answer: string, stack: Stack) {
         return
       }
 
+
       // validate match against first turn
       if (stack.canEnd) {
         const firstTurn = stack.lastTurn()
         const hasOverlapWithFirstTurn = matchHasIntersection(match, firstTurn.match)
 
+        console.log('first', stack.lastTurn())
+        console.log('last', stack.firstTurn())
+        console.log('match', match)
+        console.log('overlap', hasOverlapWithFirstTurn)
+
         // winner
         if (hasOverlapWithFirstTurn) {
-          console.groupEnd()
           submitToServer(dispatch, stack.gameId, answer, match, true)
           return
         }
