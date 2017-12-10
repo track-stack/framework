@@ -25,15 +25,11 @@ export function findMatch(userInput: string, tracks: any[]): any {
   for (let i = 0; i < limit; i++) {
     const { artist, name } = tracks[i]
     if (validate(userInput, { artist, name })) {
-      match = tracks[i]
-      console.log('%c        valid match!', 'color: #42A143')
-      break
-    } else {
-      console.log('%c        not a valid match', 'color: #A62F2F')
-    }
+      return tracks[i]
+    } 
   }
 
-  return match
+  // return error
 }
 
 // Public: Given user-generated input and a single track (json) from the Last.fm API,
@@ -71,21 +67,6 @@ export function validate(answer: string, track: {artist: string, name: string}):
   return false
 }
 
-// Internal: A layer of abstraction, which provides an opportunity
-// to add inject custom behavior into stemming algorithm
-//
-// word - string
-//
-// Returns a string
-function stemmed(word: string): string {
-  if (word === "delivery") { return "deliver" }
-  if (word === "trappin") { return "trap" }
-  if (word === "american") { return "america" }
-
-  // defer to the algo
-  return stem(word)
-}
-
 // Public: Given two string, calculates whether there are overlapping words between
 // the two strings after reducing each word to its stem.
 //
@@ -109,11 +90,21 @@ export function stringHasIntersection(left: string, right: string): boolean {
 //
 // Returns a string
 function stringThroughComponentTransform(str: string): string {
- return str.split(' ').reduce((acc, word) => {
+  return str.split(' ').reduce((acc, word) => {
     const lower = word.toLowerCase()
     const components = wordComponents[lower]
     const words = components ? components : [word]
     return acc.concat(words)
+  }, []).join(' ')
+}
+
+function splitDigits(str: string): string {
+  return str.split(' ').reduce((acc, word) => {
+    if (/^\d+$/.test(word)) {
+      const split = word.split('');
+      return acc.concat(split)
+    }
+    return acc.concat([word])
   }, []).join(' ')
 }
 
@@ -126,8 +117,11 @@ function stringThroughComponentTransform(str: string): string {
 function stemmedComponents(str: string): string[] {
   const transformed = stringThroughComponentTransform(str)
   const sanitized = sanitize(transformed)
+  const result = splitDigits(sanitized)
 
-  return sanitized.split(' ').map(word => stemmed(word))
+  console.log(result)
+
+  return result.split(' ').map(word => stem(word))
 }
 
 export function matchHasIntersection(left: Match, right: Match): boolean {
