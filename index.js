@@ -87,19 +87,14 @@ exports.INVITEE = action_helper_1.createActionSet('INVITEE');
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var BLACKLIST = "and|the|by|ft|remix";
-var REGEX = {
-    characters: /[&@,.&+\(\)\[\]\-_]/g,
-    articles: new RegExp("\\b(" + BLACKLIST + ")\\b", 'g'),
-    apostrophe: /['!]/g,
-    whitespace: /\s+/g
-};
+var BLACKLIST = "and|the|by|ft|remix|feat";
 var FILTERS = [
     function (input) { return input.toLowerCase(); },
-    function (input) { return input.replace(REGEX.characters, ' '); },
-    function (input) { return input.replace(REGEX.articles, ''); },
-    function (input) { return input.replace(REGEX.apostrophe, ''); },
-    function (input) { return input.replace(REGEX.whitespace, ' '); }
+    function (input) { return input.replace(/[,.+\(\)\[\]\-_]/g, ' '); },
+    function (input) { return input.replace(/[$!]/g, 's'); },
+    function (input) { return input.replace(new RegExp("\\b(" + BLACKLIST + ")\\b", 'g'), ''); },
+    function (input) { return input.replace(/['&@]/g, ''); },
+    function (input) { return input.replace(/\s+/g, ' '); }
 ];
 // Public: Puts the input string through a series of regex filters
 // 
@@ -1084,7 +1079,6 @@ function submitAnswer(answer, stack) {
         // TODO: full sanitization before searching may be too agressive
         // Removing "by" and "-" may be enough
         var sanitizedAnswer = sanitizer_1.sanitize(answer);
-        // search Last.fm
         performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
             // confirm that our input matches at least 1 track (check the top 5 results)
             // confirm that our match passes the test against the previous turn
@@ -1104,10 +1098,9 @@ function submitAnswer(answer, stack) {
             }
             var previousTurn = stack.firstTurn();
             var hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
-            // validate match against previous turn
-            // Bail early if there's no overlap
+            // Bail early if there's no overlap with previous turn
             if (!hasOverlapWithPreviousTurn) {
-                selectors_1._answerSubmissionFailed("Does not have any similar words with the previous answer");
+                selectors_1._answerSubmissionFailed("No similarity to the previous track");
                 return;
             }
             // Bail early if the 2 artists are the same
@@ -1119,9 +1112,12 @@ function submitAnswer(answer, stack) {
             if (stack.canEnd) {
                 var firstTurn = stack.lastTurn();
                 var hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
+                console.log('first', stack.lastTurn());
+                console.log('last', stack.firstTurn());
+                console.log('match', match);
+                console.log('overlap', hasOverlapWithFirstTurn);
                 // winner
                 if (hasOverlapWithFirstTurn) {
-                    console.groupEnd();
                     submitToServer(dispatch, stack.gameId, answer, match, true);
                     return;
                 }
@@ -1163,15 +1159,10 @@ function findMatch(userInput, tracks) {
     for (var i = 0; i < limit; i++) {
         var _a = tracks[i], artist = _a.artist, name_1 = _a.name;
         if (validate(userInput, { artist: artist, name: name_1 })) {
-            match = tracks[i];
-            console.log('%c        valid match!', 'color: #42A143');
-            break;
-        }
-        else {
-            console.log('%c        not a valid match', 'color: #A62F2F');
+            return tracks[i];
         }
     }
-    return match;
+    // return error
 }
 exports.findMatch = findMatch;
 // Public: Given user-generated input and a single track (json) from the Last.fm API,
@@ -1206,25 +1197,6 @@ function validate(answer, track) {
     return false;
 }
 exports.validate = validate;
-// Internal: A layer of abstraction, which provides an opportunity
-// to add inject custom behavior into stemming algorithm
-//
-// word - string
-//
-// Returns a string
-function stemmed(word) {
-    if (word === "delivery") {
-        return "deliver";
-    }
-    if (word === "trappin") {
-        return "trap";
-    }
-    if (word === "american") {
-        return "america";
-    }
-    // defer to the algo
-    return stem(word);
-}
 function stringHasIntersection(left, right) {
     return matchHasIntersection({ artist: left, name: "" }, { artist: right, name: "" });
 }
@@ -1243,6 +1215,15 @@ function stringThroughComponentTransform(str) {
         return acc.concat(words);
     }, []).join(' ');
 }
+function splitDigits(str) {
+    return str.split(' ').reduce(function (acc, word) {
+        if (/^\d+$/.test(word)) {
+            var split = word.split('');
+            return acc.concat(split);
+        }
+        return acc.concat([word]);
+    }, []).join(' ');
+}
 // Private: Given a string, returns an array of transformed (see stringThroughComponentTransform),
 // stemmed words.
 // 
@@ -1252,7 +1233,9 @@ function stringThroughComponentTransform(str) {
 function stemmedComponents(str) {
     var transformed = stringThroughComponentTransform(str);
     var sanitized = sanitizer_1.sanitize(transformed);
-    return sanitized.split(' ').map(function (word) { return stemmed(word); });
+    var result = splitDigits(sanitized);
+    console.log(result);
+    return result.split(' ').map(function (word) { return stem(word); });
 }
 function matchHasIntersection(left, right) {
     var aComponents = stemmedComponents([left.name, left.artist].join(' '));
@@ -1431,8 +1414,9 @@ var components = {
     'amazingly': ['amaze'],
     'amazonas': ['amazon'],
     'ambitionz': ['ambition'],
-    'americana': ['america'],
+    'jana': ['america'],
     'americano': ['america'],
+    'american': ['america'],
     'amerika': ['america'],
     'amerikaz': ['america'],
     'amerikkka': ['america'],
@@ -2455,6 +2439,7 @@ var components = {
     'deftone': ['deaf', 'tone'],
     'degreez': ['degree'],
     'delicately': ['delicate'],
+    'delivery': ['deliver'],
     'dell': ['dale'],
     'dem': ['them'],
     'demolition': ['demo'],
@@ -6452,6 +6437,7 @@ var components = {
     'traphouse': ['trap', 'house'],
     'trappa': ['trap'],
     'trapper': ['trap'],
+    'trappin': ['trap'],
     'trashbag': ['trash', 'bag'],
     'trashcan': ['trash', 'can'],
     'trashin': ['trash'],
