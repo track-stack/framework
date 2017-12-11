@@ -90,7 +90,7 @@ exports.__esModule = true;
 var BLACKLIST = "and|the|by|ft|remix|feat";
 var FILTERS = [
     function (input) { return input.toLowerCase(); },
-    function (input) { return input.replace(/[,.+\(\)\[\]\-_]/g, ' '); },
+    function (input) { return input.replace(/[,.+\(\)\[\]\-_—]/g, ' '); },
     function (input) { return input.replace(/[$!]/g, 's'); },
     function (input) { return input.replace(new RegExp("\\b(" + BLACKLIST + ")\\b", 'g'), ''); },
     function (input) { return input.replace(/['&@]/g, ''); },
@@ -1067,6 +1067,7 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
         .then(function (response) { return response.json(); })
         .then(function (json) {
         var game = types_1.Game.from(json.game);
+        console.log('GOT THE GAME', game);
         dispatch(selectors_1._answerSubmitted(game));
     })["catch"](function (error) {
         dispatch(selectors_1._answerSubmissionFailed(error));
@@ -1086,26 +1087,33 @@ function submitAnswer(answer, stack) {
             // make sure we get a response from Last.fm
             var tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
             if (tracks.length === 0) {
-                selectors_1._answerSubmissionFailed('no match found');
+                dispatch(selectors_1._answerSubmissionFailed("No track found for " + answer + "."));
                 return;
             }
             // Attempt to find a match 
             var match = turn_processor_1.findMatch(answer, tracks);
             // Bail early we didn't find a match
             if (!match) {
-                selectors_1._answerSubmissionFailed("no match found");
+                dispatch(selectors_1._answerSubmissionFailed("No track found for " + answer + "."));
                 return;
             }
             var previousTurn = stack.firstTurn();
             var hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
             // Bail early if there's no overlap with previous turn
             if (!hasOverlapWithPreviousTurn) {
-                selectors_1._answerSubmissionFailed("No similarity to the previous track");
+                dispatch(selectors_1._answerSubmissionFailed("No similarity to the previous track."));
                 return;
             }
             // Bail early if the 2 artists are the same
             if (match.artist === previousTurn.match.artist) {
-                selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row");
+                dispatch(selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row."));
+                return;
+            }
+            var trackPlayedAlready = stack.turns.filter(function (turn) {
+                return turn.match.artist == match.artist && turn.match.name == match.name;
+            });
+            if (trackPlayedAlready.length > 0) {
+                dispatch(selectors_1._answerSubmissionFailed("That song has already been played."));
                 return;
             }
             // validate match against first turn

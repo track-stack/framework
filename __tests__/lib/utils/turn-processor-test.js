@@ -47,6 +47,11 @@ test("with numbers", () => {
   expect(result).toBe(true)
 })
 
+test("with numbers", () => {
+  const result = matchHasIntersection({name: "baby 182"}, {artist: "blink-182"})
+  expect(result).toBe(true)
+})
+
 test("with encoded names", () => {
   let result = matchHasIntersection({artist: "Aerodynamic"}, {artist: "Aerosmith"})
   expect(result).toBe(true)
@@ -66,17 +71,12 @@ test("without overlap", () => {
   expect(result).toBe(false)
 })
 
-test("with numbers", () => {
-  const result = matchHasIntersection({name: "baby 182"}, {artist: "blink-182"})
-  expect(result).toBe(true)
-})
-
 test("with abbreviations", () => {
   const result = matchHasIntersection({artist: "M.I.A"}, {artist: "N.W.A"})
   expect(result).toBe(true)
 })
 
-test("with abbreviations 2", () => {
+test("with abbreviations", () => {
   const result = matchHasIntersection({artist: "M.I.A"}, {artist: "I am them"})
   expect(result).toBe(true)
 })

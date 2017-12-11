@@ -26,7 +26,7 @@ export default function(state = defaultState, action) {
     case ANSWER_SUBMISSION.SUCCESS: {
       return (<any>Object).assign({}, state, { game: action.data });
     }
-      case ANSWER_SUBMISSION.ERROR: {
+    case ANSWER_SUBMISSION.ERROR: {
       return (<any>Object).assign({}, state, { error: action.data });
     }
     default:

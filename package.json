@@ -1,6 +1,6 @@
 {
   "name": "trackstack",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "Shared code for Track Stack",
   "main": "./lib/trackstack.js",
   "scripts": {
@@ -46,6 +46,6 @@
     ]
   },
   "repl": [
-    { "name" : "sanitize", "module" : "./lib/utils/sanitizer" }
+    { "name" : "sanitize", "module" : "./lib/utils/sanitizer.ts" }
   ]
 }

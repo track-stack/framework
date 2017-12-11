@@ -72,6 +72,8 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
   .then(response => response.json())
   .then(json => {
     const game = Game.from(json.game)
+
+    console.log('GOT THE GAME', game)
     dispatch(_answerSubmitted(game))
   })
   .catch(error => {
@@ -98,7 +100,7 @@ export function submitAnswer(answer: string, stack: Stack) {
       // make sure we get a response from Last.fm
       const tracks = lastFMResponseVerifier(json)
       if (tracks.length === 0) {
-        _answerSubmissionFailed('no match found')
+        dispatch(_answerSubmissionFailed(`No track found for ${answer}.`))
         return
       }
 
@@ -107,7 +109,7 @@ export function submitAnswer(answer: string, stack: Stack) {
 
       // Bail early we didn't find a match
       if (!match) {
-        _answerSubmissionFailed("no match found")
+        dispatch(_answerSubmissionFailed(`No track found for ${answer}.`))
         return
       }
 
@@ -117,16 +119,25 @@ export function submitAnswer(answer: string, stack: Stack) {
 
       // Bail early if there's no overlap with previous turn
       if (!hasOverlapWithPreviousTurn) {
-        _answerSubmissionFailed("No similarity to the previous track")
+        dispatch(_answerSubmissionFailed("No similarity to the previous track."))
         return
       }
       
       // Bail early if the 2 artists are the same
       if (match.artist === previousTurn.match.artist) {
-        _answerSubmissionFailed("Can't play the same artist twice in a row")
+        dispatch(_answerSubmissionFailed("Can't play the same artist twice in a row."))
         return
       }
 
+       
+      const trackPlayedAlready = stack.turns.filter((turn) => {
+        return turn.match.artist == match.artist && turn.match.name == match.name
+      })
+
+      if (trackPlayedAlready.length > 0) {
+        dispatch(_answerSubmissionFailed("That song has already been played."))
+        return
+      }
 
       // validate match against first turn
       if (stack.canEnd) {
