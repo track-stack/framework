@@ -5,7 +5,7 @@ import { sanitize } from '../../../lib/utils/sanitizer'
 test("lowercases the input", () => {
   const str = "THESE WORDS ARE HERE"
   const sanitized = sanitize(str)
-  expect(sanitize(str)).toEqual("these words are here")
+  expect(sanitized).toEqual("these words are here")
 })
 
 test("replaces ( and ) with a space", () => {
@@ -39,7 +39,7 @@ test("replaces + with a space", () => {
 })
 
 test("replaces _ and - with a space", () => {
-  const str = "th-ese-wo_-_r_ds"
+  const str = "th - ese - wo_ - _r_ds"
   const sanitized = sanitize(str)
   expect(sanitized).toEqual("th ese wo r ds")
 })

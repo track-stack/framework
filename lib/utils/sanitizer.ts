@@ -12,9 +12,9 @@ const FILTERS: ((string) => string)[] = [
 ]
 
 // Public: Puts the input string through a series of regex filters
-// 
+//
 // input - string
-// 
+//
 // Returns a string
 export function sanitize(input: string): string {
   FILTERS.forEach(filter => input = filter(input))

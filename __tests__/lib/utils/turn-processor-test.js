@@ -1,9 +1,9 @@
 /*jshint esversion: 6 */
 
-import { 
-  validate, 
+import {
+  validate,
   findMatch,
-  matchHasIntersection 
+  matchHasIntersection
 } from '../../../lib/utils/turn-processor'
 
 // #validate
@@ -14,7 +14,7 @@ test("returns true with an exact match", () => {
     artist: "Torres"
   }
 
-  const result = validate(answer, match)  
+  const result = validate(answer, match)
 
   expect(result).toBe(true)
 })
@@ -26,7 +26,7 @@ test("returns true if the submitted artist is present in the match", () => {
     artist: "Torres (featuring Pitbull)"
   }
 
-  const result = validate(answer, match)  
+  const result = validate(answer, match)
 
   expect(result).toBe(true)
 })
