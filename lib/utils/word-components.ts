@@ -6479,373 +6479,358 @@ export default {
   'deadlock' : ['dead', 'lock'],
   'blueprint' : ['blue', 'print'],
   'gridlock' : ['grid', 'lock'],
-  'crossover’ : [‘cross’, ‘over’]
-  'beatking’ : [‘beat’, ‘king’]
-  'chipz’ : [‘chip’]
-  'sobeautiful’ : [‘so’, ‘beautiful’]
-  'joistarr’ : [‘joy’, ‘star’]
-  'onmyradio’ : [‘on’, ‘my’, ‘radio’]
-  'talkbox’ : [‘talk’, ‘box’]
-  'monstercat’ : [‘monster’, ‘cat’]
-  'asquared’ : [‘a’, ‘square’]
-  'squared’ : [‘square’]
-  'freefall’ : [‘free’, ‘fall’]
-  'freefalling’ : [‘free’, ‘fall’]
-  'hologram’ : [‘holo’, ‘gram’]
-  'musicboxes’ : [‘music’, ‘box’]
-  'petersburg’ : [‘peter’, ‘burg’]
-  'dreamworld’ : [‘dream’, ‘world’]
-  'riceboy’ : [‘rice’, ‘boy’]
-  'ok2222’ : [‘ok’, ‘2’]
-  'disaterpeace’ : [‘disaster’, ‘peace’]
-  'lushness’ : [‘lush’]
-  'glowworm’ : [‘glow’, ‘worm’]
-  'coachlight’ : [‘coach’, ‘light’]
-  'underbart’ : [‘under’, ‘bart’]
-  'dreamcoat’ : [‘dream’, ‘coat’]
-  'bulldog’ : [‘bull’, ‘dog’]
-  'zimzilla’ : [‘zim’, ‘zilla’]
-  'cherries’ : [‘cherry’]
-  'floodlight’ : [‘flood’, ‘light’]
-  'floodlights’ : [‘flood’, ‘light’]
-  'lightchasers’ : [‘light’, ‘chase’]
-  'stori’ : [‘story’]
-  'idontwannabeyouanymore’ : [‘I’, ‘dont’, ‘wanna’, ‘be’, ‘you’, ‘any’, ‘more’]
-  'freesol’ : [‘free’, ‘sol’]
-  'stonestreet’ : [‘stone’, ‘street’]
-  'amaanda’ : [‘amanda’]
-  'goodluck’ : [‘good’, ‘luck’]
-  'dropgun’ : [‘drop’, ‘gun’]
-  'xquizit’ : [exquisite’]
-  'lookas’ : [‘look’]
-  'killers’ : [‘kill’]
-  'm808’ : [‘m’, ‘8’, ‘0’]
-  'gspr’ : [‘g’, ‘s’, ‘p’, ‘r’]
-  'blr’ : [‘b’, ‘l’, ‘r’]
-  'mk’ : [‘m’, ‘k’]
-  'stonefox’ : [‘stone’, ‘fox’]
-  'seaway’ : [‘sea’, ‘way’]
-  'hightown’ : [‘high’, ‘town’]
-  'birdcage’ : [‘bird’, ‘cage’]
-  'numblife’ : [‘numb’, ‘life’]
-  'outlya’ : [‘out’]
-  'sickago’ : [‘sick’]
-  'beetroots’ : [‘beet’, ‘root’]
-  'smallpools’ : [‘small’, ‘pool’]
-  'phnx’ : [‘phoenix’]
-  'hellfire’ : [‘hell’, ‘fire’]
-  'rockisdead’ : [‘rock’, ‘is’, ‘dead’]
-  'vally’ : [‘valley’]
-  'asleep’ : [‘sleep’]
-  'switchblade’ : [‘switch’, ‘blade’]
-  'steepwater’ : [‘steep’, ‘water’]
-  'automatica’ : [‘automatic’]
-  'punchline’ : [‘punch’, ‘line’]
-  'midtown’ : [‘mid’, ‘town’]
-  'piebald’ : [‘pie’, ‘bald’]
-  'existentialism’ : [‘existential’]
-  'straylight’ : [‘stray’, ‘light’]
-  'glassjaw’ : [‘glass’, ‘jaw’]
-  'cosmopolitan’ : [‘cosmo’]
-  'bloodloss’ : [‘blood’, ‘loss’]
-  'fcpremix’ : [‘f’, ‘c’, ‘p’, ‘r’, ‘e’, ‘m’, ‘I’, ‘x’]
-  'bayside’ : [‘bay’, ‘side’]
-  'movielife’ : [‘movie’, ‘life’]
-  'loveletter’ : [‘love’, ‘letter’]
-  'prelow’ : [‘low’]
-  'plgrms’ : [‘pilgrim’]
-  'nightlight’ : [‘night’, ‘light’]
-  'heartbreaklist: [‘heart’, ‘break’, ‘list’]
-  'damnwells’ : [‘damn’, ‘well’]
-  'stereomud’ : [‘stereo’, ‘mud’]
-  'powerman’ : [‘power’, ‘man’]
-  'taproot’ : [‘tap’, ‘root’]
-  'fingertight’ : [‘finger’, ‘tight’]
-  'switchback’ : [‘switch’, ‘back’]
-  'nothingface’ : [‘nothing’, ‘face’]
-  'earshot’ : [‘ear’, ‘shot’]
-  'mushroomhead’ : [‘mushroom’, ‘head’]
-  'spineshank’ : [‘spine’, ‘shank’]
-  'crazyfists’ : [‘crazy’, ‘fist’]
-  '‘trustcompany’ : [‘trust’, ‘company’]
-  'ultranumb’ : [‘ultra’, ‘numb’]
-  'otherkin’ : [‘other’, ‘kin’]
-  'perfekt’ : [‘perfect’]
-  'shitkid’ : [‘shit’, ‘kid’]
-  'dygl’ : [‘d’, ‘y’, ‘g’, ‘l’]
-  'deathrays’ : [‘death’, ‘ray’]
-  'whatevr’ : [‘what’, ‘ever’]
-  'bloomfield’ : [‘bloom’, ‘field’]
-  'barleycorn’ : [‘barley’, ‘corn’]
-  'leadfoot’ : [‘lead’, ‘foot’]
-  'whitehorse’ : [‘white’, ‘horse’]
-  'broadbent’ : [‘broad’, ‘bent’]
-  'harpoonist’ : [‘harpoon’]
-  'boneyard’ : [‘bone’, ‘yard’]
-  'riverbottom’ : [‘river’, ‘bottom’]
-  'dreamcatcher’ : [‘dream’, ‘catch’]
-  'dreamcatchers’ : [‘dream’, ‘catch’]
-  'internationale’ : [‘international’]
-  'heartbroken’ : [‘heart’, ‘broke’]
-  'disrepair’ : [‘repair’]
-  'slideshow’ : [‘slide’, ‘show’]
-  'derek’ : [‘derrick’]
-  'allstars’ : [‘all’, ‘star’]
-  'allstar’ : [‘all’, ‘star’]
-  'grownass’ : [‘grown’, ‘ass’]
-  'passageway’ : [‘passage’, ‘way’]
-  'passageways’ : [‘passage’, ‘way’]
-  'bellhound’ : [‘bell’, ‘hound’]
-  'kingsborough’ : [‘king’, ‘borough’]
-  'dragonaut’ : [‘dragon’]
-  'bitchwax’ : [‘bitch’, ‘wax’]
-  'boxriff’ : [‘box’, ‘riff’]
-  'deconstruction’ : [‘construction’]
-  'greenleaf’ : [‘green’, ‘leaf’]
-  'passes’ : [‘pass’]
-  '1000mods’ : [‘1’, ‘0’, ‘mod’]
-  'nightstalker’ : [‘night’, ‘stalk’]
-  'glasspack’ : [‘glass’, ‘pack’]
-  'powderkeg’ : [‘powder’, ‘keg’]
-  'weedeater’ : [‘weed’, ‘eat’]
-  'earthless’ : [‘earth’]
-  'booster’ : [‘boost’]
-  'catfight’ : [‘cat’, ‘fight’]
-  'nearby’ : [‘near’, ‘by’]
-  'weathered’ : [‘weather’]
-  'superheaven’ : [‘super’, ‘heaven’]
-  'morgxn’ : [‘morgan’]
-  'masseducation’ : [‘mass’, ‘education’]
-  'playtones’ : [‘play’, ‘tone’]
-  'buckaroos’ : [‘buck’]
-  'jaye’ : [‘jay’]
-  'showaddywaddy’ : [‘show’, ‘waddy’]
-  'refresh’ : [‘fresh’]
-  'refreshments’ : [‘fresh’]
-  'crashly’ : [‘crash’]
-  'roadmaster’ : [‘road’, ‘master’]
-  'roadmasters’ : [‘road’, ‘master’]
-  'kingbee’ : [‘king’, ‘bee’]
-  'sugarrush’ : [‘sugar’, ‘rush’]
-  'rockpile’ : [‘rock’, ‘pile’]
-  'slapper’ : [‘slap’]
-  'slappers’ : [‘slap’]
-  'jetaways’ : [‘jet’, ‘away’]
-  'lennerockers’ : [‘rock’]
-  'toein’ : [‘toe’]
-  'breathless’ : [‘breath’]
-  'bluelight’ : [‘blue’, ‘light’]
-  'rockabillies’ : [‘rock’, ‘billy’]
-  'highshots’ : [‘high’, ‘shot’]
-  'micke’ : [‘mick’]
-  'midlife’ : [‘mid’, ‘life’]
-  'bombtrack’ : [‘bomb, ‘track’]
-  'infectious’ : [‘infect’]
-  'jonestown’ : [‘jones’, ‘town’]
-  'sailboats’ : [‘sail’, ‘boat’]
-  'holydrug’ : [‘holy’, ‘drug’]
-  'goatfuzz’ : [‘goat’, ‘fuzz’]
-  'motorpsycho’ : [‘motor’, ‘psycho’]
-  'hibernation’ : [‘hibernate’]
-  'drunken’ : [‘drunk’]
-  'sunburst’ : [‘sun’, ‘burst’]
-  'reflections’ : [‘reflect’]
-  'boredoms’ : [‘bored’]
-  'thunderthief’ : [‘thunder’, ‘thief’]
-  'groundhogs’ : [‘ground’, ‘hog’]
-  'hatfield’ : [‘hat’, ‘field’]
-  'starcastle’ : [‘star’, ‘castle’]
-  'oceansize’ : [‘ocean’, ‘size’]
-  'ornamental’ : [‘ornament’]
-  'fireballet’ : [‘fire’, ‘ballet’]
-  'sunhillow’ : [‘sun’, ‘hillow’]
-  'oldfield’ : [‘old’, ‘field’]
-  'cleopatrick’ : [‘cleo’, ‘patrick’]
-  'holograms’ : [‘holo’, ‘gram’]
-  'oilfield’ : [‘oil’, ‘field’]
-  'ottomatic’ : [‘otto’, ‘automatic’]
-  'hellraiser’ : [‘hell’, ‘raise’]
-  'madmen’ : [‘mad’, ‘men’]
-  'tinkertrain’ : [‘tinker’, ‘train’]
-  'silvery’ : [‘silver’]
-  'uncover’ : [‘cover’]
-  'uncovered’ : [‘cover’]
-  'bordersz’ : [‘border’]
-  'aftershave’ : [‘after’, ‘shave’]
-  'generationwhy’ : [‘generation’, ‘why’]
-  'nightday’ : [‘night’, ‘day’]
-  'superfriends’ : [‘super’, ‘friend’]
-  'unworthy’ : [‘worth’]
-  'aftermath’ : [‘after’, ‘math’]
-  'vapour’ : [‘vapor’]
-  'heartburn’ : [‘heart’, ‘burn’]
-  'nationwide’ : [‘nation’, ‘wide’]
-  'afterburn’ : [‘after’, ‘burn’]
-  'afterburner’ : [‘after’, ‘burn’]
-  'pincushion’ : [‘pin’, ‘cushion’]
-  'doubleback’ : [‘double’, ‘back’]
-  'diamondback’ : [‘diamond’, ‘back’]
-  'rhythmeen’ : [‘rhythm’]
-  'frontlines’ : [‘front’, ‘line’]
-  'dirtyphonics’ : [‘dirt’, ‘phonics]’
-  'dnmo’ : [‘d’, ‘n’, ‘m’, ‘o’]
-  'rudeboy’ : [‘rude’, ‘boy’]
-  'bustamove’ : [‘bust’, ‘a’, ‘move’]
-  'deadbeats’ : [‘dead’, ‘beat’]
-  'crankin’ : [‘crank’]
-  'stalkers’ : [‘stalk’]
-  'robbers’ : [‘rob’]
-  'menswear’ : [‘men’, ‘wear’]
-  'uncomfortable’ : [‘comfort’]
-  'blinders’ : [‘blind’]
-  'homebrew’ : [‘home’, ‘brew’]
-  'grassroots’ : [‘grass’, ‘root’]
-  'stylee’ : [‘style’]
-  'uplift’ : [‘up’, ‘lift’]
-  'uplifter’ : [‘up’, ‘lift’]
-  'uplifting’ : [‘up’, ‘lift’]
-  'reminder’ : [‘remind’]
-  'reminders’ : [‘remind’]
-  'yns’ : [‘y’, ‘n’, ‘s’]
-  'backflip’ : [‘back’, ‘flip’]
-  'backstroke’ : [‘back’, ‘stroke’]
-  'tropkillaz’ : [‘tropical’, ‘kill’]
-  'debbie’ : [‘deb’]
-  'p*$$yrich’ : [‘pussy’, ‘rich’]
-  'pussyrich’ : [‘pussy’, ‘rich’]
-  'ibetchu’ : [‘I’, ‘bet’, ‘chu’]
-  'dancehall’ : [‘dance’, ‘hall’]
-  'meteorite’ : [‘meteor’]
-  'errrbody’ : [‘every’, ‘body’]
-  'ackwards’ : [‘back’, ‘ward’]
-  'happnin’ : [‘happen’]
-  'naggin’ : [‘nag’]
-  'jigglin’ : [‘jiggle’]
-  'twurkulator’ : [‘twerk’]
-  'debby’ : [‘deb’]
-  'ballers’ : [‘ball’]
-  'yfn’ : [‘y’, ‘f’, ‘n’]
-  'leanworld’ : [‘lean’, ‘world’]
-  'luckaleannn’ : [‘luck’, ‘lean’]
-  'oreomilkshake’ : [‘oreo’, ‘milk’, ‘shake’]
-  'af1s’ : [‘a’, ‘f’, ‘1’, ‘s’]
-  'lightsaber’ : [‘light’, ‘saber’]
-  'sabertooth’ : [‘saber’, ‘tooth’]
-  'greygoose’ : [‘grey’, ‘goose’]
-  'email’ : [‘e’, ‘mail’]
-  'emails’ : [‘e’, ‘mail’]
-  'solarflare’ : [‘solar’, ‘flare’]
-  'voicemail’ : [‘voice’, ‘mail’]
-  'everygirl’ : [‘every’, ‘girl’]
-  '714ever’ : [‘7’, ‘1’, ‘4’, ‘ever’]
-  'reconsider’ : [‘consider’]
-  'seesaw’ : [‘see’, ‘saw’]
-  'nearer’ : [‘near’]
-  'nanna’ : [‘nana’]
-  'lioness’ : [‘lion’]
-  'limousine’ : [‘limo’]
-  'netherlands’ : [‘nether’, ‘land’]
-  'soften’ : [‘soft’]
-  'noname’ : [‘no’, ‘name’]
-  'wifeable’ : [‘wife’]
-  'collider’ : [‘collide’]
-  'sidewalks’ : [‘side’, ‘walk’]
-  'stargirl’ : [‘star’, ‘girl’]
-  'rooftops’ : [‘roof’, ‘top’]
-  'me!' : ['me']
-  'brokenheartsville' : ['broke', 'heart', 'ville']
-  'fishtail' : ['fish', 'tail']
-  'fishtails' : ['fish', 'tail']
-  'paperbond’ : [‘paper’, ‘bond’]
-  'lovemaker’ : [‘love’, ‘make’]
-  'battlestations’ : [‘battle’, ‘station’]
-  'battlestation’ : [‘battle’, ‘station’]
-  'sidekick’ : [‘side’, ‘kick’]
-  'doorbell’ : [‘door’, ‘bell’]
-  'leaves’ : [‘leaf’]
-  'outpour’ : [‘out’, ‘pour’]
-  'outpouring’ : [‘out’, ‘pour’]
-  'underwhelming’ : [‘under’, ‘whelm’]
-  'icky’ : [‘ick’]
-  'fishermen’ : [‘fish’, ‘men’]
-  'fishers’ : [‘fish’]
-  'pineapples’ : [‘pine’, ‘apple’]
-  'lovehate’ : [‘love’, ‘hate’]
-  'clappers’ : [‘clap’]
-  'fiyah’ : [‘fire’]
-  'chessboxin’ : [‘chess’, ‘box’]
-  'learnd’ : [‘learn’]
-  'inspectah’ : [‘inspect’]
-  'reunited’ : [‘unite’]
-  'grimey’ : [‘grime’]
-  'visionz’ : [‘vision’]
-  'niceguy’ : [‘nice’, ‘guy’]
-  'uncloudy’ : [‘cloud’]
-  'jimmie’ : [‘jim’]
-  'theyre' : ['they']
-  'moneytalks' : ['money', 'talk']
-  'pokin' : ['poke']
-  'aplhaville' : ['alpha', 'ville']
-  'blanguage' : ['language']
-  'breakaman' : ['break', 'man']
-  'outright' : ['out', 'right']
-  'skinned' : ['skin']
-  'steamboat' : ['steam', 'boat']
-  'waledance' : ['wale', 'dance']
-  'bigfoot' : ['big', 'foot']
-  'hangmans' : ['hang', 'man']
-  'cedarwood' : ['cedar', 'web']
-  'withdrawl' : ['with', 'drawl']
-  'withdrawls' : ['with', 'drawl']
-  'tung' : ['tounge']
-  'jodd' : ['j', 'o', 'd']
-  'likey' : ['like']
-  'droppa' : ['drop']
-  'sloppy' : ['slop']
-  'toppy' : ['top']
-  'bloodshot' : ['blood', 'shot']
-  'tricken' : ['trick']
-  'cornflake' : ['corn', 'flake']
-  'sleeptalker': ['sleep', 'talker']
-  'mindstate' : ['mind', 'state']
-  'inkredible' : ['incredible']
-  'hoodoo' : ['hoo', 'doo']
-  'backside' : ['back', 'side']
-  'unbank' : ['bank']
-  'floorboards' : ['floor', 'board']
-  'woodson' : ['wood', 'son']
-  'whatyo' : ['what', 'yo']
-  'skylit' : ['sky', 'lit']
-  'snowstorm' : ['snow', 'storm']
-  'opportunistic' : ['opportunity']
-  'landmark' : ['land', 'mark']
-  'infared' : ['red']
-  'leftover' : ['left', 'over']
-  'botalks' : ['bo', 'talk']
-  'yve' : ['y', 'v', 'e']
-  'luv2vyk' : ['love', '2', 'y', 'v', 'k']
-  'krosses' : ['cross']
-  'vicetone' : ['vice', 'tone']
-  'ltgtr' : ['l', 't', 'g', 'r']
-  'cozi' : ['cozy']
-  'pitfalls' : ['pit', 'fall']
-  'lovespeake' : ['love', 'speak']
-  'yuppycult' : ['yuppy', 'cult']
-  'lipless' : ['lip']
-  'ideh' : ['i', 'd', 'e', 'h']
-  'quarterhead' : ['quarter', 'head']
-  'serpentwithfeet' : ['serpent', 'with', 'feet']
-  'blissing' : ['bliss']
-  'boosegumps' : ['goose', 'bump', 'boose', 'gump']
-  'kississippi' : ['kiss', 'mississippi']
-  '3am' : ['3', 'am']
-  '1am' : ['1', 'am']
-  '2am' : ['2', 'am']
-  'smking' : ['smoke']
-  'dth' : ['death']
-  'cyberbully' : ['cyber', 'bully']
-  'eyelashes' : ['eye', 'lash']
-  'hourglass' : ['hour', 'glass']
-  'turnaround' : ['turn', 'around']
+
+  'crossover' : ['cross', 'over'],
+  'beatking' : ['beat', 'king'],
+  'chipz' : ['chip'],
+  'sobeautiful' : ['so', 'beautiful'],
+  'joistarr' : ['joy', 'star'],
+  'onmyradio' : ['on', 'my', 'radio'],
+  'talkbox' : ['talk', 'box'],
+  'monstercat' : ['monster', 'cat'],
+  'asquared' : ['a', 'square'],
+  'squared' : ['square'],
+  'freefall' : ['free', 'fall'],
+  'freefalling' : ['free', 'fall'],
+  'hologram' : ['holo', 'gram'],
+  'musicboxes' : ['music', 'box'],
+  'petersburg' : ['peter', 'burg'],
+  'dreamworld' : ['dream', 'world'],
+  'riceboy' : ['rice', 'boy'],
+  'ok2222' : ['ok', '2'],
+  'disaterpeace' : ['disaster', 'peace'],
+  'lushness' : ['lush'],
+  'glowworm' : ['glow', 'worm'],
+  'coachlight' : ['coach', 'light'],
+  'underbart' : ['under', 'bart'],
+  'dreamcoat' : ['dream', 'coat'],
+  'bulldog' : ['bull', 'dog'],
+  'zimzilla' : ['zim', 'zilla'],
+  'cherries' : ['cherry'],
+  'floodlight' : ['flood', 'light'],
+  'floodlights' : ['flood', 'light'],
+  'lightchasers' : ['light', 'chase'],
+  'stori' : ['story'],
+  'idontwannabeyouanymore' : ['I', 'dont', 'wanna', 'be', 'you', 'any', 'more'],
+  'freesol' : ['free', 'sol'],
+  'stonestreet' : ['stone', 'street'],
+  'amaanda' : ['amanda'],
+  'goodluck' : ['good', 'luck'],
+  'dropgun' : ['drop', 'gun'],
+  'xquizit' : ['exquisite'],
+  'lookas' : ['look'],
+  'killers' : ['kill'],
+  'm808' : ['m', '8', '0'],
+  'gspr' : ['g', 's', 'p', 'r'],
+  'blr' : ['b', 'l', 'r'],
+  'mk' : ['m', 'k'],
+  'stonefox' : ['stone', 'fox'],
+  'seaway' : ['sea', 'way'],
+  'hightown' : ['high', 'town'],
+  'birdcage' : ['bird', 'cage'],
+  'numblife' : ['numb', 'life'],
+  'outlya' : ['out'],
+  'sickago' : ['sick'],
+  'beetroots' : ['beet', 'root'],
+  'smallpools' : ['small', 'pool'],
+  'phnx' : ['phoenix'],
+  'hellfire' : ['hell', 'fire'],
+  'rockisdead' : ['rock', 'is', 'dead'],
+  'vally' : ['valley'],
+  'asleep' : ['sleep'],
+  'switchblade' : ['switch', 'blade'],
+  'steepwater' : ['steep', 'water'],
+  'automatica' : ['automatic'],
+  'punchline' : ['punch', 'line'],
+  'midtown' : ['mid', 'town'],
+  'piebald' : ['pie', 'bald'],
+  'existentialism' : ['existential'],
+  'straylight' : ['stray', 'light'],
+  'glassjaw' : ['glass', 'jaw'],
+  'cosmopolitan' : ['cosmo'],
+  'bloodloss' : ['blood', 'loss'],
+  'fcpremix' : ['f', 'c', 'p', 'r', 'e', 'm', 'I', 'x'],
+  'bayside' : ['bay', 'side'],
+  'movielife' : ['movie', 'life'],
+  'loveletter' : ['love', 'letter'],
+  'prelow' : ['low'],
+  'plgrms' : ['pilgrim'],
+  'nightlight' : ['night', 'light'],
+  'heartbreaklist' : ['heart', 'break', 'list'],
+  'damnwells' : ['damn', 'well'],
+  'stereomud' : ['stereo', 'mud'],
+  'powerman' : ['power', 'man'],
+  'taproot' : ['tap', 'root'],
+  'fingertight' : ['finger', 'tight'],
+  'switchback' : ['switch', 'back'],
+  'nothingface' : ['nothing', 'face'],
+  'earshot' : ['ear', 'shot'],
+  'mushroomhead' : ['mushroom', 'head'],
+  'spineshank' : ['spine', 'shank'],
+  'crazyfists' : ['crazy', 'fist'],
+  'trustcompany' : ['trust', 'company'],
+  'ultranumb' : ['ultra', 'numb'],
+  'otherkin' : ['other', 'kin'],
+  'perfekt' : ['perfect'],
+  'shitkid' : ['shit', 'kid'],
+  'dygl' : ['d', 'y', 'g', 'l'],
+  'deathrays' : ['death', 'ray'],
+  'whatevr' : ['what', 'ever'],
+  'bloomfield' : ['bloom', 'field'],
+  'barleycorn' : ['barley', 'corn'],
+  'leadfoot' : ['lead', 'foot'],
+  'whitehorse' : ['white', 'horse'],
+  'broadbent' : ['broad', 'bent'],
+  'harpoonist' : ['harpoon'],
+  'boneyard' : ['bone', 'yard'],
+  'riverbottom' : ['river', 'bottom'],
+  'dreamcatcher' : ['dream', 'catch'],
+  'dreamcatchers' : ['dream', 'catch'],
+  'internationale' : ['international'],
+  'heartbroken' : ['heart', 'broke'],
+  'disrepair' : ['repair'],
+  'slideshow' : ['slide', 'show'],
+  'derek' : ['derrick'],
+  'allstars' : ['all', 'star'],
+  'allstar' : ['all', 'star'],
+  'grownass' : ['grown', 'ass'],
+  'passageway' : ['passage', 'way'],
+  'passageways' : ['passage', 'way'],
+  'bellhound' : ['bell', 'hound'],
+  'kingsborough' : ['king', 'borough'],
+  'dragonaut' : ['dragon'],
+  'bitchwax' : ['bitch', 'wax'],
+  'boxriff' : ['box', 'riff'],
+  'deconstruction' : ['construction'],
+  'greenleaf' : ['green', 'leaf'],
+  'passes' : ['pass'],
+  '1000mods' : ['1', '0', 'mod'],
+  'nightstalker' : ['night', 'stalk'],
+  'glasspack' : ['glass', 'pack'],
+  'powderkeg' : ['powder', 'keg'],
+  'weedeater' : ['weed', 'eat'],
+  'earthless' : ['earth'],
+  'booster' : ['boost'],
+  'catfight' : ['cat', 'fight'],
+  'nearby' : ['near', 'by'],
+  'weathered' : ['weather'],
+  'superheaven' : ['super', 'heaven'],
+  'morgxn' : ['morgan'],
+  'masseducation' : ['mass', 'education'],
+  'playtones' : ['play', 'tone'],
+  'buckaroos' : ['buck'],
+  'jaye' : ['jay'],
+  'showaddywaddy' : ['show', 'waddy'],
+  'refresh' : ['fresh'],
+  'refreshments' : ['fresh'],
+  'crashly' : ['crash'],
+  'roadmaster' : ['road', 'master'],
+  'roadmasters' : ['road', 'master'],
+  'kingbee' : ['king', 'bee'],
+  'sugarrush' : ['sugar', 'rush'],
+  'rockpile' : ['rock', 'pile'],
+  'slapper' : ['slap'],
+  'slappers' : ['slap'],
+  'jetaways' : ['jet', 'away'],
+  'lennerockers' : ['rock'],
+  'toein' : ['toe'],
+  'breathless' : ['breath'],
+  'bluelight' : ['blue', 'light'],
+  'rockabillies' : ['rock', 'billy'],
+  'highshots' : ['high', 'shot'],
+  'micke' : ['mick'],
+  'midlife' : ['mid', 'life'],
+  'bombtrack' : ['bomb', 'track'],
+  'infectious' : ['infect'],
+  'jonestown' : ['jones', 'town'],
+  'sailboats' : ['sail', 'boat'],
+  'holydrug' : ['holy', 'drug'],
+  'goatfuzz' : ['goat', 'fuzz'],
+  'motorpsycho' : ['motor', 'psycho'],
+  'hibernation' : ['hibernate'],
+  'drunken' : ['drunk'],
+  'sunburst' : ['sun', 'burst'],
+  'reflections' : ['reflect'],
+  'boredoms' : ['bored'],
+  'thunderthief' : ['thunder', 'thief'],
+  'groundhogs' : ['ground', 'hog'],
+  'hatfield' : ['hat', 'field'],
+  'starcastle' : ['star', 'castle'],
+  'oceansize' : ['ocean', 'size'],
+  'ornamental' : ['ornament'],
+  'fireballet' : ['fire', 'ballet'],
+  'sunhillow' : ['sun', 'hillow'],
+  'oldfield' : ['old', 'field'],
+  'holograms' : ['holo', 'gram'],
+  'oilfield' : ['oil', 'field'],
+  'ottomatic' : ['otto', 'automatic'],
+  'hellraiser' : ['hell', 'raise'],
+  'madmen' : ['mad', 'men'],
+  'tinkertrain' : ['tinker', 'train'],
+  'silvery' : ['silver'],
+  'uncover' : ['cover'],
+  'uncovered' : ['cover'],
+  'bordersz' : ['border'],
+  'aftershave' : ['after', 'shave'],
+  'generationwhy' : ['generation', 'why'],
+  'nightday' : ['night', 'day'],
+  'superfriends' : ['super', 'friend'],
+  'unworthy' : ['worth'],
+  'aftermath' : ['after', 'math'],
+  'vapour' : ['vapor'],
+  'heartburn' : ['heart', 'burn'],
+  'nationwide' : ['nation', 'wide'],
+  'afterburn' : ['after', 'burn'],
+  'afterburner' : ['after', 'burn'],
+  'pincushion' : ['pin', 'cushion'],
+  'doubleback' : ['double', 'back'],
+  'diamondback' : ['diamond', 'back'],
+  'rhythmeen' : ['rhythm'],
+  'frontlines' : ['front', 'line'],
+  'dirtyphonics' : ['dirt', 'phonics'],
+  'dnmo' : ['d', 'n', 'm', 'o'],
+  'rudeboy' : ['rude', 'boy'],
+  'bustamove' : ['bust', 'a', 'move'],
+  'deadbeats' : ['dead', 'beat'],
+  'crankin' : ['crank'],
+  'menswear' : ['men', 'wear'],
+  'uncomfortable' : ['comfort'],
+  'homebrew' : ['home', 'brew'],
+  'grassroots' : ['grass', 'root'],
+  'stylee' : ['style'],
+  'uplift' : ['up', 'lift'],
+  'uplifter' : ['up', 'lift'],
+  'uplifting' : ['up', 'lift'],
+  'reminder' : ['remind'],
+  'reminders' : ['remind'],
+  'yns' : ['y', 'n', 's'],
+  'backflip' : ['back', 'flip'],
+  'backstroke' : ['back', 'stroke'],
+  'tropkillaz' : ['tropical', 'kill'],
+  'debbie' : ['deb'],
+  'p*$$yrich' : ['pussy', 'rich'],
+  'pussyrich' : ['pussy', 'rich'],
+  'ibetchu' : ['I', 'bet', 'chu'],
+  'dancehall' : ['dance', 'hall'],
+  'meteorite' : ['meteor'],
+  'errrbody' : ['every', 'body'],
+  'ackwards' : ['back', 'ward'],
+  'happnin' : ['happen'],
+  'naggin' : ['nag'],
+  'jigglin' : ['jiggle'],
+  'twurkulator' : ['twerk'],
+  'debby' : ['deb'],
+  'yfn' : ['y', 'f', 'n'],
+  'leanworld' : ['lean', 'world'],
+  'luckaleannn' : ['luck', 'lean'],
+  'oreomilkshake' : ['oreo', 'milk', 'shake'],
+  'af1s' : ['a', 'f', '1', 's'],
+  'lightsaber' : ['light', 'saber'],
+  'sabertooth' : ['saber', 'tooth'],
+  'greygoose' : ['grey', 'goose'],
+  'email' : ['e', 'mail'],
+  'emails' : ['e', 'mail'],
+  'solarflare' : ['solar', 'flare'],
+  'voicemail' : ['voice', 'mail'],
+  'everygirl' : ['every', 'girl'],
+  '714ever' : ['7', '1', '4', 'ever'],
+  'reconsider' : ['consider'],
+  'seesaw' : ['see', 'saw'],
+  'nearer' : ['near'],
+  'nanna' : ['nana'],
+  'lioness' : ['lion'],
+  'limousine' : ['limo'],
+  'netherlands' : ['nether', 'land'],
+  'soften' : ['soft'],
+  'noname' : ['no', 'name'],
+  'wifeable' : ['wife'],
+  'collider' : ['collide'],
+  'stargirl' : ['star', 'girl'],
+  'me!' : ['me'],
+  'brokenheartsville' : ['broke', 'heart', 'ville'],
+  'fishtail' : ['fish', 'tail'],
+  'fishtails' : ['fish', 'tail'],
+  'paperbond' : ['paper', 'bond'],
+  'lovemaker' : ['love', 'make'],
+  'battlestations' : ['battle', 'station'],
+  'battlestation' : ['battle', 'station'],
+  'sidekick' : ['side', 'kick'],
+  'doorbell' : ['door', 'bell'],
+  'leaves' : ['leaf'],
+  'outpour' : ['out', 'pour'],
+  'outpouring' : ['out', 'pour'],
+  'underwhelming' : ['under', 'whelm'],
+  'icky' : ['ick'],
+  'fishermen' : ['fish', 'men'],
+  'fishers' : ['fish'],
+  'pineapples' : ['pine', 'apple'],
+  'lovehate' : ['love', 'hate'],
+  'clappers' : ['clap'],
+  'fiyah' : ['fire'],
+  'chessboxin' : ['chess', 'box'],
+  'learnd' : ['learn'],
+  'inspectah' : ['inspect'],
+  'reunited' : ['unite'],
+  'grimey' : ['grime'],
+  'visionz' : ['vision'],
+  'niceguy' : ['nice', 'guy'],
+  'uncloudy' : ['cloud'],
+  'jimmie' : ['jim'],
+  'theyre' : ['they'],
+  'moneytalks' : ['money', 'talk'],
+  'pokin' : ['poke'],
+  'aplhaville' : ['alpha', 'ville'],
+  'blanguage' : ['language'],
+  'breakaman' : ['break', 'man'],
+  'outright' : ['out', 'right'],
+  'skinned' : ['skin'],
+  'steamboat' : ['steam', 'boat'],
+  'waledance' : ['wale', 'dance'],
+  'bigfoot' : ['big', 'foot'],
+  'hangmans' : ['hang', 'man'],
+  'cedarwood' : ['cedar', 'web'],
+  'withdrawl' : ['with', 'drawl'],
+  'withdrawls' : ['with', 'drawl'],
+  'tung' : ['tounge'],
+  'jodd' : ['j', 'o', 'd'],
+  'likey' : ['like'],
+  'droppa' : ['drop'],
+  'sloppy' : ['slop'],
+  'toppy' : ['top'],
+  'bloodshot' : ['blood', 'shot'],
+  'tricken' : ['trick'],
+  'cornflake' : ['corn', 'flake'],
+  'sleeptalker': ['sleep', 'talker'],
+  'mindstate' : ['mind', 'state'],
+  'inkredible' : ['incredible'],
+  'hoodoo' : ['hoo', 'doo'],
+  'backside' : ['back', 'side'],
+  'unbank' : ['bank'],
+  'floorboards' : ['floor', 'board'],
+  'woodson' : ['wood', 'son'],
+  'snowstorm' : ['snow', 'storm'],
+  'opportunistic' : ['opportunity'],
+  'botalks' : ['bo', 'talk'],
+  'yve' : ['y', 'v', 'e'],
+  'luv2vyk' : ['love', '2', 'y', 'v', 'k'],
+  'krosses' : ['cross'],
+  'vicetone' : ['vice', 'tone'],
+  'ltgtr' : ['l', 't', 'g', 'r'],
+  'cozi' : ['cozy'],
+  'pitfalls' : ['pit', 'fall'],
+  'lovespeake' : ['love', 'speak'],
+  'lipless' : ['lip'],
+  'ideh' : ['i', 'd', 'e', 'h'],
+  'quarterhead' : ['quarter', 'head'],
+  'serpentwithfeet' : ['serpent', 'with', 'feet'],
+  'blissing' : ['bliss'],
+  'boosegumps' : ['goose', 'bump', 'boose', 'gump'],
+  'kississippi' : ['kiss', 'mississippi'],
+  '3am' : ['3', 'am'],
+  '1am' : ['1', 'am'],
+  'smking' : ['smoke'],
+  'dth' : ['death'],
+  'cyberbully' : ['cyber', 'bully'],
+  'turnaround' : ['turn', 'around'],
   'thrashville' : ['trash', 'ville']
 }
