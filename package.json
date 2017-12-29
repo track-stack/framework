@@ -46,6 +46,6 @@
     ]
   },
   "repl": [
-    { "name" : "sanitize", "module" : "./lib/utils/sanitizer.ts" }
+    { "name" : "sanitize", "module" : "./lib/utils/sanitizer" }
   ]
 }

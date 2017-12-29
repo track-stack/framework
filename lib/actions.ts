@@ -57,8 +57,8 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json'
   })
-  const data = { 
-    answer: answer, 
+  const data = {
+    answer: answer,
     match: match,
     game_over: gameOver
   }
@@ -104,7 +104,7 @@ export function submitAnswer(answer: string, stack: Stack) {
         return
       }
 
-      // Attempt to find a match 
+      // Attempt to find a match
       const match: {artist: string, name: string} = findMatch(answer, tracks)
 
       // Bail early we didn't find a match
@@ -122,14 +122,14 @@ export function submitAnswer(answer: string, stack: Stack) {
         dispatch(_answerSubmissionFailed("No similarity to the previous track."))
         return
       }
-      
+
       // Bail early if the 2 artists are the same
       if (match.artist === previousTurn.match.artist) {
         dispatch(_answerSubmissionFailed("Can't play the same artist twice in a row."))
         return
       }
 
-       
+
       const trackPlayedAlready = stack.turns.filter((turn) => {
         return turn.match.artist == match.artist && turn.match.name == match.name
       })

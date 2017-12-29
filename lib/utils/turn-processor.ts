@@ -28,8 +28,6 @@ export function findMatch(userInput: string, tracks: any[]): any {
       return tracks[i]
     } 
   }
-
-  // return error
 }
 
 // Public: Given user-generated input and a single track (json) from the Last.fm API,
