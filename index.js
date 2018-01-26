@@ -71,7 +71,7 @@
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var action_helper_1 = __webpack_require__(22);
+var action_helper_1 = __webpack_require__(23);
 exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
 exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
 exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
@@ -267,15 +267,15 @@ var _createStore = __webpack_require__(8);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = __webpack_require__(41);
+var _combineReducers = __webpack_require__(43);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = __webpack_require__(42);
+var _bindActionCreators = __webpack_require__(44);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = __webpack_require__(43);
+var _applyMiddleware = __webpack_require__(45);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
@@ -519,7 +519,7 @@ var _isPlainObject = __webpack_require__(9);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = __webpack_require__(37);
+var _symbolObservable = __webpack_require__(39);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -782,15 +782,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _baseGetTag = __webpack_require__(29);
+var _baseGetTag = __webpack_require__(31);
 
 var _baseGetTag2 = _interopRequireDefault(_baseGetTag);
 
-var _getPrototype = __webpack_require__(34);
+var _getPrototype = __webpack_require__(36);
 
 var _getPrototype2 = _interopRequireDefault(_getPrototype);
 
-var _isObjectLike = __webpack_require__(36);
+var _isObjectLike = __webpack_require__(38);
 
 var _isObjectLike2 = _interopRequireDefault(_isObjectLike);
 
@@ -865,7 +865,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _root = __webpack_require__(30);
+var _root = __webpack_require__(32);
 
 var _root2 = _interopRequireDefault(_root);
 
@@ -992,7 +992,7 @@ function compose() {
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var a = __webpack_require__(15);
-var store_1 = __webpack_require__(27);
+var store_1 = __webpack_require__(29);
 exports.store = store_1["default"];
 exports.actions = a;
 
@@ -1005,43 +1005,24 @@ exports.actions = a;
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var turn_processor_1 = __webpack_require__(16);
+var site_1 = __webpack_require__(16);
+exports.Site = site_1["default"];
+var admin_1 = __webpack_require__(28);
+exports.Admin = admin_1["default"];
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var turn_processor_1 = __webpack_require__(17);
 var sanitizer_1 = __webpack_require__(1);
-var lastfm_response_verifier_1 = __webpack_require__(20);
-var selectors_1 = __webpack_require__(21);
-var types_1 = __webpack_require__(23);
-function selectGameInvitee(friend) {
-    return function (dispatch) {
-        return dispatch(selectors_1._selectGameInvitee(friend));
-    };
-}
-exports.selectGameInvitee = selectGameInvitee;
-function fetchGame(gameId) {
-    var headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
-    return function (dispatch) {
-        fetch("/games/" + gameId, {
-            credentials: 'same-origin',
-            headers: headers
-        }).then(function (response) { return response.json(); }).then(function (json) {
-            var game = types_1.Game.from(json.game);
-            return dispatch(selectors_1._fetchedGame(game));
-        });
-    };
-}
-exports.fetchGame = fetchGame;
-function fetchFriends() {
-    return function (dispatch) {
-        fetch('/friends', { credentials: 'same-origin' })
-            .then(function (response) { return response.json(); })
-            .then(function (json) {
-            var friends = json.friends.map(function (friend) {
-                return types_1.FBFriend.from(friend);
-            });
-            dispatch(selectors_1._fetchFriends(friends));
-        });
-    };
-}
-exports.fetchFriends = fetchFriends;
+var lastfm_response_verifier_1 = __webpack_require__(21);
+var selectors_1 = __webpack_require__(22);
+var types_1 = __webpack_require__(24);
 function performSearch(_a) {
     var sanitizedAnswer = _a.sanitizedAnswer;
     var apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
@@ -1073,73 +1054,102 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
         dispatch(selectors_1._answerSubmissionFailed(error));
     });
 }
-// TODO: Remove logs
-function submitAnswer(answer, stack) {
-    return function (dispatch) {
-        dispatch(selectors_1._answerSubmissionStarted());
-        // TODO: full sanitization before searching may be too agressive
-        // Removing "by" and "-" may be enough
-        var sanitizedAnswer = sanitizer_1.sanitize(answer);
-        performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
-            // confirm that our input matches at least 1 track (check the top 5 results)
-            // confirm that our match passes the test against the previous turn
-            // if the stack can be ended, cofirm that our match passes the test against the first turn
-            // make sure we get a response from Last.fm
-            var tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
-            if (tracks.length === 0) {
-                dispatch(selectors_1._answerSubmissionFailed("No track found for " + answer + "."));
-                return;
-            }
-            // Attempt to find a match 
-            var match = turn_processor_1.findMatch(answer, tracks);
-            // Bail early we didn't find a match
-            if (!match) {
-                dispatch(selectors_1._answerSubmissionFailed("No track found for " + answer + "."));
-                return;
-            }
-            var previousTurn = stack.firstTurn();
-            var hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
-            // Bail early if there's no overlap with previous turn
-            if (!hasOverlapWithPreviousTurn) {
-                dispatch(selectors_1._answerSubmissionFailed("No similarity to the previous track."));
-                return;
-            }
-            // Bail early if the 2 artists are the same
-            if (match.artist === previousTurn.match.artist) {
-                dispatch(selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row."));
-                return;
-            }
-            var trackPlayedAlready = stack.turns.filter(function (turn) {
-                return turn.match.artist == match.artist && turn.match.name == match.name;
+exports["default"] = {
+    selectGameInvitee: function (friend) {
+        return function (dispatch) {
+            return dispatch(selectors_1._selectGameInvitee(friend));
+        };
+    },
+    fetchGame: function (gameId) {
+        var headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
+        return function (dispatch) {
+            fetch("/games/" + gameId, {
+                credentials: 'same-origin',
+                headers: headers
+            }).then(function (response) { return response.json(); }).then(function (json) {
+                var game = types_1.Game.from(json.game);
+                return dispatch(selectors_1._fetchedGame(game));
             });
-            if (trackPlayedAlready.length > 0) {
-                dispatch(selectors_1._answerSubmissionFailed("That song has already been played."));
-                return;
-            }
-            // validate match against first turn
-            if (stack.canEnd) {
-                var firstTurn = stack.lastTurn();
-                var hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
-                console.log('first', stack.lastTurn());
-                console.log('last', stack.firstTurn());
-                console.log('match', match);
-                console.log('overlap', hasOverlapWithFirstTurn);
-                // winner
-                if (hasOverlapWithFirstTurn) {
-                    submitToServer(dispatch, stack.gameId, answer, match, true);
+        };
+    },
+    fetchFriends: function () {
+        return function (dispatch) {
+            fetch('/friends', { credentials: 'same-origin' })
+                .then(function (response) { return response.json(); })
+                .then(function (json) {
+                var friends = json.friends.map(function (friend) {
+                    return types_1.FBFriend.from(friend);
+                });
+                dispatch(selectors_1._fetchFriends(friends));
+            });
+        };
+    },
+    submitAnswer: function (answer, stack) {
+        return function (dispatch) {
+            dispatch(selectors_1._answerSubmissionStarted());
+            // TODO: full sanitization before searching may be too agressive
+            // Removing "by" and "-" may be enough
+            var sanitizedAnswer = sanitizer_1.sanitize(answer);
+            performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
+                // confirm that our input matches at least 1 track (check the top 5 results)
+                // confirm that our match passes the test against the previous turn
+                // if the stack can be ended, cofirm that our match passes the test against the first turn
+                // make sure we get a response from Last.fm
+                var tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
+                if (tracks.length === 0) {
+                    dispatch(selectors_1._answerSubmissionFailed("No track found for " + answer + "."));
                     return;
                 }
-            }
-            // Submit our answer and match to the server
-            submitToServer(dispatch, stack.gameId, answer, match, false);
-        });
-    };
-}
-exports.submitAnswer = submitAnswer;
+                // Attempt to find a match
+                var match = turn_processor_1.findMatch(answer, tracks);
+                // Bail early we didn't find a match
+                if (!match) {
+                    dispatch(selectors_1._answerSubmissionFailed("No track found for " + answer + "."));
+                    return;
+                }
+                var previousTurn = stack.firstTurn();
+                var hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
+                // Bail early if there's no overlap with previous turn
+                if (!hasOverlapWithPreviousTurn) {
+                    dispatch(selectors_1._answerSubmissionFailed("No similarity to the previous track."));
+                    return;
+                }
+                // Bail early if the 2 artists are the same
+                if (match.artist === previousTurn.match.artist) {
+                    dispatch(selectors_1._answerSubmissionFailed("Can't play the same artist twice in a row."));
+                    return;
+                }
+                var trackPlayedAlready = stack.turns.filter(function (turn) {
+                    return turn.match.artist == match.artist && turn.match.name == match.name;
+                });
+                if (trackPlayedAlready.length > 0) {
+                    dispatch(selectors_1._answerSubmissionFailed("That song has already been played."));
+                    return;
+                }
+                // validate match against first turn
+                if (stack.canEnd) {
+                    var firstTurn = stack.lastTurn();
+                    var hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
+                    console.log('first', stack.lastTurn());
+                    console.log('last', stack.firstTurn());
+                    console.log('match', match);
+                    console.log('overlap', hasOverlapWithFirstTurn);
+                    // winner
+                    if (hasOverlapWithFirstTurn) {
+                        submitToServer(dispatch, stack.gameId, answer, match, true);
+                        return;
+                    }
+                }
+                // Submit our answer and match to the server
+                submitToServer(dispatch, stack.gameId, answer, match, false);
+            });
+        };
+    }
+};
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1152,8 +1162,8 @@ exports.__esModule = true;
  * at various stages of the turn validation process
 */
 var sanitizer_1 = __webpack_require__(1);
-var word_components_1 = __webpack_require__(17);
-var stem = __webpack_require__(18);
+var word_components_1 = __webpack_require__(18);
+var stem = __webpack_require__(19);
 // Public: Given user-generated input and an array of
 // tracks (json) from Last.fm, returns the track that
 // approximately matches the user-generated input.
@@ -1170,7 +1180,6 @@ function findMatch(userInput, tracks) {
             return tracks[i];
         }
     }
-    // return error
 }
 exports.findMatch = findMatch;
 // Public: Given user-generated input and a single track (json) from the Last.fm API,
@@ -1258,7 +1267,7 @@ exports.matchHasIntersection = matchHasIntersection;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8101,7 +8110,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8109,13 +8118,13 @@ exports["default"] = {
 
 var stemmer = __webpack_require__(2);
 
-exports = module.exports = __webpack_require__(19);
+exports = module.exports = __webpack_require__(20);
 
 exports.among = stemmer.among;
 exports.except = stemmer.except;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8265,7 +8274,7 @@ function short(word, r1) {
 }
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8289,7 +8298,7 @@ exports.lastFMResponseVerifier = lastFMResponseVerifier;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8348,7 +8357,7 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8364,29 +8373,29 @@ exports.createActionSet = function (actionName) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var game_1 = __webpack_require__(24);
+var game_1 = __webpack_require__(25);
 exports.Game = game_1["default"];
-var player_1 = __webpack_require__(25);
+var player_1 = __webpack_require__(26);
 exports.Player = player_1["default"];
 var match_1 = __webpack_require__(5);
 exports.Match = match_1["default"];
 var turn_1 = __webpack_require__(4);
 exports.Turn = turn_1["default"];
-var fb_friend_1 = __webpack_require__(26);
+var fb_friend_1 = __webpack_require__(27);
 exports.FBFriend = fb_friend_1["default"];
 var stack_1 = __webpack_require__(3);
 exports.Stack = stack_1["default"];
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8450,7 +8459,7 @@ exports["default"] = Game;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8466,7 +8475,7 @@ exports["default"] = Player;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8488,21 +8497,31 @@ exports["default"] = FBFriend;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+exports["default"] = {};
+
+
+/***/ }),
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var redux_thunk_1 = __webpack_require__(28);
+var redux_thunk_1 = __webpack_require__(30);
 var redux_1 = __webpack_require__(6);
-var index_1 = __webpack_require__(44);
+var index_1 = __webpack_require__(46);
 exports["default"] = redux_1.createStore(index_1["default"], redux_1.applyMiddleware(redux_thunk_1["default"]));
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8531,7 +8550,7 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8545,11 +8564,11 @@ var _Symbol2 = __webpack_require__(10);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
-var _getRawTag = __webpack_require__(32);
+var _getRawTag = __webpack_require__(34);
 
 var _getRawTag2 = _interopRequireDefault(_getRawTag);
 
-var _objectToString = __webpack_require__(33);
+var _objectToString = __webpack_require__(35);
 
 var _objectToString2 = _interopRequireDefault(_objectToString);
 
@@ -8579,7 +8598,7 @@ function baseGetTag(value) {
 exports.default = baseGetTag;
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8591,7 +8610,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _freeGlobal = __webpack_require__(31);
+var _freeGlobal = __webpack_require__(33);
 
 var _freeGlobal2 = _interopRequireDefault(_freeGlobal);
 
@@ -8606,7 +8625,7 @@ var root = _freeGlobal2.default || freeSelf || Function('return this')();
 exports.default = root;
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8625,7 +8644,7 @@ exports.default = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8687,7 +8706,7 @@ function getRawTag(value) {
 exports.default = getRawTag;
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8720,7 +8739,7 @@ function objectToString(value) {
 exports.default = objectToString;
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8730,7 +8749,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _overArg = __webpack_require__(35);
+var _overArg = __webpack_require__(37);
 
 var _overArg2 = _interopRequireDefault(_overArg);
 
@@ -8742,7 +8761,7 @@ var getPrototype = (0, _overArg2.default)(Object.getPrototypeOf, Object);
 exports.default = getPrototype;
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8768,7 +8787,7 @@ function overArg(func, transform) {
 exports.default = overArg;
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8811,16 +8830,16 @@ function isObjectLike(value) {
 exports.default = isObjectLike;
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(38);
+module.exports = __webpack_require__(40);
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8830,7 +8849,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(40);
+var _ponyfill = __webpack_require__(42);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -8854,10 +8873,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(39)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(41)(module)))
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8887,7 +8906,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8916,7 +8935,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9068,7 +9087,7 @@ function combineReducers(reducers) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9130,7 +9149,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9203,7 +9222,7 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9211,8 +9230,8 @@ function applyMiddleware() {
 /*jshint esversion: 6 */
 exports.__esModule = true;
 var redux_1 = __webpack_require__(6);
-var lastfm_1 = __webpack_require__(45);
-var main_1 = __webpack_require__(46);
+var lastfm_1 = __webpack_require__(47);
+var main_1 = __webpack_require__(48);
 exports["default"] = redux_1.combineReducers({
     lastFM: lastfm_1["default"],
     main: main_1["default"]
@@ -9220,7 +9239,7 @@ exports["default"] = redux_1.combineReducers({
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9243,7 +9262,7 @@ exports["default"] = default_1;
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
