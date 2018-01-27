@@ -206,11 +206,13 @@ function validate(answer, track, debugCallback) {
     }
     // see if the artist exists in the match
     if (nameMatch && !artistMatch) {
-        debugCallback({
-            key: "<h4>Fuzzy match...</h4>",
-            value: null,
-            options: { "indent": 1 }
-        });
+        if (debugCallback) {
+            debugCallback({
+                key: "<h4>Fuzzy match...</h4>",
+                value: null,
+                options: { "indent": 1 }
+            });
+        }
         var nameMatchReg = new RegExp(sName, "gi");
         var answerWithoutName = sAnswer.replace(nameMatchReg, "").trim();
         var hasIntersection = stringHasIntersection(sArtist, answerWithoutName, debugCallback);
