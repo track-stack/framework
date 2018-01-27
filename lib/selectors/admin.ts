@@ -1,9 +1,18 @@
-interface SelectGameInviteeSelector {
-  type: string
-  data: {key: string, value: any}
+interface DebugValue {
+  key: string, 
+  value: string[] | null, 
+  options?: {
+    key: string, 
+    value: string | number
+  }
 }
 
-export function _debug(data: {key: string, value: any}): SelectGameInviteeSelector {
+interface DebugSelector {
+  type: string
+  data: DebugValue
+}
+
+export function _debug(data: DebugValue): DebugSelector {
   return {
     type: "DEBUG",
     data: data

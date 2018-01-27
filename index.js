@@ -130,13 +130,20 @@ var stem = __webpack_require__(20);
 //
 // userInput: string - User-generated input
 // tracks: any[] - An array of tracks (json) from Last.fm
+// debugCallback?: DebugValue - An optional debug callback function
 // Returns any
-function findMatch(userInput, tracks) {
+function findMatch(userInput, tracks, debugCallback) {
     var match = null;
-    var limit = Math.min(tracks.length, 5);
+    var limit = Math.min(tracks.length, 10);
     for (var i = 0; i < limit; i++) {
         var _a = tracks[i], artist = _a.artist, name_1 = _a.name;
-        if (validate(userInput, { artist: artist, name: name_1 })) {
+        if (debugCallback) {
+            debugCallback({
+                key: "<span>Validating against</span> <u>" + artist + " - " + name_1 + "</u>",
+                value: null
+            });
+        }
+        if (validate(userInput, { artist: artist, name: name_1 }, debugCallback)) {
             return tracks[i];
         }
     }
@@ -149,33 +156,82 @@ exports.findMatch = findMatch;
 // track: {string, string} - An object that contains the artist and song name from Last.fm
 //
 // Returns boolean
-function validate(answer, track) {
+function validate(answer, track, debugCallback) {
+    if (debugCallback) {
+        debugCallback({
+            key: '<i>Validating match...</i>',
+            value: null,
+            options: { "indent": 1 }
+        });
+    }
     var sAnswer = sanitizer_1.sanitize(answer);
     var sArtist = sanitizer_1.sanitize(track.artist);
     var sName = sanitizer_1.sanitize(track.name);
+    if (debugCallback) {
+        debugCallback({
+            key: '<span>Sanitizing values...</span>',
+            value: [
+                "<b>Input: </b>" + sAnswer,
+                "<b>Artist: </b>" + sArtist,
+                "<b>Track: </b>" + sName
+            ],
+            options: { "indent": 1 }
+        });
+    }
     var Patterns = {
         name: new RegExp(sName, 'g'),
         artist: new RegExp(sArtist, 'g')
     };
     var nameMatch = sAnswer.match(Patterns.name);
     var artistMatch = sAnswer.match(Patterns.artist);
+    if (debugCallback) {
+        var nameMatchClass = nameMatch ? "success" : "error";
+        var nameMatchText = nameMatch ? "yes" : "no";
+        debugCallback({
+            key: "<span>Do the track names match?</span> <span class=\"" + nameMatchClass + "\">" + nameMatchText + "</span>",
+            value: null,
+            options: { "indent": 1 }
+        });
+        var artistMatchClass = artistMatch ? "success" : "error";
+        var artistMatchText = artistMatch ? "yes" : "no";
+        debugCallback({
+            key: "<span>Do the artist names match?</span> <span class=\"" + artistMatchClass + "\">" + artistMatchText + "</span>",
+            value: null,
+            options: { "indent": 1 }
+        });
+    }
     // if we have an exact match then we're 👌🏼
     if (nameMatch && artistMatch) {
         return true;
     }
     // see if the artist exists in the match
     if (nameMatch && !artistMatch) {
+        debugCallback({
+            key: "<h4>Fuzzy match...</h4>",
+            value: null,
+            options: { "indent": 1 }
+        });
         var nameMatchReg = new RegExp(sName, "gi");
         var answerWithoutName = sAnswer.replace(nameMatchReg, "").trim();
-        if (stringHasIntersection(sArtist, answerWithoutName)) {
+        var hasIntersection = stringHasIntersection(sArtist, answerWithoutName, debugCallback);
+        var klass = hasIntersection ? "success" : "error";
+        var text = hasIntersection ? "yes" : "no";
+        if (hasIntersection) {
             return true;
         }
+    }
+    if (debugCallback) {
+        debugCallback({
+            key: '<span class="error">No match</span>',
+            value: null,
+            options: { "indent": 1 }
+        });
     }
     return false;
 }
 exports.validate = validate;
-function stringHasIntersection(left, right) {
-    return matchHasIntersection({ artist: left, name: "" }, { artist: right, name: "" });
+function stringHasIntersection(left, right, debugCallback) {
+    return matchHasIntersection({ artist: left, name: "" }, { artist: right, name: "" }, debugCallback);
 }
 exports.stringHasIntersection = stringHasIntersection;
 // Private: Runs a string through a transform function which considers
@@ -207,20 +263,111 @@ function splitDigits(str) {
 // str - string
 //
 // Returns a string[]
-function stemmedComponents(str) {
+function stemmedComponents(str, debugCallback) {
     var transformed = stringThroughComponentTransform(str);
+    if (debugCallback) {
+        debugCallback({
+            key: "&rarr;&nbsp;&nbsp;&nbsp;" + transformed,
+            value: null,
+            options: { indent: 3 }
+        });
+    }
+    if (debugCallback) {
+        debugCallback({
+            key: "<i>Sanitizing...</i>",
+            value: null,
+            options: { indent: 3 }
+        });
+    }
     var sanitized = sanitizer_1.sanitize(transformed);
+    if (debugCallback) {
+        debugCallback({
+            key: "&rarr;&nbsp;&nbsp;&nbsp;" + sanitized,
+            value: null,
+            options: { indent: 3 }
+        });
+    }
+    if (debugCallback) {
+        debugCallback({
+            key: "<i>Splitting digits...</i>",
+            value: null,
+            options: { indent: 3 }
+        });
+    }
     var result = splitDigits(sanitized);
-    return result.split(' ').map(function (word) { return stem(word); });
+    if (debugCallback) {
+        debugCallback({
+            key: "&rarr;&nbsp;&nbsp;&nbsp;" + result,
+            value: null,
+            options: { indent: 3 }
+        });
+    }
+    if (debugCallback) {
+        debugCallback({
+            key: "<i>Stemming...</i>",
+            value: null,
+            options: { indent: 3 }
+        });
+    }
+    var stemmed = result.split(' ').map(function (word) { return stem(word); });
+    if (debugCallback) {
+        debugCallback({
+            key: "&rarr;&nbsp;&nbsp;&nbsp;" + stemmed,
+            value: null,
+            options: { indent: 3 }
+        });
+    }
+    return stemmed;
 }
-function matchHasIntersection(left, right) {
-    var aComponents = stemmedComponents([left.name, left.artist].join(' '));
-    var bComponents = stemmedComponents([right.name, right.artist].join(' '));
+function matchHasIntersection(left, right, debugCallback) {
+    if (debugCallback) {
+        debugCallback({
+            key: "<b>input:</b> " + [left.name, left.artist].join(' '),
+            value: null,
+            options: { indent: 2 }
+        });
+        debugCallback({
+            key: "<i>Running custom component transform...</i>",
+            value: null,
+            options: { indent: 3 }
+        });
+    }
+    var aComponents = stemmedComponents([left.name, left.artist].join(' '), debugCallback);
+    if (debugCallback) {
+        debugCallback({
+            key: "<b>input:</b> " + [right.name, right.artist].join(' '),
+            value: null,
+            options: { indent: 2 }
+        });
+        debugCallback({
+            key: "<i>Running custom component transform...</i>",
+            value: null,
+            options: { indent: 3 }
+        });
+    }
+    var bComponents = stemmedComponents([right.name, right.artist].join(' '), debugCallback);
     var long = aComponents.length > bComponents.length ? aComponents : bComponents;
     var short = long == aComponents ? bComponents : aComponents;
     var results = long.filter(function (word) {
         return short.indexOf(word) !== -1;
     });
+    if (debugCallback) {
+        var lHTMLString = long.map(function (word) {
+            var match = results.indexOf(word) !== -1;
+            var klass = match ? 'success' : '';
+            return "<span class=" + klass + ">" + word + "</span>";
+        }).join(' ');
+        var sHTMLString = short.map(function (word) {
+            var match = results.indexOf(word) !== -1;
+            var klass = match ? 'success' : '';
+            return "<span class=" + klass + ">" + word + "</span>";
+        }).join(' ');
+        debugCallback({
+            key: lHTMLString + " <> " + sHTMLString,
+            value: null,
+            options: { indent: 2 }
+        });
+    }
     return results.length > 0;
 }
 exports.matchHasIntersection = matchHasIntersection;
@@ -8519,27 +8666,47 @@ exports["default"] = {
     },
     submitAnswer: function (answer) {
         return function (dispatch) {
-            dispatch({ type: "debug", data: "Answer submitted: " + answer });
-            dispatch({ type: "debug", data: "Sanitizing answer" });
+            dispatch(admin_1._debug({ key: "<span>Received input:</span> " + answer, value: null }));
+            dispatch(admin_1._debug({ key: '<i>Sanitizing answer...</i>', value: null }));
             var sanitizedAnswer = sanitizer_1.sanitize(answer);
-            dispatch(admin_1._debug({ key: 'Sanitized answer:', value: sanitizedAnswer }));
+            dispatch(admin_1._debug({
+                key: "<span>Sanitized answer:</span> " + sanitizedAnswer,
+                value: null
+            }));
+            dispatch(admin_1._debug({
+                key: '<h3>Last.fm',
+                value: null
+            }));
+            dispatch(admin_1._debug({
+                key: "<span>Sending \"" + sanitizedAnswer + "\" to Last.fm</b></span>",
+                value: null
+            }));
             performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
                 var tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
                 if (tracks.length === 0) {
-                    dispatch(admin_1._debug({ key: "0 results from Last.fm", value: null }));
+                    dispatch(admin_1._debug({ key: '<span class="error">0 results from Last.fm</span>', value: null }));
                     return;
                 }
-                var trackStrings = tracks.map(function (track) {
+                var trackList = tracks.map(function (track) {
                     var artist = track.artist, name = track.name;
-                    return "  Artist: " + artist + ", Track: " + name;
+                    return artist + " - " + name;
                 });
-                dispatch(admin_1._debug({ key: "Tracks received", value: trackStrings }));
-                var match = turn_processor_1.findMatch(answer, tracks);
+                dispatch(admin_1._debug({ key: '<span class="success">Response:</span>', value: trackList }));
+                dispatch(admin_1._debug({
+                    key: '<h3>Validation</h3>',
+                    value: null
+                }));
+                var match = turn_processor_1.findMatch(answer, tracks, function (arg) {
+                    dispatch(admin_1._debug({ key: arg.key, value: arg.value, options: arg.options }));
+                });
                 if (!match) {
-                    dispatch(admin_1._debug({ key: "User input didn't match any results from Last.fm", value: null }));
+                    dispatch(admin_1._debug({ key: '<span class="error">User input didn\'t match any results from Last.fm</span>', value: null }));
                     return;
                 }
-                dispatch(admin_1._debug({ key: "Match found:", value: "Artist: " + match.artist + ", Song: " + match.name }));
+                dispatch(admin_1._debug({
+                    key: '<span class="success">Match found:</span  >',
+                    value: [match.artist + " - " + match.name]
+                }));
             });
         };
     }

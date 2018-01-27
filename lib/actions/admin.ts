@@ -12,6 +12,15 @@ function performSearch({sanitizedAnswer}) {
     .then(response => response.json())
 }
 
+interface DebugValue {
+  key: string, 
+  value: string[] | null, 
+  options?: {
+    key: string, 
+    value: string | number
+  }
+}
+
 export default {
   reset: () => {
     return dispatch => {
@@ -21,36 +30,59 @@ export default {
 
   submitAnswer: (answer: string) => {
     return dispatch => {
-      dispatch({type: "debug", data: `Answer submitted: ${answer}`})
-      dispatch({type: "debug", data: "Sanitizing answer"})
+      dispatch(_debug({key: `<span>Received input:</span> ${answer}`, value: null}))
+      dispatch(_debug({key: '<i>Sanitizing answer...</i>', value: null}))
 
       const sanitizedAnswer = sanitize(answer)
 
-      dispatch(_debug({key: 'Sanitized answer:', value: sanitizedAnswer}))
+      dispatch(_debug({
+        key: `<span>Sanitized answer:</span> ${sanitizedAnswer}`, 
+        value: null
+      }))
+
+      dispatch(_debug({
+        key: '<h3>Last.fm',
+        value: null
+      }))
+
+      dispatch(_debug({
+        key: `<span>Sending "${sanitizedAnswer}" to Last.fm</b></span>`,
+        value: null
+      }))
 
       performSearch({sanitizedAnswer}).then(json => {
 
         const tracks = lastFMResponseVerifier(json)
         if (tracks.length === 0) {
-          dispatch(_debug({ key: "0 results from Last.fm", value: null }))
+          dispatch(_debug({ key: '<span class="error">0 results from Last.fm</span>', value: null }))
           return
         }
 
-        const trackStrings = tracks.map(track => {
+        const trackList = tracks.map(track => {
           const { artist, name } = track;
-          return `  Artist: ${artist}, Track: ${name}`
+          return `${artist} - ${name}`
         })
 
-        dispatch(_debug({key: "Tracks received", value: trackStrings}))
+        dispatch(_debug({key: '<span class="success">Response:</span>', value: trackList}))
 
-        const match: {artist: string, name: string} = findMatch(answer, tracks)
+        dispatch(_debug({
+          key: '<h3>Validation</h3>',
+          value: null
+        }))
+
+        const match: {artist: string, name: string} = findMatch(answer, tracks, (arg: DebugValue) => {
+           dispatch(_debug({key: arg.key, value: arg.value, options: arg.options}))
+        })
 
         if (!match) {
-          dispatch(_debug({key: "User input didn't match any results from Last.fm", value: null}))
+          dispatch(_debug({key: '<span class="error">User input didn\'t match any results from Last.fm</span>', value: null}))
           return
         }
 
-        dispatch(_debug({key: "Match found:", value: `Artist: ${match.artist}, Song: ${match.name}`}))
+        dispatch(_debug({
+          key: '<span class="success">Match found:</span  >', 
+          value: [`${match.artist} - ${match.name}`]
+        }))
       })
     }
   }
