@@ -1,5 +1,3 @@
-/*jshint esversion: 6 */
-
 import { LAST_FM_SEARCH } from '../constants'
 
 const defaultState = { searchResults: [] }

@@ -8,8 +8,9 @@ import {
   _answerSubmissionFailed ,
   _fetchFriends,
   _performSearch,
-  _fetchedGame, _selectGameInvitee,
-} from '../selectors'
+  _fetchedGame, 
+  _selectGameInvitee,
+} from '../selectors/site'
 
 import { Game, FBFriend, Stack } from '../types'
 
