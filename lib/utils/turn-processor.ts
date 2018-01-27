@@ -109,11 +109,13 @@ export function validate(answer: string, track: {artist: string, name: string}, 
 
   // see if the artist exists in the match
   if (nameMatch && !artistMatch) {
-    debugCallback({
-      key: `<h4>Fuzzy match...</h4>`,
-      value: null,
-      options: {"indent": 1}
-    })
+    if (debugCallback) {
+      debugCallback({
+        key: `<h4>Fuzzy match...</h4>`,
+        value: null,
+        options: {"indent": 1}
+      })
+    }
 
     const nameMatchReg = new RegExp(sName, "gi")
     const answerWithoutName = sAnswer.replace(nameMatchReg, "").trim()
