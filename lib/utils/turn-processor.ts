@@ -34,8 +34,12 @@ export function findMatch(userInput: string, tracks: any[], debugCallback?: (arg
 
     if (debugCallback) {
       debugCallback({
-        key: `<span>Validating against</span> <u>${artist} - ${name}</u>`, 
-        value: null
+        key: `Validating against ${artist} - ${name}`, 
+        value: null,
+        options: { tags: [
+          {tag: 'span', range: [0, 'Validating against'.length]},
+          {tag: 'u', range: ['Validating against '.length, `${artist} - ${name}`.length]}
+        ]}
       })
     }
 
@@ -56,9 +60,11 @@ export function findMatch(userInput: string, tracks: any[], debugCallback?: (arg
 export function validate(answer: string, track: {artist: string, name: string}, debugCallback?: (arg: DebugValue) => void): boolean {
   if (debugCallback) {
     debugCallback({
-      key: '<i>Validating match...</i>', 
+      key: 'Validating match...', 
       value: null, 
-      options: { "indent": 1 }
+      options: {indent: 1, tags: [
+        {tag: 'i', range: [0, 'Validating match...'.length]}
+      ]}
     })
   }
 
@@ -68,13 +74,15 @@ export function validate(answer: string, track: {artist: string, name: string}, 
 
   if (debugCallback) {
     debugCallback({
-      key: '<span>Sanitizing values...</span>', 
+      key: 'Sanitizing values...', 
       value: [
         `<b>Input: </b>${sAnswer}`,
         `<b>Artist: </b>${sArtist}`,
         `<b>Track: </b>${sName}`
       ],
-      options: {"indent": 1}
+      options: {indent: 1, tags: [
+        {tag: 'span', range: [0, 'Sanitizing values...'.length]}
+      ]}
     })
   }
 
@@ -90,17 +98,23 @@ export function validate(answer: string, track: {artist: string, name: string}, 
     const nameMatchClass = nameMatch ? "success" : "error"
     const nameMatchText = nameMatch ? "yes" : "no"
     debugCallback({
-      key: `<span>Do the track names match?</span> <span class="${nameMatchClass}">${nameMatchText}</span>`,
+      key: `Do the track names match? ${nameMatchText}`,
       value: null,
-      options: {"indent": 1}
+      options: {indent: 1, tags: [
+        {tag: 'span', range: [0, 'Do the track names match?'.length]},
+        {tag: 'span', range: ['Do the track names match? '.length, nameMatchText.length], style: nameMatchClass}
+      ]}
     })
 
     const artistMatchClass = artistMatch ? "success" : "error"
     const artistMatchText = artistMatch ? "yes" : "no"
     debugCallback({
-      key: `<span>Do the artist names match?</span> <span class="${artistMatchClass}">${artistMatchText}</span>`,
+      key: `Do the artist names match? ${artistMatchText}`,
       value: null,
-      options: {"indent": 1}
+      options: {indent: 1, tags: [
+        {tag: 'span', range: [0, 'Do the artist names match?'.length]},
+        {tag: 'span', style: artistMatchClass, range: ['Do the artist names match? '.length, artistMatchText.length]}
+      ]}
     })
   }
 
@@ -111,9 +125,11 @@ export function validate(answer: string, track: {artist: string, name: string}, 
   if (nameMatch && !artistMatch) {
     if (debugCallback) {
       debugCallback({
-        key: `<h4>Fuzzy match...</h4>`,
+        key: `Fuzzy match...`,
         value: null,
-        options: {"indent": 1}
+        options: {indent: 1, tags: [
+          {tag: 'h4', range: [0, 'Fuzz match...'.length]}
+        ]}
       })
     }
 
@@ -131,9 +147,11 @@ export function validate(answer: string, track: {artist: string, name: string}, 
 
   if (debugCallback) {
     debugCallback({
-      key: '<span class="error">No match</span>', 
+      key: 'No match', 
       value: null, 
-      options: {"indent": 1}
+      options: {indent: 1, tags: [
+        {tag: 'span', style: 'error', range: [0, 'no match'.length]}
+      ]}
     })
   }
 
@@ -191,7 +209,7 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
   const transformed = stringThroughComponentTransform(str) 
   if (debugCallback) {
     debugCallback({
-      key: `&rarr;&nbsp;&nbsp;&nbsp;${transformed}`,
+      key: `👉 ${transformed}`,
       value: null,
       options: {indent: 3}
     })
@@ -199,9 +217,11 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
 
   if (debugCallback) {
     debugCallback({
-      key: `<i>Sanitizing...</i>`,
+      key: 'Sanitizing...',
       value: null,
-      options: {indent: 3}
+      options: {indent: 3, tags: [
+        {tag: 'i', range: [0, 'Sanitizing...'.length]}
+      ]}
     })
   }
 
@@ -209,7 +229,7 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
 
   if (debugCallback) {
     debugCallback({
-      key: `&rarr;&nbsp;&nbsp;&nbsp;${sanitized}`,
+      key: `👉 ${sanitized}`,
       value: null,
       options: {indent: 3}
     })
@@ -217,9 +237,11 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
 
   if (debugCallback) {
     debugCallback({
-      key: `<i>Splitting digits...</i>`,
+      key: 'Splitting digits...',
       value: null,
-      options: {indent: 3}
+      options: {indent: 3, tags: [
+        {tag: 'i', range: [0, 'Splitting digits...'.length]}
+      ]}
     })
   }
 
@@ -227,7 +249,7 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
 
   if (debugCallback) {
     debugCallback({
-      key: `&rarr;&nbsp;&nbsp;&nbsp;${result}`,
+      key: `👉 ${result}`,
       value: null,
       options: {indent: 3}
     })
@@ -235,9 +257,11 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
 
   if (debugCallback) {
     debugCallback({
-      key: `<i>Stemming...</i>`,
+      key: 'Stemming...',
       value: null,
-      options: {indent: 3}
+      options: {indent: 3, tags: [
+        {tag: 'i', range: [0, 'stemming...'.length]}
+      ]}
     })
   }
 
@@ -245,7 +269,7 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
 
   if (debugCallback) {
     debugCallback({
-      key: `&rarr;&nbsp;&nbsp;&nbsp;${stemmed}`,
+      key: `👉 ${stemmed}`,
       value: null,
       options: {indent: 3}
     })
@@ -273,15 +297,19 @@ export function matchHasIntersection(left: Match, right: Match, debugCallback?: 
 
   if (debugCallback) {
     debugCallback({
-      key: `<b>input:</b> ${[right.name, right.artist].join(' ')}`,
+      key: `input: ${[right.name, right.artist].join(' ')}`,
       value: null,
-      options: {indent: 2}
+      options: {indent: 2, tags: [
+        {tag: 'b', range: [0, 'input:'.length]}
+      ]}
     })
 
     debugCallback({
-      key: `<i>Running custom component transform...</i>`,
+      key: 'Running custom component transform...',
       value: null,
-      options: {indent: 3}
+      options: {indent: 3, tags: [
+        {tag: 'i', range: [0, 'Running custom component transform...'.length]}
+      ]}
     })
   }
   const bComponents = stemmedComponents([right.name, right.artist].join(' '), debugCallback)

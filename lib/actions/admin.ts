@@ -15,10 +15,7 @@ function performSearch({sanitizedAnswer}) {
 interface DebugValue {
   key: string, 
   value: string[] | null, 
-  options?: {
-    key: string, 
-    value: string | number
-  }
+  options?: any
 }
 
 export default {
@@ -30,31 +27,60 @@ export default {
 
   submitAnswer: (answer: string) => {
     return dispatch => {
-      dispatch(_debug({key: `<span>Received input:</span> ${answer}`, value: null}))
-      dispatch(_debug({key: '<i>Sanitizing answer...</i>', value: null}))
+      dispatch(_debug({
+        key: `Received input: ${answer}`,
+        value: null,
+        options: { tags: [
+          {tag: 'span', range: [0, "Received input:".length]},
+          {tag: 'u', range: ['Received input: '.length, answer.length]}
+        ]}
+      }))
+
+      dispatch(_debug({
+        key: 'Sanitizing answer...', 
+        value: null,
+        options: { tags: [
+          {tag: 'i', range: [0, 'Sanitizing answer...'.length]}
+        ]}
+      }))
 
       const sanitizedAnswer = sanitize(answer)
 
       dispatch(_debug({
-        key: `<span>Sanitized answer:</span> ${sanitizedAnswer}`, 
-        value: null
+        key: `Sanitized answer: ${sanitizedAnswer}`, 
+        value: null,
+        options: { tags: [
+          {tag: 'span', range: [0, 'Sanitized answer:'.length]}
+        ]}
       }))
 
       dispatch(_debug({
-        key: '<h3>Last.fm',
-        value: null
+        key: 'Last.fm',
+        value: null,
+        options: { tags: [
+          {tag: 'h3', range: [0, 'Last.fm'.length]}
+        ]}
       }))
 
       dispatch(_debug({
-        key: `<span>Sending "${sanitizedAnswer}" to Last.fm</b></span>`,
-        value: null
+        key: `Sending "${sanitizedAnswer}" to Last.fm`,
+        value: null,
+        options: { tags: [
+          {tag: 'span', range: [0, `Sending "${sanitizedAnswer}" to Last.fm`.length]}
+        ]}
       }))
 
       performSearch({sanitizedAnswer}).then(json => {
-
         const tracks = lastFMResponseVerifier(json)
+
         if (tracks.length === 0) {
-          dispatch(_debug({ key: '<span class="error">0 results from Last.fm</span>', value: null }))
+          dispatch(_debug({ 
+            key: '0 results from Last.fm', 
+            value: null,
+            options: { tags: [
+              {tag: 'span', style: 'error', range: [0, '0 results from Last.fm'.length]}
+            ]}
+          }))
           return
         }
 
@@ -63,11 +89,20 @@ export default {
           return `${artist} - ${name}`
         })
 
-        dispatch(_debug({key: '<span class="success">Response:</span>', value: trackList}))
+        dispatch(_debug({
+          key: 'Response:', 
+          value: trackList,
+          options: { tags: [
+            {tag: 'span', style: 'success', range: [0, 'Response:'.length]}
+          ]}
+        }))
 
         dispatch(_debug({
-          key: '<h3>Validation</h3>',
-          value: null
+          key: 'Validation',
+          value: null,
+          options: { tags: [
+            {tag: 'h3', range: [0, 'Validation'.length]}
+          ]}
         }))
 
         const match: {artist: string, name: string} = findMatch(answer, tracks, (arg: DebugValue) => {
@@ -75,13 +110,22 @@ export default {
         })
 
         if (!match) {
-          dispatch(_debug({key: '<span class="error">User input didn\'t match any results from Last.fm</span>', value: null}))
+          dispatch(_debug({
+            key: 'User input didn\'t match any results from Last.fm', 
+            value: null,
+            options: { tags: [
+              {tag: 'span', style: 'error', range: [0, 'User input didn`t match any results from Last.fm'.length]}
+            ]}
+          }))
           return
         }
 
         dispatch(_debug({
-          key: '<span class="success">Match found:</span  >', 
-          value: [`${match.artist} - ${match.name}`]
+          key: 'Match found:', 
+          value: [`${match.artist} - ${match.name}`],
+          options: { tags: [
+            {tag: 'span', style: 'success', range: [0, 'Match found:'.length]}
+          ]}
         }))
       })
     }

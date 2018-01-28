@@ -139,8 +139,12 @@ function findMatch(userInput, tracks, debugCallback) {
         var _a = tracks[i], artist = _a.artist, name_1 = _a.name;
         if (debugCallback) {
             debugCallback({
-                key: "<span>Validating against</span> <u>" + artist + " - " + name_1 + "</u>",
-                value: null
+                key: "Validating against " + artist + " - " + name_1,
+                value: null,
+                options: { tags: [
+                        { tag: 'span', range: [0, 'Validating against'.length] },
+                        { tag: 'u', range: ['Validating against '.length, (artist + " - " + name_1).length] }
+                    ] }
             });
         }
         if (validate(userInput, { artist: artist, name: name_1 }, debugCallback)) {
@@ -159,9 +163,11 @@ exports.findMatch = findMatch;
 function validate(answer, track, debugCallback) {
     if (debugCallback) {
         debugCallback({
-            key: '<i>Validating match...</i>',
+            key: 'Validating match...',
             value: null,
-            options: { "indent": 1 }
+            options: { indent: 1, tags: [
+                    { tag: 'i', range: [0, 'Validating match...'.length] }
+                ] }
         });
     }
     var sAnswer = sanitizer_1.sanitize(answer);
@@ -169,13 +175,15 @@ function validate(answer, track, debugCallback) {
     var sName = sanitizer_1.sanitize(track.name);
     if (debugCallback) {
         debugCallback({
-            key: '<span>Sanitizing values...</span>',
+            key: 'Sanitizing values...',
             value: [
                 "<b>Input: </b>" + sAnswer,
                 "<b>Artist: </b>" + sArtist,
                 "<b>Track: </b>" + sName
             ],
-            options: { "indent": 1 }
+            options: { indent: 1, tags: [
+                    { tag: 'span', range: [0, 'Sanitizing values...'.length] }
+                ] }
         });
     }
     var Patterns = {
@@ -188,16 +196,22 @@ function validate(answer, track, debugCallback) {
         var nameMatchClass = nameMatch ? "success" : "error";
         var nameMatchText = nameMatch ? "yes" : "no";
         debugCallback({
-            key: "<span>Do the track names match?</span> <span class=\"" + nameMatchClass + "\">" + nameMatchText + "</span>",
+            key: "Do the track names match? " + nameMatchText,
             value: null,
-            options: { "indent": 1 }
+            options: { indent: 1, tags: [
+                    { tag: 'span', range: [0, 'Do the track names match?'.length] },
+                    { tag: 'span', range: ['Do the track names match? '.length, nameMatchText.length], style: nameMatchClass }
+                ] }
         });
         var artistMatchClass = artistMatch ? "success" : "error";
         var artistMatchText = artistMatch ? "yes" : "no";
         debugCallback({
-            key: "<span>Do the artist names match?</span> <span class=\"" + artistMatchClass + "\">" + artistMatchText + "</span>",
+            key: "Do the artist names match? " + artistMatchText,
             value: null,
-            options: { "indent": 1 }
+            options: { indent: 1, tags: [
+                    { tag: 'span', range: [0, 'Do the artist names match?'.length] },
+                    { tag: 'span', style: artistMatchClass, range: ['Do the artist names match? '.length, artistMatchText.length] }
+                ] }
         });
     }
     // if we have an exact match then we're 👌🏼
@@ -208,9 +222,11 @@ function validate(answer, track, debugCallback) {
     if (nameMatch && !artistMatch) {
         if (debugCallback) {
             debugCallback({
-                key: "<h4>Fuzzy match...</h4>",
+                key: "Fuzzy match...",
                 value: null,
-                options: { "indent": 1 }
+                options: { indent: 1, tags: [
+                        { tag: 'h4', range: [0, 'Fuzz match...'.length] }
+                    ] }
             });
         }
         var nameMatchReg = new RegExp(sName, "gi");
@@ -224,9 +240,11 @@ function validate(answer, track, debugCallback) {
     }
     if (debugCallback) {
         debugCallback({
-            key: '<span class="error">No match</span>',
+            key: 'No match',
             value: null,
-            options: { "indent": 1 }
+            options: { indent: 1, tags: [
+                    { tag: 'span', style: 'error', range: [0, 'no match'.length] }
+                ] }
         });
     }
     return false;
@@ -269,52 +287,58 @@ function stemmedComponents(str, debugCallback) {
     var transformed = stringThroughComponentTransform(str);
     if (debugCallback) {
         debugCallback({
-            key: "&rarr;&nbsp;&nbsp;&nbsp;" + transformed,
+            key: "\uD83D\uDC49 " + transformed,
             value: null,
             options: { indent: 3 }
         });
     }
     if (debugCallback) {
         debugCallback({
-            key: "<i>Sanitizing...</i>",
+            key: 'Sanitizing...',
             value: null,
-            options: { indent: 3 }
+            options: { indent: 3, tags: [
+                    { tag: 'i', range: [0, 'Sanitizing...'.length] }
+                ] }
         });
     }
     var sanitized = sanitizer_1.sanitize(transformed);
     if (debugCallback) {
         debugCallback({
-            key: "&rarr;&nbsp;&nbsp;&nbsp;" + sanitized,
+            key: "\uD83D\uDC49 " + sanitized,
             value: null,
             options: { indent: 3 }
         });
     }
     if (debugCallback) {
         debugCallback({
-            key: "<i>Splitting digits...</i>",
+            key: 'Splitting digits...',
             value: null,
-            options: { indent: 3 }
+            options: { indent: 3, tags: [
+                    { tag: 'i', range: [0, 'Splitting digits...'.length] }
+                ] }
         });
     }
     var result = splitDigits(sanitized);
     if (debugCallback) {
         debugCallback({
-            key: "&rarr;&nbsp;&nbsp;&nbsp;" + result,
+            key: "\uD83D\uDC49 " + result,
             value: null,
             options: { indent: 3 }
         });
     }
     if (debugCallback) {
         debugCallback({
-            key: "<i>Stemming...</i>",
+            key: 'Stemming...',
             value: null,
-            options: { indent: 3 }
+            options: { indent: 3, tags: [
+                    { tag: 'i', range: [0, 'stemming...'.length] }
+                ] }
         });
     }
     var stemmed = result.split(' ').map(function (word) { return stem(word); });
     if (debugCallback) {
         debugCallback({
-            key: "&rarr;&nbsp;&nbsp;&nbsp;" + stemmed,
+            key: "\uD83D\uDC49 " + stemmed,
             value: null,
             options: { indent: 3 }
         });
@@ -337,14 +361,18 @@ function matchHasIntersection(left, right, debugCallback) {
     var aComponents = stemmedComponents([left.name, left.artist].join(' '), debugCallback);
     if (debugCallback) {
         debugCallback({
-            key: "<b>input:</b> " + [right.name, right.artist].join(' '),
+            key: "input: " + [right.name, right.artist].join(' '),
             value: null,
-            options: { indent: 2 }
+            options: { indent: 2, tags: [
+                    { tag: 'b', range: [0, 'input:'.length] }
+                ] }
         });
         debugCallback({
-            key: "<i>Running custom component transform...</i>",
+            key: 'Running custom component transform...',
             value: null,
-            options: { indent: 3 }
+            options: { indent: 3, tags: [
+                    { tag: 'i', range: [0, 'Running custom component transform...'.length] }
+                ] }
         });
     }
     var bComponents = stemmedComponents([right.name, right.artist].join(' '), debugCallback);
@@ -8668,46 +8696,92 @@ exports["default"] = {
     },
     submitAnswer: function (answer) {
         return function (dispatch) {
-            dispatch(admin_1._debug({ key: "<span>Received input:</span> " + answer, value: null }));
-            dispatch(admin_1._debug({ key: '<i>Sanitizing answer...</i>', value: null }));
+            dispatch(admin_1._debug({
+                key: "Received input: " + answer,
+                value: null,
+                options: { tags: [
+                        { tag: 'span', range: [0, "Received input:".length] },
+                        { tag: 'u', range: ['Received input: '.length, answer.length] }
+                    ] }
+            }));
+            dispatch(admin_1._debug({
+                key: 'Sanitizing answer...',
+                value: null,
+                options: { tags: [
+                        { tag: 'i', range: [0, 'Sanitizing answer...'.length] }
+                    ] }
+            }));
             var sanitizedAnswer = sanitizer_1.sanitize(answer);
             dispatch(admin_1._debug({
-                key: "<span>Sanitized answer:</span> " + sanitizedAnswer,
-                value: null
+                key: "Sanitized answer: " + sanitizedAnswer,
+                value: null,
+                options: { tags: [
+                        { tag: 'span', range: [0, 'Sanitized answer:'.length] }
+                    ] }
             }));
             dispatch(admin_1._debug({
-                key: '<h3>Last.fm',
-                value: null
+                key: 'Last.fm',
+                value: null,
+                options: { tags: [
+                        { tag: 'h3', range: [0, 'Last.fm'.length] }
+                    ] }
             }));
             dispatch(admin_1._debug({
-                key: "<span>Sending \"" + sanitizedAnswer + "\" to Last.fm</b></span>",
-                value: null
+                key: "Sending \"" + sanitizedAnswer + "\" to Last.fm",
+                value: null,
+                options: { tags: [
+                        { tag: 'span', range: [0, ("Sending \"" + sanitizedAnswer + "\" to Last.fm").length] }
+                    ] }
             }));
             performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
                 var tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
                 if (tracks.length === 0) {
-                    dispatch(admin_1._debug({ key: '<span class="error">0 results from Last.fm</span>', value: null }));
+                    dispatch(admin_1._debug({
+                        key: '0 results from Last.fm',
+                        value: null,
+                        options: { tags: [
+                                { tag: 'span', style: 'error', range: [0, '0 results from Last.fm'.length] }
+                            ] }
+                    }));
                     return;
                 }
                 var trackList = tracks.map(function (track) {
                     var artist = track.artist, name = track.name;
                     return artist + " - " + name;
                 });
-                dispatch(admin_1._debug({ key: '<span class="success">Response:</span>', value: trackList }));
                 dispatch(admin_1._debug({
-                    key: '<h3>Validation</h3>',
-                    value: null
+                    key: 'Response:',
+                    value: trackList,
+                    options: { tags: [
+                            { tag: 'span', style: 'success', range: [0, 'Response:'.length] }
+                        ] }
+                }));
+                dispatch(admin_1._debug({
+                    key: 'Validation',
+                    value: null,
+                    options: { tags: [
+                            { tag: 'h3', range: [0, 'Validation'.length] }
+                        ] }
                 }));
                 var match = turn_processor_1.findMatch(answer, tracks, function (arg) {
                     dispatch(admin_1._debug({ key: arg.key, value: arg.value, options: arg.options }));
                 });
                 if (!match) {
-                    dispatch(admin_1._debug({ key: '<span class="error">User input didn\'t match any results from Last.fm</span>', value: null }));
+                    dispatch(admin_1._debug({
+                        key: 'User input didn\'t match any results from Last.fm',
+                        value: null,
+                        options: { tags: [
+                                { tag: 'span', style: 'error', range: [0, 'User input didn`t match any results from Last.fm'.length] }
+                            ] }
+                    }));
                     return;
                 }
                 dispatch(admin_1._debug({
-                    key: '<span class="success">Match found:</span  >',
-                    value: [match.artist + " - " + match.name]
+                    key: 'Match found:',
+                    value: [match.artist + " - " + match.name],
+                    options: { tags: [
+                            { tag: 'span', style: 'success', range: [0, 'Match found:'.length] }
+                        ] }
                 }));
             });
         };

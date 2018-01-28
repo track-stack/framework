@@ -1,10 +1,7 @@
 interface DebugValue {
   key: string, 
   value: string[] | null, 
-  options?: {
-    key: string, 
-    value: string | number
-  }
+  options?: any
 }
 
 interface DebugSelector {
