@@ -1,8 +1,7 @@
 {
   "name": "trackstack",
-  "version": "0.0.42",
+  "version": "0.0.47",
   "description": "Shared code for Track Stack",
-  "main": "./lib/trackstack.js",
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch"

@@ -1,0 +1,10 @@
+/node_modules/**/*
+__tests__/**/*
+bin/**/*
+status/**/*
+tsconfig.json
+webpack.config.js
+lib/**/*
+/.circlci/**/*
+.jshintrc
+.babelrc
