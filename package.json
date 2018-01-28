@@ -17,6 +17,7 @@
     "trackstack": "file:../framework/"
   },
   "devDependencies": {
+    "jest-cli": "^22.1.4",
     "@types/node": "^8.0.47",
     "babel-core": "^6.26.0",
     "babel-jest": "^21.2.0",
