@@ -9,7 +9,7 @@
 import { sanitize } from './sanitizer'
 import wordComponents from './word-components'
 import * as stem from 'stem-porter'
-import { TagStyle, AttributedString } from '../interfaces'
+import { TagStyle, Tag, AttributedString } from '../interfaces'
 
 
 // Public: Given user-generated input and an array of
@@ -74,13 +74,19 @@ export function validate(answer: string, track: {artist: string, name: string}, 
         {tag: 'span', range: [0, 'Sanitizing values...'.length]}
       ]}
     })
-    /*
-      value: [
-        `<b>Input: </b>${sAnswer}`,
-        `<b>Artist: </b>${sArtist}`,
-        `<b>Track: </b>${sName}`
-      ],
-    */
+
+    const hash = {'Input:': sAnswer, 'Artist:': sArtist, 'Track': sName}
+    for (let key in hash) {
+      const val = hash[key]
+      let tags: Tag[] = [{tag: 'b', range: [0, key.length]}]
+      if (val === sAnswer) {
+        tags.push({tag: 'span', range: ['input: '.length, sAnswer.length], style: TagStyle.Input})
+      }
+      debugCallback({
+        key: `${key} ${val}`,
+        options: {indent: 2, tags: tags}
+      })
+    }
   }
 
   const Patterns = {

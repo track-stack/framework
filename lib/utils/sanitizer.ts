@@ -4,6 +4,7 @@ const BLACKLIST = "and|the|by|ft|remix|feat"
 
 const FILTERS: ((string) => string)[] = [
   (input: string) => input.toLowerCase(),
+  (input: string) => input.replace(/\(feat.*\)/, ''),
   (input: string) => input.replace(/[,.+\(\)\[\]\-_—]/g, ' '),
   (input: string) => input.replace(/[$!]/g, 's'),
   (input: string) => input.replace(new RegExp(`\\b(${BLACKLIST})\\b`, 'g'), ''),

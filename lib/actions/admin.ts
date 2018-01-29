@@ -56,8 +56,9 @@ export default {
             range: [0, 'Sanitized answer:'.length]
           },
           {
-            tag: 'u',
-            range: ['Sanitized answer: '.length, sanitizedAnswer.length]
+            tag: 'span',
+            range: ['Sanitized answer: '.length, sanitizedAnswer.length],
+            style: TagStyle.Input
           }
         ]}
       }))
@@ -73,11 +74,20 @@ export default {
       }))
 
       dispatch(_debug({
-        key: `Sending "${sanitizedAnswer}" to Last.fm`,
+        key: `Sending ${sanitizedAnswer} to Last.fm`,
         options: { tags: [
           {
             tag: 'span', 
-            range: [0, `Sending "${sanitizedAnswer}" to Last.fm`.length]
+            range: [0, 'Sending'.length]
+          },
+          {
+            tag: 'span',
+            range: ['sending '.length, sanitizedAnswer.length],
+            style: TagStyle.Input
+          },
+          { 
+            tag: 'span',
+            range: [`sending ${sanitizedAnswer} `.length, 'to last.fm'.length]
           }
         ]}
       }))
@@ -118,7 +128,7 @@ export default {
         trackList.forEach(track => {
           dispatch(_debug({
             key: track, 
-            options: {indent: 3}
+            options: {indent: 1}
           }))
         })
 

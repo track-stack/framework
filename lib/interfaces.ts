@@ -1,6 +1,8 @@
 export enum TagStyle {
   Success = 'success',
-  Error = 'error'
+  Error = 'error',
+  Input = 'input',
+  None = ''
 }
 
 export interface Tag {

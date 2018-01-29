@@ -74,6 +74,7 @@ exports.__esModule = true;
 var BLACKLIST = "and|the|by|ft|remix|feat";
 var FILTERS = [
     function (input) { return input.toLowerCase(); },
+    function (input) { return input.replace(/\(feat.*\)/, ''); },
     function (input) { return input.replace(/[,.+\(\)\[\]\-_—]/g, ' '); },
     function (input) { return input.replace(/[$!]/g, 's'); },
     function (input) { return input.replace(new RegExp("\\b(" + BLACKLIST + ")\\b", 'g'), ''); },
@@ -179,13 +180,18 @@ function validate(answer, track, debugCallback) {
                     { tag: 'span', range: [0, 'Sanitizing values...'.length] }
                 ] }
         });
-        /*
-          value: [
-            `<b>Input: </b>${sAnswer}`,
-            `<b>Artist: </b>${sArtist}`,
-            `<b>Track: </b>${sName}`
-          ],
-        */
+        var hash = { 'Input:': sAnswer, 'Artist:': sArtist, 'Track': sName };
+        for (var key in hash) {
+            var val = hash[key];
+            var tags = [{ tag: 'b', range: [0, key.length] }];
+            if (val === sAnswer) {
+                tags.push({ tag: 'span', range: ['input: '.length, sAnswer.length], style: interfaces_1.TagStyle.Input });
+            }
+            debugCallback({
+                key: key + " " + val,
+                options: { indent: 2, tags: tags }
+            });
+        }
     }
     var Patterns = {
         name: new RegExp(sName, 'g'),
@@ -460,6 +466,8 @@ var TagStyle;
 (function (TagStyle) {
     TagStyle["Success"] = "success";
     TagStyle["Error"] = "error";
+    TagStyle["Input"] = "input";
+    TagStyle["None"] = "";
 })(TagStyle = exports.TagStyle || (exports.TagStyle = {}));
 
 
@@ -8727,8 +8735,9 @@ exports["default"] = {
                             range: [0, 'Sanitized answer:'.length]
                         },
                         {
-                            tag: 'u',
-                            range: ['Sanitized answer: '.length, sanitizedAnswer.length]
+                            tag: 'span',
+                            range: ['Sanitized answer: '.length, sanitizedAnswer.length],
+                            style: interfaces_1.TagStyle.Input
                         }
                     ] }
             }));
@@ -8742,11 +8751,20 @@ exports["default"] = {
                     ] }
             }));
             dispatch(admin_1._debug({
-                key: "Sending \"" + sanitizedAnswer + "\" to Last.fm",
+                key: "Sending " + sanitizedAnswer + " to Last.fm",
                 options: { tags: [
                         {
                             tag: 'span',
-                            range: [0, ("Sending \"" + sanitizedAnswer + "\" to Last.fm").length]
+                            range: [0, 'Sending'.length]
+                        },
+                        {
+                            tag: 'span',
+                            range: ['sending '.length, sanitizedAnswer.length],
+                            style: interfaces_1.TagStyle.Input
+                        },
+                        {
+                            tag: 'span',
+                            range: [("sending " + sanitizedAnswer + " ").length, 'to last.fm'.length]
                         }
                     ] }
             }));
@@ -8782,7 +8800,7 @@ exports["default"] = {
                 trackList.forEach(function (track) {
                     dispatch(admin_1._debug({
                         key: track,
-                        options: { indent: 3 }
+                        options: { indent: 1 }
                     }));
                 });
                 dispatch(admin_1._debug({
