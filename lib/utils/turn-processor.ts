@@ -9,12 +9,8 @@
 import { sanitize } from './sanitizer'
 import wordComponents from './word-components'
 import * as stem from 'stem-porter'
+import { TagStyle, AttributedString } from '../interfaces'
 
-interface DebugValue {
-  key: string, 
-  value: string[] | null, 
-  options?: any
-}
 
 // Public: Given user-generated input and an array of
 // tracks (json) from Last.fm, returns the track that
@@ -25,7 +21,7 @@ interface DebugValue {
 // debugCallback?: DebugValue - An optional debug callback function
 
 // Returns any
-export function findMatch(userInput: string, tracks: any[], debugCallback?: (arg: DebugValue) => void): any {
+export function findMatch(userInput: string, tracks: any[], debugCallback?: (arg: AttributedString) => void): any {
   let match = null
   const limit = Math.min(tracks.length, 10)
 
@@ -35,7 +31,6 @@ export function findMatch(userInput: string, tracks: any[], debugCallback?: (arg
     if (debugCallback) {
       debugCallback({
         key: `Validating against ${artist} - ${name}`, 
-        value: null,
         options: { tags: [
           {tag: 'span', range: [0, 'Validating against'.length]},
           {tag: 'u', range: ['Validating against '.length, `${artist} - ${name}`.length]}
@@ -57,11 +52,11 @@ export function findMatch(userInput: string, tracks: any[], debugCallback?: (arg
 // track: {string, string} - An object that contains the artist and song name from Last.fm
 //
 // Returns boolean
-export function validate(answer: string, track: {artist: string, name: string}, debugCallback?: (arg: DebugValue) => void): boolean {
+
+export function validate(answer: string, track: {artist: string, name: string}, debugCallback?: (retVal: AttributedString) => void): boolean {
   if (debugCallback) {
     debugCallback({
       key: 'Validating match...', 
-      value: null, 
       options: {indent: 1, tags: [
         {tag: 'i', range: [0, 'Validating match...'.length]}
       ]}
@@ -75,15 +70,17 @@ export function validate(answer: string, track: {artist: string, name: string}, 
   if (debugCallback) {
     debugCallback({
       key: 'Sanitizing values...', 
+      options: {indent: 1, tags: [
+        {tag: 'span', range: [0, 'Sanitizing values...'.length]}
+      ]}
+    })
+    /*
       value: [
         `<b>Input: </b>${sAnswer}`,
         `<b>Artist: </b>${sArtist}`,
         `<b>Track: </b>${sName}`
       ],
-      options: {indent: 1, tags: [
-        {tag: 'span', range: [0, 'Sanitizing values...'.length]}
-      ]}
-    })
+    */
   }
 
   const Patterns = {
@@ -95,25 +92,23 @@ export function validate(answer: string, track: {artist: string, name: string}, 
   let artistMatch = sAnswer.match(Patterns.artist)
 
   if (debugCallback) {
-    const nameMatchClass = nameMatch ? "success" : "error"
-    const nameMatchText = nameMatch ? "yes" : "no"
+    let matchClass: TagStyle = nameMatch ? TagStyle.Success : TagStyle.Error
+    let matchText = nameMatch ? "yes" : "no"
     debugCallback({
-      key: `Do the track names match? ${nameMatchText}`,
-      value: null,
+      key: `Do the track names match? ${matchText}`,
       options: {indent: 1, tags: [
         {tag: 'span', range: [0, 'Do the track names match?'.length]},
-        {tag: 'span', range: ['Do the track names match? '.length, nameMatchText.length], style: nameMatchClass}
+        {tag: 'span', range: ['Do the track names match? '.length, matchText.length], style: matchClass}
       ]}
     })
 
-    const artistMatchClass = artistMatch ? "success" : "error"
-    const artistMatchText = artistMatch ? "yes" : "no"
+    matchClass = artistMatch ? TagStyle.Success : TagStyle.Error
+    matchText = artistMatch ? "yes" : "no"
     debugCallback({
-      key: `Do the artist names match? ${artistMatchText}`,
-      value: null,
+      key: `Do the artist names match? ${matchText}`,
       options: {indent: 1, tags: [
         {tag: 'span', range: [0, 'Do the artist names match?'.length]},
-        {tag: 'span', style: artistMatchClass, range: ['Do the artist names match? '.length, artistMatchText.length]}
+        {tag: 'span', range: ['Do the artist names match? '.length, matchText.length], style: matchClass}
       ]}
     })
   }
@@ -126,7 +121,6 @@ export function validate(answer: string, track: {artist: string, name: string}, 
     if (debugCallback) {
       debugCallback({
         key: `Fuzzy match...`,
-        value: null,
         options: {indent: 1, tags: [
           {tag: 'h4', range: [0, 'Fuzz match...'.length]}
         ]}
@@ -148,9 +142,8 @@ export function validate(answer: string, track: {artist: string, name: string}, 
   if (debugCallback) {
     debugCallback({
       key: 'No match', 
-      value: null, 
       options: {indent: 1, tags: [
-        {tag: 'span', style: 'error', range: [0, 'no match'.length]}
+        {tag: 'span', style: TagStyle.Error, range: [0, 'no match'.length]}
       ]}
     })
   }
@@ -170,7 +163,7 @@ interface Match {
   artist: string
 }
 
-export function stringHasIntersection(left: string, right: string, debugCallback?: (arg: DebugValue) => void): boolean {
+export function stringHasIntersection(left: string, right: string, debugCallback?: (retVal: AttributedString) => void): boolean {
   return matchHasIntersection({artist: left, name: ""}, {artist: right, name: ""}, debugCallback)
 }
 
@@ -205,12 +198,11 @@ function splitDigits(str: string): string {
 // str - string
 //
 // Returns a string[]
-function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => void): string[] {
+function stemmedComponents(str: string, debugCallback?: (retVal: AttributedString) => void): string[] {
   const transformed = stringThroughComponentTransform(str) 
   if (debugCallback) {
     debugCallback({
       key: `👉 ${transformed}`,
-      value: null,
       options: {indent: 3}
     })
   }
@@ -218,7 +210,6 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
   if (debugCallback) {
     debugCallback({
       key: 'Sanitizing...',
-      value: null,
       options: {indent: 3, tags: [
         {tag: 'i', range: [0, 'Sanitizing...'.length]}
       ]}
@@ -230,7 +221,6 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
   if (debugCallback) {
     debugCallback({
       key: `👉 ${sanitized}`,
-      value: null,
       options: {indent: 3}
     })
   }
@@ -238,7 +228,6 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
   if (debugCallback) {
     debugCallback({
       key: 'Splitting digits...',
-      value: null,
       options: {indent: 3, tags: [
         {tag: 'i', range: [0, 'Splitting digits...'.length]}
       ]}
@@ -250,7 +239,6 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
   if (debugCallback) {
     debugCallback({
       key: `👉 ${result}`,
-      value: null,
       options: {indent: 3}
     })
   }
@@ -258,7 +246,6 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
   if (debugCallback) {
     debugCallback({
       key: 'Stemming...',
-      value: null,
       options: {indent: 3, tags: [
         {tag: 'i', range: [0, 'stemming...'.length]}
       ]}
@@ -270,7 +257,6 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
   if (debugCallback) {
     debugCallback({
       key: `👉 ${stemmed}`,
-      value: null,
       options: {indent: 3}
     })
   }
@@ -278,17 +264,15 @@ function stemmedComponents(str: string, debugCallback?: (arg: DebugValue) => voi
   return stemmed
 }
 
-export function matchHasIntersection(left: Match, right: Match, debugCallback?: (arg: DebugValue) => void): boolean {
+export function matchHasIntersection(left: Match, right: Match, debugCallback?: (retVal: AttributedString) => void): boolean {
   if (debugCallback) {
     debugCallback({
       key: `<b>input:</b> ${[left.name, left.artist].join(' ')}`,
-      value: null,
       options: {indent: 2}
     })
 
     debugCallback({
       key: `<i>Running custom component transform...</i>`,
-      value: null,
       options: {indent: 3}
     })
   }
@@ -298,7 +282,6 @@ export function matchHasIntersection(left: Match, right: Match, debugCallback?: 
   if (debugCallback) {
     debugCallback({
       key: `input: ${[right.name, right.artist].join(' ')}`,
-      value: null,
       options: {indent: 2, tags: [
         {tag: 'b', range: [0, 'input:'.length]}
       ]}
@@ -306,7 +289,6 @@ export function matchHasIntersection(left: Match, right: Match, debugCallback?: 
 
     debugCallback({
       key: 'Running custom component transform...',
-      value: null,
       options: {indent: 3, tags: [
         {tag: 'i', range: [0, 'Running custom component transform...'.length]}
       ]}
@@ -337,7 +319,6 @@ export function matchHasIntersection(left: Match, right: Match, debugCallback?: 
 
     debugCallback({
       key: `${lHTMLString} <> ${sHTMLString}`,
-      value: null,
       options: {indent: 2}
     })
   }

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -100,7 +100,7 @@ exports.sanitize = sanitize;
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var action_helper_1 = __webpack_require__(23);
+var action_helper_1 = __webpack_require__(24);
 exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
 exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
 exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
@@ -122,8 +122,9 @@ exports.__esModule = true;
  * at various stages of the turn validation process
 */
 var sanitizer_1 = __webpack_require__(0);
-var word_components_1 = __webpack_require__(19);
-var stem = __webpack_require__(20);
+var word_components_1 = __webpack_require__(20);
+var stem = __webpack_require__(21);
+var interfaces_1 = __webpack_require__(4);
 // Public: Given user-generated input and an array of
 // tracks (json) from Last.fm, returns the track that
 // approximately matches the user-generated input.
@@ -140,7 +141,6 @@ function findMatch(userInput, tracks, debugCallback) {
         if (debugCallback) {
             debugCallback({
                 key: "Validating against " + artist + " - " + name_1,
-                value: null,
                 options: { tags: [
                         { tag: 'span', range: [0, 'Validating against'.length] },
                         { tag: 'u', range: ['Validating against '.length, (artist + " - " + name_1).length] }
@@ -164,7 +164,6 @@ function validate(answer, track, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: 'Validating match...',
-            value: null,
             options: { indent: 1, tags: [
                     { tag: 'i', range: [0, 'Validating match...'.length] }
                 ] }
@@ -176,15 +175,17 @@ function validate(answer, track, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: 'Sanitizing values...',
-            value: [
-                "<b>Input: </b>" + sAnswer,
-                "<b>Artist: </b>" + sArtist,
-                "<b>Track: </b>" + sName
-            ],
             options: { indent: 1, tags: [
                     { tag: 'span', range: [0, 'Sanitizing values...'.length] }
                 ] }
         });
+        /*
+          value: [
+            `<b>Input: </b>${sAnswer}`,
+            `<b>Artist: </b>${sArtist}`,
+            `<b>Track: </b>${sName}`
+          ],
+        */
     }
     var Patterns = {
         name: new RegExp(sName, 'g'),
@@ -193,24 +194,22 @@ function validate(answer, track, debugCallback) {
     var nameMatch = sAnswer.match(Patterns.name);
     var artistMatch = sAnswer.match(Patterns.artist);
     if (debugCallback) {
-        var nameMatchClass = nameMatch ? "success" : "error";
-        var nameMatchText = nameMatch ? "yes" : "no";
+        var matchClass = nameMatch ? interfaces_1.TagStyle.Success : interfaces_1.TagStyle.Error;
+        var matchText = nameMatch ? "yes" : "no";
         debugCallback({
-            key: "Do the track names match? " + nameMatchText,
-            value: null,
+            key: "Do the track names match? " + matchText,
             options: { indent: 1, tags: [
                     { tag: 'span', range: [0, 'Do the track names match?'.length] },
-                    { tag: 'span', range: ['Do the track names match? '.length, nameMatchText.length], style: nameMatchClass }
+                    { tag: 'span', range: ['Do the track names match? '.length, matchText.length], style: matchClass }
                 ] }
         });
-        var artistMatchClass = artistMatch ? "success" : "error";
-        var artistMatchText = artistMatch ? "yes" : "no";
+        matchClass = artistMatch ? interfaces_1.TagStyle.Success : interfaces_1.TagStyle.Error;
+        matchText = artistMatch ? "yes" : "no";
         debugCallback({
-            key: "Do the artist names match? " + artistMatchText,
-            value: null,
+            key: "Do the artist names match? " + matchText,
             options: { indent: 1, tags: [
                     { tag: 'span', range: [0, 'Do the artist names match?'.length] },
-                    { tag: 'span', style: artistMatchClass, range: ['Do the artist names match? '.length, artistMatchText.length] }
+                    { tag: 'span', range: ['Do the artist names match? '.length, matchText.length], style: matchClass }
                 ] }
         });
     }
@@ -223,7 +222,6 @@ function validate(answer, track, debugCallback) {
         if (debugCallback) {
             debugCallback({
                 key: "Fuzzy match...",
-                value: null,
                 options: { indent: 1, tags: [
                         { tag: 'h4', range: [0, 'Fuzz match...'.length] }
                     ] }
@@ -241,9 +239,8 @@ function validate(answer, track, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: 'No match',
-            value: null,
             options: { indent: 1, tags: [
-                    { tag: 'span', style: 'error', range: [0, 'no match'.length] }
+                    { tag: 'span', style: interfaces_1.TagStyle.Error, range: [0, 'no match'.length] }
                 ] }
         });
     }
@@ -288,14 +285,12 @@ function stemmedComponents(str, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: "\uD83D\uDC49 " + transformed,
-            value: null,
             options: { indent: 3 }
         });
     }
     if (debugCallback) {
         debugCallback({
             key: 'Sanitizing...',
-            value: null,
             options: { indent: 3, tags: [
                     { tag: 'i', range: [0, 'Sanitizing...'.length] }
                 ] }
@@ -305,14 +300,12 @@ function stemmedComponents(str, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: "\uD83D\uDC49 " + sanitized,
-            value: null,
             options: { indent: 3 }
         });
     }
     if (debugCallback) {
         debugCallback({
             key: 'Splitting digits...',
-            value: null,
             options: { indent: 3, tags: [
                     { tag: 'i', range: [0, 'Splitting digits...'.length] }
                 ] }
@@ -322,14 +315,12 @@ function stemmedComponents(str, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: "\uD83D\uDC49 " + result,
-            value: null,
             options: { indent: 3 }
         });
     }
     if (debugCallback) {
         debugCallback({
             key: 'Stemming...',
-            value: null,
             options: { indent: 3, tags: [
                     { tag: 'i', range: [0, 'stemming...'.length] }
                 ] }
@@ -339,7 +330,6 @@ function stemmedComponents(str, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: "\uD83D\uDC49 " + stemmed,
-            value: null,
             options: { indent: 3 }
         });
     }
@@ -349,12 +339,10 @@ function matchHasIntersection(left, right, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: "<b>input:</b> " + [left.name, left.artist].join(' '),
-            value: null,
             options: { indent: 2 }
         });
         debugCallback({
             key: "<i>Running custom component transform...</i>",
-            value: null,
             options: { indent: 3 }
         });
     }
@@ -362,14 +350,12 @@ function matchHasIntersection(left, right, debugCallback) {
     if (debugCallback) {
         debugCallback({
             key: "input: " + [right.name, right.artist].join(' '),
-            value: null,
             options: { indent: 2, tags: [
                     { tag: 'b', range: [0, 'input:'.length] }
                 ] }
         });
         debugCallback({
             key: 'Running custom component transform...',
-            value: null,
             options: { indent: 3, tags: [
                     { tag: 'i', range: [0, 'Running custom component transform...'.length] }
                 ] }
@@ -394,7 +380,6 @@ function matchHasIntersection(left, right, debugCallback) {
         }).join(' ');
         debugCallback({
             key: lHTMLString + " <> " + sHTMLString,
-            value: null,
             options: { indent: 2 }
         });
     }
@@ -470,6 +455,20 @@ stemmer.among = function among(word, offset, replace) {
 
 "use strict";
 
+exports.__esModule = true;
+var TagStyle;
+(function (TagStyle) {
+    TagStyle["Success"] = "success";
+    TagStyle["Error"] = "error";
+})(TagStyle = exports.TagStyle || (exports.TagStyle = {}));
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 /*jshint esversion: 6 */
 exports.__esModule = true;
 function lastFMResponseVerifier(json) {
@@ -489,14 +488,14 @@ exports.lastFMResponseVerifier = lastFMResponseVerifier;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var turn_1 = __webpack_require__(6);
+var turn_1 = __webpack_require__(7);
 var Stack = /** @class */ (function () {
     function Stack(turns, canEnd, gameId, ended) {
         this.turns = turns || new Array();
@@ -520,14 +519,14 @@ exports["default"] = Stack;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var match_1 = __webpack_require__(7);
+var match_1 = __webpack_require__(8);
 var Turn = /** @class */ (function () {
     function Turn(userId, answer, distance, hasExactNameMatch, hasExactArtistMatch, userPhoto, match, createdAt) {
         this.userId = userId;
@@ -549,7 +548,7 @@ exports["default"] = Turn;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -571,7 +570,7 @@ exports["default"] = Match;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -582,27 +581,27 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-var _createStore = __webpack_require__(10);
+var _createStore = __webpack_require__(11);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = __webpack_require__(43);
+var _combineReducers = __webpack_require__(44);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = __webpack_require__(44);
+var _bindActionCreators = __webpack_require__(45);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = __webpack_require__(45);
+var _applyMiddleware = __webpack_require__(46);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-var _compose = __webpack_require__(15);
+var _compose = __webpack_require__(16);
 
 var _compose2 = _interopRequireDefault(_compose);
 
-var _warning = __webpack_require__(14);
+var _warning = __webpack_require__(15);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -623,10 +622,10 @@ exports.combineReducers = _combineReducers2.default;
 exports.bindActionCreators = _bindActionCreators2.default;
 exports.applyMiddleware = _applyMiddleware2.default;
 exports.compose = _compose2.default;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -819,7 +818,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -834,11 +833,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = createStore;
 
-var _isPlainObject = __webpack_require__(11);
+var _isPlainObject = __webpack_require__(12);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = __webpack_require__(40);
+var _symbolObservable = __webpack_require__(41);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -1091,7 +1090,7 @@ var ActionTypes = exports.ActionTypes = {
 }
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1101,15 +1100,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _baseGetTag = __webpack_require__(32);
+var _baseGetTag = __webpack_require__(33);
 
 var _baseGetTag2 = _interopRequireDefault(_baseGetTag);
 
-var _getPrototype = __webpack_require__(37);
+var _getPrototype = __webpack_require__(38);
 
 var _getPrototype2 = _interopRequireDefault(_getPrototype);
 
-var _isObjectLike = __webpack_require__(39);
+var _isObjectLike = __webpack_require__(40);
 
 var _isObjectLike2 = _interopRequireDefault(_isObjectLike);
 
@@ -1174,7 +1173,7 @@ function isPlainObject(value) {
 exports.default = isPlainObject;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1184,7 +1183,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _root = __webpack_require__(33);
+var _root = __webpack_require__(34);
 
 var _root2 = _interopRequireDefault(_root);
 
@@ -1196,7 +1195,7 @@ var _Symbol = _root2.default.Symbol;
 exports.default = _Symbol;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1226,7 +1225,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1259,7 +1258,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1303,20 +1302,6 @@ function compose() {
 }
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/*jshint esversion: 6 */
-exports.__esModule = true;
-var a = __webpack_require__(17);
-var store_1 = __webpack_require__(30);
-exports.store = store_1["default"];
-exports.actions = a;
-
-
-/***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1324,10 +1309,10 @@ exports.actions = a;
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var site_1 = __webpack_require__(18);
-exports.Site = site_1["default"];
-var admin_1 = __webpack_require__(28);
-exports.Admin = admin_1["default"];
+var a = __webpack_require__(18);
+var store_1 = __webpack_require__(31);
+exports.store = store_1["default"];
+exports.actions = a;
 
 
 /***/ }),
@@ -1336,12 +1321,26 @@ exports.Admin = admin_1["default"];
 
 "use strict";
 
+/*jshint esversion: 6 */
+exports.__esModule = true;
+var site_1 = __webpack_require__(19);
+exports.Site = site_1["default"];
+var admin_1 = __webpack_require__(29);
+exports.Admin = admin_1["default"];
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 exports.__esModule = true;
 var turn_processor_1 = __webpack_require__(2);
 var sanitizer_1 = __webpack_require__(0);
-var lastfm_response_verifier_1 = __webpack_require__(4);
-var site_1 = __webpack_require__(22);
-var types_1 = __webpack_require__(24);
+var lastfm_response_verifier_1 = __webpack_require__(5);
+var site_1 = __webpack_require__(23);
+var types_1 = __webpack_require__(25);
 function performSearch(_a) {
     var sanitizedAnswer = _a.sanitizedAnswer;
     var apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
@@ -1468,7 +1467,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8311,7 +8310,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8319,13 +8318,13 @@ exports["default"] = {
 
 var stemmer = __webpack_require__(3);
 
-exports = module.exports = __webpack_require__(21);
+exports = module.exports = __webpack_require__(22);
 
 exports.among = stemmer.among;
 exports.except = stemmer.except;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8475,7 +8474,7 @@ function short(word, r1) {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8533,7 +8532,7 @@ exports._selectGameInvitee = _selectGameInvitee;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8549,35 +8548,35 @@ exports.createActionSet = function (actionName) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var game_1 = __webpack_require__(25);
+var game_1 = __webpack_require__(26);
 exports.Game = game_1["default"];
-var player_1 = __webpack_require__(26);
+var player_1 = __webpack_require__(27);
 exports.Player = player_1["default"];
-var match_1 = __webpack_require__(7);
+var match_1 = __webpack_require__(8);
 exports.Match = match_1["default"];
-var turn_1 = __webpack_require__(6);
+var turn_1 = __webpack_require__(7);
 exports.Turn = turn_1["default"];
-var fb_friend_1 = __webpack_require__(27);
+var fb_friend_1 = __webpack_require__(28);
 exports.FBFriend = fb_friend_1["default"];
-var stack_1 = __webpack_require__(5);
+var stack_1 = __webpack_require__(6);
 exports.Stack = stack_1["default"];
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var stack_1 = __webpack_require__(5);
+var stack_1 = __webpack_require__(6);
 var Game = /** @class */ (function () {
     function Game(id, players, status, stacks) {
         this.id = id;
@@ -8634,7 +8633,7 @@ exports["default"] = Game;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8650,7 +8649,7 @@ exports["default"] = Player;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8672,7 +8671,7 @@ exports["default"] = FBFriend;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8680,8 +8679,9 @@ exports["default"] = FBFriend;
 exports.__esModule = true;
 var turn_processor_1 = __webpack_require__(2);
 var sanitizer_1 = __webpack_require__(0);
-var lastfm_response_verifier_1 = __webpack_require__(4);
-var admin_1 = __webpack_require__(29);
+var lastfm_response_verifier_1 = __webpack_require__(5);
+var admin_1 = __webpack_require__(30);
+var interfaces_1 = __webpack_require__(4);
 function performSearch(_a) {
     var sanitizedAnswer = _a.sanitizedAnswer;
     var apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
@@ -8698,39 +8698,56 @@ exports["default"] = {
         return function (dispatch) {
             dispatch(admin_1._debug({
                 key: "Received input: " + answer,
-                value: null,
                 options: { tags: [
-                        { tag: 'span', range: [0, "Received input:".length] },
-                        { tag: 'u', range: ['Received input: '.length, answer.length] }
+                        {
+                            tag: 'span',
+                            range: [0, "Received input:".length]
+                        },
+                        {
+                            tag: 'u',
+                            range: ['Received input: '.length, answer.length]
+                        }
                     ] }
             }));
             dispatch(admin_1._debug({
                 key: 'Sanitizing answer...',
-                value: null,
                 options: { tags: [
-                        { tag: 'i', range: [0, 'Sanitizing answer...'.length] }
+                        {
+                            tag: 'i',
+                            range: [0, -1]
+                        }
                     ] }
             }));
             var sanitizedAnswer = sanitizer_1.sanitize(answer);
             dispatch(admin_1._debug({
                 key: "Sanitized answer: " + sanitizedAnswer,
-                value: null,
                 options: { tags: [
-                        { tag: 'span', range: [0, 'Sanitized answer:'.length] }
+                        {
+                            tag: 'span',
+                            range: [0, 'Sanitized answer:'.length]
+                        },
+                        {
+                            tag: 'u',
+                            range: ['Sanitized answer: '.length, sanitizedAnswer.length]
+                        }
                     ] }
             }));
             dispatch(admin_1._debug({
                 key: 'Last.fm',
-                value: null,
                 options: { tags: [
-                        { tag: 'h3', range: [0, 'Last.fm'.length] }
+                        {
+                            tag: 'h3',
+                            range: [0, -1]
+                        }
                     ] }
             }));
             dispatch(admin_1._debug({
                 key: "Sending \"" + sanitizedAnswer + "\" to Last.fm",
-                value: null,
                 options: { tags: [
-                        { tag: 'span', range: [0, ("Sending \"" + sanitizedAnswer + "\" to Last.fm").length] }
+                        {
+                            tag: 'span',
+                            range: [0, ("Sending \"" + sanitizedAnswer + "\" to Last.fm").length]
+                        }
                     ] }
             }));
             performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
@@ -8738,9 +8755,12 @@ exports["default"] = {
                 if (tracks.length === 0) {
                     dispatch(admin_1._debug({
                         key: '0 results from Last.fm',
-                        value: null,
                         options: { tags: [
-                                { tag: 'span', style: 'error', range: [0, '0 results from Last.fm'.length] }
+                                {
+                                    tag: 'span',
+                                    style: interfaces_1.TagStyle.Error,
+                                    range: [0, -1]
+                                }
                             ] }
                     }));
                     return;
@@ -8751,37 +8771,58 @@ exports["default"] = {
                 });
                 dispatch(admin_1._debug({
                     key: 'Response:',
-                    value: trackList,
                     options: { tags: [
-                            { tag: 'span', style: 'success', range: [0, 'Response:'.length] }
+                            {
+                                tag: 'span',
+                                range: [0, -1],
+                                style: interfaces_1.TagStyle.Success
+                            }
                         ] }
                 }));
+                trackList.forEach(function (track) {
+                    dispatch(admin_1._debug({
+                        key: track,
+                        options: { indent: 3 }
+                    }));
+                });
                 dispatch(admin_1._debug({
                     key: 'Validation',
-                    value: null,
                     options: { tags: [
-                            { tag: 'h3', range: [0, 'Validation'.length] }
+                            {
+                                tag: 'h3',
+                                range: [0, -1]
+                            }
                         ] }
                 }));
-                var match = turn_processor_1.findMatch(answer, tracks, function (arg) {
-                    dispatch(admin_1._debug({ key: arg.key, value: arg.value, options: arg.options }));
+                var match = turn_processor_1.findMatch(answer, tracks, function (retVal) {
+                    dispatch(admin_1._debug(retVal));
                 });
                 if (!match) {
                     dispatch(admin_1._debug({
                         key: 'User input didn\'t match any results from Last.fm',
-                        value: null,
                         options: { tags: [
-                                { tag: 'span', style: 'error', range: [0, 'User input didn`t match any results from Last.fm'.length] }
+                                {
+                                    tag: 'span',
+                                    style: interfaces_1.TagStyle.Error,
+                                    range: [0, -1]
+                                }
                             ] }
                     }));
                     return;
                 }
                 dispatch(admin_1._debug({
                     key: 'Match found:',
-                    value: [match.artist + " - " + match.name],
                     options: { tags: [
-                            { tag: 'span', style: 'success', range: [0, 'Match found:'.length] }
+                            {
+                                tag: 'span',
+                                style: interfaces_1.TagStyle.Success,
+                                range: [0, -1]
+                            }
                         ] }
+                }));
+                dispatch(admin_1._debug({
+                    key: match.artist + " - " + match.name,
+                    options: { indent: 2 }
                 }));
             });
         };
@@ -8790,7 +8831,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8812,21 +8853,21 @@ exports._reset = _reset;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var redux_thunk_1 = __webpack_require__(31);
-var redux_1 = __webpack_require__(8);
-var index_1 = __webpack_require__(46);
+var redux_thunk_1 = __webpack_require__(32);
+var redux_1 = __webpack_require__(9);
+var index_1 = __webpack_require__(47);
 exports["default"] = redux_1.createStore(index_1["default"], redux_1.applyMiddleware(redux_thunk_1["default"]));
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8855,7 +8896,7 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8865,15 +8906,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(12);
+var _Symbol2 = __webpack_require__(13);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
-var _getRawTag = __webpack_require__(35);
+var _getRawTag = __webpack_require__(36);
 
 var _getRawTag2 = _interopRequireDefault(_getRawTag);
 
-var _objectToString = __webpack_require__(36);
+var _objectToString = __webpack_require__(37);
 
 var _objectToString2 = _interopRequireDefault(_objectToString);
 
@@ -8903,7 +8944,7 @@ function baseGetTag(value) {
 exports.default = baseGetTag;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8915,7 +8956,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _freeGlobal = __webpack_require__(34);
+var _freeGlobal = __webpack_require__(35);
 
 var _freeGlobal2 = _interopRequireDefault(_freeGlobal);
 
@@ -8930,7 +8971,7 @@ var root = _freeGlobal2.default || freeSelf || Function('return this')();
 exports.default = root;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8946,10 +8987,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
 
 exports.default = freeGlobal;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8959,7 +9000,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(12);
+var _Symbol2 = __webpack_require__(13);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
@@ -9011,7 +9052,7 @@ function getRawTag(value) {
 exports.default = getRawTag;
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9044,7 +9085,7 @@ function objectToString(value) {
 exports.default = objectToString;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9054,7 +9095,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _overArg = __webpack_require__(38);
+var _overArg = __webpack_require__(39);
 
 var _overArg2 = _interopRequireDefault(_overArg);
 
@@ -9066,7 +9107,7 @@ var getPrototype = (0, _overArg2.default)(Object.getPrototypeOf, Object);
 exports.default = getPrototype;
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9092,7 +9133,7 @@ function overArg(func, transform) {
 exports.default = overArg;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9135,7 +9176,7 @@ function isObjectLike(value) {
 exports.default = isObjectLike;
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9145,7 +9186,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(42);
+var _ponyfill = __webpack_require__(43);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -9168,10 +9209,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2.default)(root);
 exports.default = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(41)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(42)(module)))
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9201,7 +9242,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9230,7 +9271,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9241,13 +9282,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = combineReducers;
 
-var _createStore = __webpack_require__(10);
+var _createStore = __webpack_require__(11);
 
-var _isPlainObject = __webpack_require__(11);
+var _isPlainObject = __webpack_require__(12);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _warning = __webpack_require__(14);
+var _warning = __webpack_require__(15);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -9379,10 +9420,10 @@ function combineReducers(reducers) {
     return hasChanged ? nextState : state;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9444,7 +9485,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9455,7 +9496,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = applyMiddleware;
 
-var _compose = __webpack_require__(15);
+var _compose = __webpack_require__(16);
 
 var _compose2 = _interopRequireDefault(_compose);
 
@@ -9517,17 +9558,17 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 exports.__esModule = true;
-var redux_1 = __webpack_require__(8);
-var lastfm_1 = __webpack_require__(47);
-var main_1 = __webpack_require__(48);
-var admin_1 = __webpack_require__(49);
+var redux_1 = __webpack_require__(9);
+var lastfm_1 = __webpack_require__(48);
+var main_1 = __webpack_require__(49);
+var admin_1 = __webpack_require__(50);
 exports["default"] = redux_1.combineReducers({
     lastFM: lastfm_1["default"],
     main: main_1["default"],
@@ -9536,7 +9577,7 @@ exports["default"] = redux_1.combineReducers({
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9558,7 +9599,7 @@ exports["default"] = default_1;
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9596,7 +9637,7 @@ exports["default"] = default_1;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
