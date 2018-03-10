@@ -1381,6 +1381,22 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
     });
 }
 exports["default"] = {
+    login: function (token) {
+        return function (dispatch) {
+            var headers = new Headers({
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            });
+            var data = { token: token };
+            fetch('http://localhost:3000/api/v1/auth/create', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(data)
+            }).then(function (json) {
+                console.log('logged in', json);
+            });
+        };
+    },
     selectGameInvitee: function (friend) {
         return function (dispatch) {
             return dispatch(site_1._selectGameInvitee(friend));

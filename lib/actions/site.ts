@@ -25,6 +25,7 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json'
   })
+
   const data = {
     answer: answer,
     match: match,
@@ -50,6 +51,24 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
 }
 
 export default {
+  login: (token: string) => {
+    return dispatch => {
+      const headers = new Headers({
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      })
+
+      const data = {token}
+      fetch('http://localhost:3000/api/v1/auth/create', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+      }).then(json => {
+        console.log('logged in', json)
+      })
+    }
+  },
+
   selectGameInvitee: (friend: FBFriend) => {
     return dispatch => {
       return dispatch(_selectGameInvitee(friend))
