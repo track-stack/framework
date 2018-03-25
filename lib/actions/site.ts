@@ -8,8 +8,9 @@ import {
   _answerSubmissionFailed ,
   _fetchFriends,
   _performSearch,
-  _fetchedGame, 
+  _fetchedGame,
   _selectGameInvitee,
+  _loginSuccess,
 } from '../selectors/site'
 
 import { Game, FBFriend, Stack } from '../types'
@@ -51,20 +52,23 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
 }
 
 export default {
-  login: (token: string) => {
+  login: (token: string, expires: number, callback: (json: any) => void) => {
     return dispatch => {
       const headers = new Headers({
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/json'
       })
 
-      const data = {token}
+      const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97"
+      const data = {token, expires, app_id}
       fetch('http://localhost:3000/api/v1/auth/create', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
+      }).then(response => {
+        return response.json()
       }).then(json => {
-        console.log('logged in', json)
+        callback(json)
       })
     }
   },

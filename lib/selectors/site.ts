@@ -3,7 +3,8 @@ import {
   FETCH_FRIENDS,
   LAST_FM_SEARCH,
   FETCH_GAME,
-  INVITEE
+  INVITEE,
+  LOGIN
 } from '../constants'
 
 import { Game, FBFriend } from '../types'
@@ -38,7 +39,7 @@ interface SelectGameInviteeSelector {
 }
 
 export function _answerSubmissionStarted(): AnswerSubmissionStartSelector  {
-  return { 
+  return {
     type: ANSWER_SUBMISSION.PENDING
   }
 }
@@ -60,7 +61,7 @@ export function _answerSubmissionFailed(error): AnswerSubmissionFailedSelector {
 export function _fetchFriends(friends: [FBFriend]) {
   return {
     type: FETCH_FRIENDS.SUCCESS,
-    data: friends 
+    data: friends
   }
 }
 
@@ -82,5 +83,23 @@ export function _selectGameInvitee(friend: FBFriend): SelectGameInviteeSelector 
   return {
     type: INVITEE.SUCCESS,
     data: friend
+  }
+}
+
+interface LoginSuccess {
+  type: string
+  data: {
+    user: any,
+    accessToken: any
+  }
+}
+
+export function _loginSuccess(json: any): LoginSuccess {
+  return {
+    type: LOGIN.SUCCESS,
+    data: {
+      user: json.user,
+      accessToken: json.accessToken
+    }
   }
 }

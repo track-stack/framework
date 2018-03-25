@@ -106,6 +106,7 @@ exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
 exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
 exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
 exports.FETCH_GAME = action_helper_1.createActionSet('FETCH_GAME');
+exports.LOGIN = action_helper_1.createActionSet('LOGIN');
 exports.INVITEE = action_helper_1.createActionSet('INVITEE');
 
 
@@ -1381,19 +1382,22 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
     });
 }
 exports["default"] = {
-    login: function (token) {
+    login: function (token, expires, callback) {
         return function (dispatch) {
             var headers = new Headers({
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json'
             });
-            var data = { token: token };
+            var app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97";
+            var data = { token: token, expires: expires, app_id: app_id };
             fetch('http://localhost:3000/api/v1/auth/create', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(data)
+            }).then(function (response) {
+                return response.json();
             }).then(function (json) {
-                console.log('logged in', json);
+                callback(json);
             });
         };
     },
@@ -8553,6 +8557,16 @@ function _selectGameInvitee(friend) {
     };
 }
 exports._selectGameInvitee = _selectGameInvitee;
+function _loginSuccess(json) {
+    return {
+        type: constants_1.LOGIN.SUCCESS,
+        data: {
+            user: json.user,
+            accessToken: json.accessToken
+        }
+    };
+}
+exports._loginSuccess = _loginSuccess;
 
 
 /***/ }),
