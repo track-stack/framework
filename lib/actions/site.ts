@@ -11,6 +11,7 @@ import {
   _fetchedGame,
   _selectGameInvitee,
   _loginSuccess,
+  _setAccessToken
 } from '../selectors/site'
 
 import { Game, FBFriend, Stack } from '../types'
@@ -52,7 +53,13 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
 }
 
 export default {
-  login: (token: string, expires: number, callback: (json: any) => void) => {
+  setAccessToken: (token: string) => {
+    return dispatch => {
+      dispatch(_setAccessToken(token))
+    }
+  },
+
+  login: (token: string, expires: number, local: boolean, callback: (json: any) => void) => {
     return dispatch => {
       const headers = new Headers({
         'X-Requested-With': 'XMLHttpRequest',
@@ -65,10 +72,11 @@ export default {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
-      }).then(response => {
-        return response.json()
-      }).then(json => {
-        callback(json)
+      })
+      .then(response => response.json)
+      .then(json => {
+      })
+      .catch(error => {
       })
     }
   },
@@ -97,8 +105,7 @@ export default {
       fetch('/friends', { credentials: 'same-origin' })
         .then(response => response.json())
         .then(json => {
-          const friends: [FBFriend] = json.friends.map(friend => {
-            return FBFriend.from(friend) })
+          const friends: [FBFriend] = json.friends.map(friend => FBFriend.from(friend))
           dispatch(_fetchFriends(friends))
         })
     }
@@ -137,7 +144,6 @@ export default {
         const previousTurn = stack.firstTurn()
         const hasOverlapWithPreviousTurn = matchHasIntersection(match, previousTurn.match)
 
-
         // Bail early if there's no overlap with previous turn
         if (!hasOverlapWithPreviousTurn) {
           dispatch(_answerSubmissionFailed("No similarity to the previous track."))
@@ -149,7 +155,6 @@ export default {
           dispatch(_answerSubmissionFailed("Can't play the same artist twice in a row."))
           return
         }
-
 
         const trackPlayedAlready = stack.turns.filter((turn) => {
           return turn.match.artist == match.artist && turn.match.name == match.name
@@ -164,11 +169,6 @@ export default {
         if (stack.canEnd) {
           const firstTurn = stack.lastTurn()
           const hasOverlapWithFirstTurn = matchHasIntersection(match, firstTurn.match)
-
-          console.log('first', stack.lastTurn())
-          console.log('last', stack.firstTurn())
-          console.log('match', match)
-          console.log('overlap', hasOverlapWithFirstTurn)
 
           // winner
           if (hasOverlapWithFirstTurn) {

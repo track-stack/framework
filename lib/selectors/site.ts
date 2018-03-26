@@ -4,7 +4,8 @@ import {
   LAST_FM_SEARCH,
   FETCH_GAME,
   INVITEE,
-  LOGIN
+  LOGIN,
+  ACCESS_TOKEN
 } from '../constants'
 
 import { Game, FBFriend } from '../types'
@@ -101,5 +102,16 @@ export function _loginSuccess(json: any): LoginSuccess {
       user: json.user,
       accessToken: json.accessToken
     }
+  }
+}
+
+interface SetAccessToken {
+  type: string
+  data: string
+}
+export function _setAccessToken(token: string): SetAccessToken {
+  return {
+    type: ACCESS_TOKEN.SET,
+    data: token
   }
 }

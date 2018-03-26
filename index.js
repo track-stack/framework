@@ -70,16 +70,16 @@
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var BLACKLIST = "and|the|by|ft|remix|feat";
-var FILTERS = [
-    function (input) { return input.toLowerCase(); },
-    function (input) { return input.replace(/\(feat.*\)/, ''); },
-    function (input) { return input.replace(/[,.+\(\)\[\]\-_—]/g, ' '); },
-    function (input) { return input.replace(/[$!]/g, 's'); },
-    function (input) { return input.replace(new RegExp("\\b(" + BLACKLIST + ")\\b", 'g'), ''); },
-    function (input) { return input.replace(/['&@]/g, ''); },
-    function (input) { return input.replace(/\s+/g, ' '); }
+Object.defineProperty(exports, "__esModule", { value: true });
+const BLACKLIST = "and|the|by|ft|remix|feat";
+const FILTERS = [
+    (input) => input.toLowerCase(),
+    (input) => input.replace(/\(feat.*\)/, ''),
+    (input) => input.replace(/[,.+\(\)\[\]\-_—]/g, ' '),
+    (input) => input.replace(/[$!]/g, 's'),
+    (input) => input.replace(new RegExp(`\\b(${BLACKLIST})\\b`, 'g'), ''),
+    (input) => input.replace(/['&@]/g, ''),
+    (input) => input.replace(/\s+/g, ' ')
 ];
 // Public: Puts the input string through a series of regex filters
 //
@@ -87,7 +87,7 @@ var FILTERS = [
 //
 // Returns a string
 function sanitize(input) {
-    FILTERS.forEach(function (filter) { return input = filter(input); });
+    FILTERS.forEach(filter => input = filter(input));
     return input.trim();
 }
 exports.sanitize = sanitize;
@@ -100,14 +100,15 @@ exports.sanitize = sanitize;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var action_helper_1 = __webpack_require__(24);
+Object.defineProperty(exports, "__esModule", { value: true });
+const action_helper_1 = __webpack_require__(24);
 exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
 exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
 exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
 exports.FETCH_GAME = action_helper_1.createActionSet('FETCH_GAME');
 exports.LOGIN = action_helper_1.createActionSet('LOGIN');
 exports.INVITEE = action_helper_1.createActionSet('INVITEE');
+exports.ACCESS_TOKEN = { SET: 'ACCESS_TOKEN_SET' };
 
 
 /***/ }),
@@ -117,16 +118,16 @@ exports.INVITEE = action_helper_1.createActionSet('INVITEE');
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /* turn-processor.ts
  *
  * A suite of functions designed to process user-generated input
  * at various stages of the turn validation process
 */
-var sanitizer_1 = __webpack_require__(0);
-var word_components_1 = __webpack_require__(20);
-var stem = __webpack_require__(21);
-var interfaces_1 = __webpack_require__(4);
+const sanitizer_1 = __webpack_require__(0);
+const word_components_1 = __webpack_require__(20);
+const stem = __webpack_require__(21);
+const interfaces_1 = __webpack_require__(4);
 // Public: Given user-generated input and an array of
 // tracks (json) from Last.fm, returns the track that
 // approximately matches the user-generated input.
@@ -136,20 +137,20 @@ var interfaces_1 = __webpack_require__(4);
 // debugCallback?: DebugValue - An optional debug callback function
 // Returns any
 function findMatch(userInput, tracks, debugCallback) {
-    var match = null;
-    var limit = Math.min(tracks.length, 10);
-    for (var i = 0; i < limit; i++) {
-        var _a = tracks[i], artist = _a.artist, name_1 = _a.name;
+    let match = null;
+    const limit = Math.min(tracks.length, 10);
+    for (let i = 0; i < limit; i++) {
+        const { artist, name } = tracks[i];
         if (debugCallback) {
             debugCallback({
-                key: "Validating against " + artist + " - " + name_1,
+                key: `Validating against ${artist} - ${name}`,
                 options: { tags: [
                         { tag: 'span', range: [0, 'Validating against'.length] },
-                        { tag: 'u', range: ['Validating against '.length, (artist + " - " + name_1).length] }
+                        { tag: 'u', range: ['Validating against '.length, `${artist} - ${name}`.length] }
                     ] }
             });
         }
-        if (validate(userInput, { artist: artist, name: name_1 }, debugCallback)) {
+        if (validate(userInput, { artist, name }, debugCallback)) {
             return tracks[i];
         }
     }
@@ -171,9 +172,9 @@ function validate(answer, track, debugCallback) {
                 ] }
         });
     }
-    var sAnswer = sanitizer_1.sanitize(answer);
-    var sArtist = sanitizer_1.sanitize(track.artist);
-    var sName = sanitizer_1.sanitize(track.name);
+    const sAnswer = sanitizer_1.sanitize(answer);
+    const sArtist = sanitizer_1.sanitize(track.artist);
+    const sName = sanitizer_1.sanitize(track.name);
     if (debugCallback) {
         debugCallback({
             key: 'Sanitizing values...',
@@ -181,30 +182,30 @@ function validate(answer, track, debugCallback) {
                     { tag: 'span', range: [0, 'Sanitizing values...'.length] }
                 ] }
         });
-        var hash = { 'Input:': sAnswer, 'Artist:': sArtist, 'Track': sName };
-        for (var key in hash) {
-            var val = hash[key];
-            var tags = [{ tag: 'b', range: [0, key.length] }];
+        const hash = { 'Input:': sAnswer, 'Artist:': sArtist, 'Track': sName };
+        for (let key in hash) {
+            const val = hash[key];
+            let tags = [{ tag: 'b', range: [0, key.length] }];
             if (val === sAnswer) {
                 tags.push({ tag: 'span', range: ['input: '.length, sAnswer.length], style: interfaces_1.TagStyle.Input });
             }
             debugCallback({
-                key: key + " " + val,
+                key: `${key} ${val}`,
                 options: { indent: 2, tags: tags }
             });
         }
     }
-    var Patterns = {
+    const Patterns = {
         name: new RegExp(sName, 'g'),
         artist: new RegExp(sArtist, 'g')
     };
-    var nameMatch = sAnswer.match(Patterns.name);
-    var artistMatch = sAnswer.match(Patterns.artist);
+    let nameMatch = sAnswer.match(Patterns.name);
+    let artistMatch = sAnswer.match(Patterns.artist);
     if (debugCallback) {
-        var matchClass = nameMatch ? interfaces_1.TagStyle.Success : interfaces_1.TagStyle.Error;
-        var matchText = nameMatch ? "yes" : "no";
+        let matchClass = nameMatch ? interfaces_1.TagStyle.Success : interfaces_1.TagStyle.Error;
+        let matchText = nameMatch ? "yes" : "no";
         debugCallback({
-            key: "Do the track names match? " + matchText,
+            key: `Do the track names match? ${matchText}`,
             options: { indent: 1, tags: [
                     { tag: 'span', range: [0, 'Do the track names match?'.length] },
                     { tag: 'span', range: ['Do the track names match? '.length, matchText.length], style: matchClass }
@@ -213,7 +214,7 @@ function validate(answer, track, debugCallback) {
         matchClass = artistMatch ? interfaces_1.TagStyle.Success : interfaces_1.TagStyle.Error;
         matchText = artistMatch ? "yes" : "no";
         debugCallback({
-            key: "Do the artist names match? " + matchText,
+            key: `Do the artist names match? ${matchText}`,
             options: { indent: 1, tags: [
                     { tag: 'span', range: [0, 'Do the artist names match?'.length] },
                     { tag: 'span', range: ['Do the artist names match? '.length, matchText.length], style: matchClass }
@@ -228,17 +229,17 @@ function validate(answer, track, debugCallback) {
     if (nameMatch && !artistMatch) {
         if (debugCallback) {
             debugCallback({
-                key: "Fuzzy match...",
+                key: `Fuzzy match...`,
                 options: { indent: 1, tags: [
                         { tag: 'h4', range: [0, 'Fuzz match...'.length] }
                     ] }
             });
         }
-        var nameMatchReg = new RegExp(sName, "gi");
-        var answerWithoutName = sAnswer.replace(nameMatchReg, "").trim();
-        var hasIntersection = stringHasIntersection(sArtist, answerWithoutName, debugCallback);
-        var klass = hasIntersection ? "success" : "error";
-        var text = hasIntersection ? "yes" : "no";
+        const nameMatchReg = new RegExp(sName, "gi");
+        const answerWithoutName = sAnswer.replace(nameMatchReg, "").trim();
+        const hasIntersection = stringHasIntersection(sArtist, answerWithoutName, debugCallback);
+        const klass = hasIntersection ? "success" : "error";
+        const text = hasIntersection ? "yes" : "no";
         if (hasIntersection) {
             return true;
         }
@@ -265,17 +266,17 @@ exports.stringHasIntersection = stringHasIntersection;
 //
 // Returns a string
 function stringThroughComponentTransform(str) {
-    return str.split(' ').reduce(function (acc, word) {
-        var lower = word.toLowerCase();
-        var components = word_components_1["default"][lower];
-        var words = components ? components : [word];
+    return str.split(' ').reduce((acc, word) => {
+        const lower = word.toLowerCase();
+        const components = word_components_1.default[lower];
+        const words = components ? components : [word];
         return acc.concat(words);
     }, []).join(' ');
 }
 function splitDigits(str) {
-    return str.split(' ').reduce(function (acc, word) {
+    return str.split(' ').reduce((acc, word) => {
         if (/^\d+$/.test(word)) {
-            var split = word.split('');
+            const split = word.split('');
             return acc.concat(split);
         }
         return acc.concat([word]);
@@ -288,10 +289,10 @@ function splitDigits(str) {
 //
 // Returns a string[]
 function stemmedComponents(str, debugCallback) {
-    var transformed = stringThroughComponentTransform(str);
+    const transformed = stringThroughComponentTransform(str);
     if (debugCallback) {
         debugCallback({
-            key: "\uD83D\uDC49 " + transformed,
+            key: `👉 ${transformed}`,
             options: { indent: 3 }
         });
     }
@@ -303,10 +304,10 @@ function stemmedComponents(str, debugCallback) {
                 ] }
         });
     }
-    var sanitized = sanitizer_1.sanitize(transformed);
+    const sanitized = sanitizer_1.sanitize(transformed);
     if (debugCallback) {
         debugCallback({
-            key: "\uD83D\uDC49 " + sanitized,
+            key: `👉 ${sanitized}`,
             options: { indent: 3 }
         });
     }
@@ -318,10 +319,10 @@ function stemmedComponents(str, debugCallback) {
                 ] }
         });
     }
-    var result = splitDigits(sanitized);
+    const result = splitDigits(sanitized);
     if (debugCallback) {
         debugCallback({
-            key: "\uD83D\uDC49 " + result,
+            key: `👉 ${result}`,
             options: { indent: 3 }
         });
     }
@@ -333,10 +334,10 @@ function stemmedComponents(str, debugCallback) {
                 ] }
         });
     }
-    var stemmed = result.split(' ').map(function (word) { return stem(word); });
+    const stemmed = result.split(' ').map(word => stem(word));
     if (debugCallback) {
         debugCallback({
-            key: "\uD83D\uDC49 " + stemmed,
+            key: `👉 ${stemmed}`,
             options: { indent: 3 }
         });
     }
@@ -345,18 +346,18 @@ function stemmedComponents(str, debugCallback) {
 function matchHasIntersection(left, right, debugCallback) {
     if (debugCallback) {
         debugCallback({
-            key: "<b>input:</b> " + [left.name, left.artist].join(' '),
+            key: `<b>input:</b> ${[left.name, left.artist].join(' ')}`,
             options: { indent: 2 }
         });
         debugCallback({
-            key: "<i>Running custom component transform...</i>",
+            key: `<i>Running custom component transform...</i>`,
             options: { indent: 3 }
         });
     }
-    var aComponents = stemmedComponents([left.name, left.artist].join(' '), debugCallback);
+    const aComponents = stemmedComponents([left.name, left.artist].join(' '), debugCallback);
     if (debugCallback) {
         debugCallback({
-            key: "input: " + [right.name, right.artist].join(' '),
+            key: `input: ${[right.name, right.artist].join(' ')}`,
             options: { indent: 2, tags: [
                     { tag: 'b', range: [0, 'input:'.length] }
                 ] }
@@ -368,25 +369,25 @@ function matchHasIntersection(left, right, debugCallback) {
                 ] }
         });
     }
-    var bComponents = stemmedComponents([right.name, right.artist].join(' '), debugCallback);
-    var long = aComponents.length > bComponents.length ? aComponents : bComponents;
-    var short = long == aComponents ? bComponents : aComponents;
-    var results = long.filter(function (word) {
+    const bComponents = stemmedComponents([right.name, right.artist].join(' '), debugCallback);
+    const long = aComponents.length > bComponents.length ? aComponents : bComponents;
+    const short = long == aComponents ? bComponents : aComponents;
+    const results = long.filter(word => {
         return short.indexOf(word) !== -1;
     });
     if (debugCallback) {
-        var lHTMLString = long.map(function (word) {
-            var match = results.indexOf(word) !== -1;
-            var klass = match ? 'success' : '';
-            return "<span class=" + klass + ">" + word + "</span>";
+        const lHTMLString = long.map(word => {
+            const match = results.indexOf(word) !== -1;
+            const klass = match ? 'success' : '';
+            return `<span class=${klass}>${word}</span>`;
         }).join(' ');
-        var sHTMLString = short.map(function (word) {
-            var match = results.indexOf(word) !== -1;
-            var klass = match ? 'success' : '';
-            return "<span class=" + klass + ">" + word + "</span>";
+        const sHTMLString = short.map(word => {
+            const match = results.indexOf(word) !== -1;
+            const klass = match ? 'success' : '';
+            return `<span class=${klass}>${word}</span>`;
         }).join(' ');
         debugCallback({
-            key: lHTMLString + " <> " + sHTMLString,
+            key: `${lHTMLString} <> ${sHTMLString}`,
             options: { indent: 2 }
         });
     }
@@ -462,7 +463,7 @@ stemmer.among = function among(word, offset, replace) {
 
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var TagStyle;
 (function (TagStyle) {
     TagStyle["Success"] = "success";
@@ -479,15 +480,15 @@ var TagStyle;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function lastFMResponseVerifier(json) {
     // Bail early if the response lacks the required json structure
-    var foundTracks = json && json.results && json.results.trackmatches;
+    const foundTracks = json && json.results && json.results.trackmatches;
     if (!foundTracks) {
         return [];
     }
     // Bail early if the results are empty
-    var tracks = json.results.trackmatches.track;
+    const tracks = json.results.trackmatches.track;
     if (tracks.length == 0) {
         return [];
     }
@@ -503,28 +504,27 @@ exports.lastFMResponseVerifier = lastFMResponseVerifier;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var turn_1 = __webpack_require__(7);
-var Stack = /** @class */ (function () {
-    function Stack(turns, canEnd, gameId, ended) {
+Object.defineProperty(exports, "__esModule", { value: true });
+const turn_1 = __webpack_require__(7);
+class Stack {
+    constructor(turns, canEnd, gameId, ended) {
         this.turns = turns || new Array();
         this.canEnd = canEnd;
         this.gameId = gameId;
         this.ended = ended;
     }
-    Stack.prototype.lastTurn = function () {
+    lastTurn() {
         return this.turns[this.turns.length - 1];
-    };
-    Stack.prototype.firstTurn = function () {
+    }
+    firstTurn() {
         return this.turns[0];
-    };
-    Stack.from = function (json) {
-        var turns = json.turns.map(function (turn) { return turn_1["default"].from(turn); });
+    }
+    static from(json) {
+        const turns = json.turns.map(turn => turn_1.default.from(turn));
         return new Stack(turns, json.can_end, json.game_id, json.ended);
-    };
-    return Stack;
-}());
-exports["default"] = Stack;
+    }
+}
+exports.default = Stack;
 
 
 /***/ }),
@@ -534,10 +534,10 @@ exports["default"] = Stack;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var match_1 = __webpack_require__(8);
-var Turn = /** @class */ (function () {
-    function Turn(userId, answer, distance, hasExactNameMatch, hasExactArtistMatch, userPhoto, match, createdAt) {
+Object.defineProperty(exports, "__esModule", { value: true });
+const match_1 = __webpack_require__(8);
+class Turn {
+    constructor(userId, answer, distance, hasExactNameMatch, hasExactArtistMatch, userPhoto, match, createdAt) {
         this.userId = userId;
         this.answer = answer;
         this.distance = distance;
@@ -547,13 +547,12 @@ var Turn = /** @class */ (function () {
         this.match = match;
         this.createdAt = new Date(createdAt);
     }
-    Turn.from = function (json) {
-        var match = match_1["default"].from(json.match);
+    static from(json) {
+        const match = match_1.default.from(json.match);
         return new Turn(json.user_id, json.answer, json.distance, json.has_exact_name_match, json.has_exact_artist_match, json.user_photo, match, json.created_at);
-    };
-    return Turn;
-}());
-exports["default"] = Turn;
+    }
+}
+exports.default = Turn;
 
 
 /***/ }),
@@ -563,19 +562,18 @@ exports["default"] = Turn;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var Match = /** @class */ (function () {
-    function Match(name, artist, image) {
+Object.defineProperty(exports, "__esModule", { value: true });
+class Match {
+    constructor(name, artist, image) {
         this.name = name;
         this.artist = artist;
         this.image = image;
     }
-    Match.from = function (json) {
+    static from(json) {
         return new Match(json.name, json.artist, json.image);
-    };
-    return Match;
-}());
-exports["default"] = Match;
+    }
+}
+exports.default = Match;
 
 
 /***/ }),
@@ -1317,10 +1315,10 @@ function compose() {
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var a = __webpack_require__(18);
-var store_1 = __webpack_require__(31);
-exports.store = store_1["default"];
+Object.defineProperty(exports, "__esModule", { value: true });
+const a = __webpack_require__(18);
+const store_1 = __webpack_require__(31);
+exports.store = store_1.default;
 exports.actions = a;
 
 
@@ -1331,11 +1329,11 @@ exports.actions = a;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var site_1 = __webpack_require__(19);
-exports.Site = site_1["default"];
+exports.Site = site_1.default;
 var admin_1 = __webpack_require__(29);
-exports.Admin = admin_1["default"];
+exports.Admin = admin_1.default;
 
 
 /***/ }),
@@ -1344,117 +1342,121 @@ exports.Admin = admin_1["default"];
 
 "use strict";
 
-exports.__esModule = true;
-var turn_processor_1 = __webpack_require__(2);
-var sanitizer_1 = __webpack_require__(0);
-var lastfm_response_verifier_1 = __webpack_require__(5);
-var site_1 = __webpack_require__(23);
-var types_1 = __webpack_require__(25);
-function performSearch(_a) {
-    var sanitizedAnswer = _a.sanitizedAnswer;
-    var apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
-    return fetch("http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + sanitizedAnswer + "&api_key=" + apiKey + "&format=json")
-        .then(function (response) { return response.json(); });
+Object.defineProperty(exports, "__esModule", { value: true });
+const turn_processor_1 = __webpack_require__(2);
+const sanitizer_1 = __webpack_require__(0);
+const lastfm_response_verifier_1 = __webpack_require__(5);
+const site_1 = __webpack_require__(23);
+const types_1 = __webpack_require__(25);
+function performSearch({ sanitizedAnswer }) {
+    const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
+    return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
+        .then(response => response.json());
 }
 function submitToServer(dispatch, gameId, answer, match, gameOver) {
-    var headers = new Headers({
+    const headers = new Headers({
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/json'
     });
-    var data = {
+    const data = {
         answer: answer,
         match: match,
         game_over: gameOver
     };
-    fetch("/games/" + gameId + "/turn", {
+    fetch(`/games/${gameId}/turn`, {
         method: 'POST',
         credentials: 'same-origin',
         headers: headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
     })
-        .then(function (response) { return response.json(); })
-        .then(function (json) {
-        var game = types_1.Game.from(json.game);
+        .then(response => response.json())
+        .then(json => {
+        const game = types_1.Game.from(json.game);
         console.log('GOT THE GAME', game);
         dispatch(site_1._answerSubmitted(game));
-    })["catch"](function (error) {
+    })
+        .catch(error => {
         dispatch(site_1._answerSubmissionFailed(error));
     });
 }
-exports["default"] = {
-    login: function (token, expires, callback) {
-        return function (dispatch) {
-            var headers = new Headers({
+exports.default = {
+    setAccessToken: (token) => {
+        return dispatch => {
+            dispatch(site_1._setAccessToken(token));
+        };
+    },
+    login: (token, expires, local, callback) => {
+        return dispatch => {
+            const headers = new Headers({
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json'
             });
-            var app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97";
-            var data = { token: token, expires: expires, app_id: app_id };
+            const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97";
+            const data = { token, expires, app_id };
             fetch('http://localhost:3000/api/v1/auth/create', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(data)
-            }).then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                callback(json);
+            })
+                .then(response => response.json)
+                .then(json => {
+            })
+                .catch(error => {
             });
         };
     },
-    selectGameInvitee: function (friend) {
-        return function (dispatch) {
+    selectGameInvitee: (friend) => {
+        return dispatch => {
             return dispatch(site_1._selectGameInvitee(friend));
         };
     },
-    fetchGame: function (gameId) {
-        var headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
-        return function (dispatch) {
-            fetch("/games/" + gameId, {
+    fetchGame: (gameId) => {
+        const headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
+        return dispatch => {
+            fetch(`/games/${gameId}`, {
                 credentials: 'same-origin',
                 headers: headers
-            }).then(function (response) { return response.json(); }).then(function (json) {
-                var game = types_1.Game.from(json.game);
+            }).then(response => response.json()).then(json => {
+                const game = types_1.Game.from(json.game);
                 return dispatch(site_1._fetchedGame(game));
             });
         };
     },
-    fetchFriends: function () {
-        return function (dispatch) {
+    fetchFriends: () => {
+        return dispatch => {
             fetch('/friends', { credentials: 'same-origin' })
-                .then(function (response) { return response.json(); })
-                .then(function (json) {
-                var friends = json.friends.map(function (friend) {
-                    return types_1.FBFriend.from(friend);
-                });
+                .then(response => response.json())
+                .then(json => {
+                const friends = json.friends.map(friend => types_1.FBFriend.from(friend));
                 dispatch(site_1._fetchFriends(friends));
             });
         };
     },
-    submitAnswer: function (answer, stack) {
-        return function (dispatch) {
+    submitAnswer: (answer, stack) => {
+        return dispatch => {
             dispatch(site_1._answerSubmissionStarted());
             // TODO: full sanitization before searching may be too agressive
             // Removing "by" and "-" may be enough
-            var sanitizedAnswer = sanitizer_1.sanitize(answer);
-            performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
+            const sanitizedAnswer = sanitizer_1.sanitize(answer);
+            performSearch({ sanitizedAnswer }).then(json => {
                 // confirm that our input matches at least 1 track (check the top 5 results)
                 // confirm that our match passes the test against the previous turn
                 // if the stack can be ended, cofirm that our match passes the test against the first turn
                 // make sure we get a response from Last.fm
-                var tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
+                const tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
                 if (tracks.length === 0) {
-                    dispatch(site_1._answerSubmissionFailed("No track found for " + answer + "."));
+                    dispatch(site_1._answerSubmissionFailed(`No track found for ${answer}.`));
                     return;
                 }
                 // Attempt to find a match
-                var match = turn_processor_1.findMatch(answer, tracks);
+                const match = turn_processor_1.findMatch(answer, tracks);
                 // Bail early we didn't find a match
                 if (!match) {
-                    dispatch(site_1._answerSubmissionFailed("No track found for " + answer + "."));
+                    dispatch(site_1._answerSubmissionFailed(`No track found for ${answer}.`));
                     return;
                 }
-                var previousTurn = stack.firstTurn();
-                var hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
+                const previousTurn = stack.firstTurn();
+                const hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
                 // Bail early if there's no overlap with previous turn
                 if (!hasOverlapWithPreviousTurn) {
                     dispatch(site_1._answerSubmissionFailed("No similarity to the previous track."));
@@ -1465,7 +1467,7 @@ exports["default"] = {
                     dispatch(site_1._answerSubmissionFailed("Can't play the same artist twice in a row."));
                     return;
                 }
-                var trackPlayedAlready = stack.turns.filter(function (turn) {
+                const trackPlayedAlready = stack.turns.filter((turn) => {
                     return turn.match.artist == match.artist && turn.match.name == match.name;
                 });
                 if (trackPlayedAlready.length > 0) {
@@ -1474,12 +1476,8 @@ exports["default"] = {
                 }
                 // validate match against first turn
                 if (stack.canEnd) {
-                    var firstTurn = stack.lastTurn();
-                    var hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
-                    console.log('first', stack.lastTurn());
-                    console.log('last', stack.firstTurn());
-                    console.log('match', match);
-                    console.log('overlap', hasOverlapWithFirstTurn);
+                    const firstTurn = stack.lastTurn();
+                    const hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
                     // winner
                     if (hasOverlapWithFirstTurn) {
                         submitToServer(dispatch, stack.gameId, answer, match, true);
@@ -1501,8 +1499,8 @@ exports["default"] = {
 "use strict";
 
 /* jshint esversion: 6 */
-exports.__esModule = true;
-exports["default"] = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     '100': ['1', '0', 'hundred'],
     '200': ['2', '0', 'hundred'],
     '300': ['3', '0', 'hundred'],
@@ -8507,8 +8505,8 @@ function short(word, r1) {
 
 "use strict";
 
-exports.__esModule = true;
-var constants_1 = __webpack_require__(1);
+Object.defineProperty(exports, "__esModule", { value: true });
+const constants_1 = __webpack_require__(1);
 function _answerSubmissionStarted() {
     return {
         type: constants_1.ANSWER_SUBMISSION.PENDING
@@ -8518,7 +8516,7 @@ exports._answerSubmissionStarted = _answerSubmissionStarted;
 function _answerSubmitted(game) {
     return {
         type: constants_1.ANSWER_SUBMISSION.SUCCESS,
-        data: game
+        data: game,
     };
 }
 exports._answerSubmitted = _answerSubmitted;
@@ -8567,6 +8565,13 @@ function _loginSuccess(json) {
     };
 }
 exports._loginSuccess = _loginSuccess;
+function _setAccessToken(token) {
+    return {
+        type: constants_1.ACCESS_TOKEN.SET,
+        data: token
+    };
+}
+exports._setAccessToken = _setAccessToken;
 
 
 /***/ }),
@@ -8575,12 +8580,12 @@ exports._loginSuccess = _loginSuccess;
 
 "use strict";
 
-exports.__esModule = true;
-exports.createActionSet = function (actionName) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createActionSet = actionName => {
     return {
-        PENDING: actionName + "_PENDING",
-        SUCCESS: actionName + "_SUCCESS",
-        ERROR: actionName + "_ERROR"
+        PENDING: `${actionName}_PENDING`,
+        SUCCESS: `${actionName}_SUCCESS`,
+        ERROR: `${actionName}_ERROR`
     };
 };
 
@@ -8591,19 +8596,19 @@ exports.createActionSet = function (actionName) {
 
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var game_1 = __webpack_require__(26);
-exports.Game = game_1["default"];
+exports.Game = game_1.default;
 var player_1 = __webpack_require__(27);
-exports.Player = player_1["default"];
+exports.Player = player_1.default;
 var match_1 = __webpack_require__(8);
-exports.Match = match_1["default"];
+exports.Match = match_1.default;
 var turn_1 = __webpack_require__(7);
-exports.Turn = turn_1["default"];
+exports.Turn = turn_1.default;
 var fb_friend_1 = __webpack_require__(28);
-exports.FBFriend = fb_friend_1["default"];
+exports.FBFriend = fb_friend_1.default;
 var stack_1 = __webpack_require__(6);
-exports.Stack = stack_1["default"];
+exports.Stack = stack_1.default;
 
 
 /***/ }),
@@ -8613,25 +8618,25 @@ exports.Stack = stack_1["default"];
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var stack_1 = __webpack_require__(6);
-var Game = /** @class */ (function () {
-    function Game(id, players, status, stacks) {
+Object.defineProperty(exports, "__esModule", { value: true });
+const stack_1 = __webpack_require__(6);
+class Game {
+    constructor(id, players, status, stacks) {
         this.id = id;
         this.players = players;
         this.status = status;
         this.stacks = stacks;
     }
-    Game.from = function (json) {
-        var stacks = json.stacks.map(function (stack) { return stack_1["default"].from(stack); });
-        var players = {
+    static from(json) {
+        const stacks = json.stacks.map(stack => stack_1.default.from(stack));
+        const players = {
             viewer: json.players.viewer,
             opponent: json.players.opponent
         };
         return new Game(json.id, players, json.status, stacks);
-    };
-    Game.prototype.lastTurn = function () {
-        var stack = this.lastStack();
+    }
+    lastTurn() {
+        const stack = this.lastStack();
         if (!stack) {
             return null;
         }
@@ -8642,9 +8647,9 @@ var Game = /** @class */ (function () {
             return null;
         }
         return stack.lastTurn();
-    };
-    Game.prototype.firstTurn = function () {
-        var stack = this.lastStack();
+    }
+    firstTurn() {
+        const stack = this.lastStack();
         if (!stack) {
             return null;
         }
@@ -8655,8 +8660,8 @@ var Game = /** @class */ (function () {
             return null;
         }
         return stack.firstTurn();
-    };
-    Game.prototype.lastStack = function () {
+    }
+    lastStack() {
         if (!this.stacks) {
             return null;
         }
@@ -8664,10 +8669,9 @@ var Game = /** @class */ (function () {
             return null;
         }
         return this.stacks[this.stacks.length - 1];
-    };
-    return Game;
-}());
-exports["default"] = Game;
+    }
+}
+exports.default = Game;
 
 
 /***/ }),
@@ -8677,13 +8681,10 @@ exports["default"] = Game;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var Player = /** @class */ (function () {
-    function Player() {
-    }
-    return Player;
-}());
-exports["default"] = Player;
+Object.defineProperty(exports, "__esModule", { value: true });
+class Player {
+}
+exports.default = Player;
 
 
 /***/ }),
@@ -8693,19 +8694,18 @@ exports["default"] = Player;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var FBFriend = /** @class */ (function () {
-    function FBFriend(id, name, picture) {
+Object.defineProperty(exports, "__esModule", { value: true });
+class FBFriend {
+    constructor(id, name, picture) {
         this.id = id;
         this.name = name;
         this.picture = picture;
     }
-    FBFriend.from = function (json) {
+    static from(json) {
         return new FBFriend(json.id, json.name, json.picture);
-    };
-    return FBFriend;
-}());
-exports["default"] = FBFriend;
+    }
+}
+exports.default = FBFriend;
 
 
 /***/ }),
@@ -8714,28 +8714,27 @@ exports["default"] = FBFriend;
 
 "use strict";
 
-exports.__esModule = true;
-var turn_processor_1 = __webpack_require__(2);
-var sanitizer_1 = __webpack_require__(0);
-var lastfm_response_verifier_1 = __webpack_require__(5);
-var admin_1 = __webpack_require__(30);
-var interfaces_1 = __webpack_require__(4);
-function performSearch(_a) {
-    var sanitizedAnswer = _a.sanitizedAnswer;
-    var apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
-    return fetch("http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + sanitizedAnswer + "&api_key=" + apiKey + "&format=json")
-        .then(function (response) { return response.json(); });
+Object.defineProperty(exports, "__esModule", { value: true });
+const turn_processor_1 = __webpack_require__(2);
+const sanitizer_1 = __webpack_require__(0);
+const lastfm_response_verifier_1 = __webpack_require__(5);
+const admin_1 = __webpack_require__(30);
+const interfaces_1 = __webpack_require__(4);
+function performSearch({ sanitizedAnswer }) {
+    const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
+    return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
+        .then(response => response.json());
 }
-exports["default"] = {
-    reset: function () {
-        return function (dispatch) {
+exports.default = {
+    reset: () => {
+        return dispatch => {
             dispatch(admin_1._reset());
         };
     },
-    submitAnswer: function (answer) {
-        return function (dispatch) {
+    submitAnswer: (answer) => {
+        return dispatch => {
             dispatch(admin_1._debug({
-                key: "Received input: " + answer,
+                key: `Received input: ${answer}`,
                 options: { tags: [
                         {
                             tag: 'span',
@@ -8756,9 +8755,9 @@ exports["default"] = {
                         }
                     ] }
             }));
-            var sanitizedAnswer = sanitizer_1.sanitize(answer);
+            const sanitizedAnswer = sanitizer_1.sanitize(answer);
             dispatch(admin_1._debug({
-                key: "Sanitized answer: " + sanitizedAnswer,
+                key: `Sanitized answer: ${sanitizedAnswer}`,
                 options: { tags: [
                         {
                             tag: 'span',
@@ -8781,7 +8780,7 @@ exports["default"] = {
                     ] }
             }));
             dispatch(admin_1._debug({
-                key: "Sending " + sanitizedAnswer + " to Last.fm",
+                key: `Sending ${sanitizedAnswer} to Last.fm`,
                 options: { tags: [
                         {
                             tag: 'span',
@@ -8794,12 +8793,12 @@ exports["default"] = {
                         },
                         {
                             tag: 'span',
-                            range: [("sending " + sanitizedAnswer + " ").length, 'to last.fm'.length]
+                            range: [`sending ${sanitizedAnswer} `.length, 'to last.fm'.length]
                         }
                     ] }
             }));
-            performSearch({ sanitizedAnswer: sanitizedAnswer }).then(function (json) {
-                var tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
+            performSearch({ sanitizedAnswer }).then(json => {
+                const tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
                 if (tracks.length === 0) {
                     dispatch(admin_1._debug({
                         key: '0 results from Last.fm',
@@ -8813,9 +8812,9 @@ exports["default"] = {
                     }));
                     return;
                 }
-                var trackList = tracks.map(function (track) {
-                    var artist = track.artist, name = track.name;
-                    return artist + " - " + name;
+                const trackList = tracks.map(track => {
+                    const { artist, name } = track;
+                    return `${artist} - ${name}`;
                 });
                 dispatch(admin_1._debug({
                     key: 'Response:',
@@ -8827,7 +8826,7 @@ exports["default"] = {
                             }
                         ] }
                 }));
-                trackList.forEach(function (track) {
+                trackList.forEach(track => {
                     dispatch(admin_1._debug({
                         key: track,
                         options: { indent: 1 }
@@ -8842,7 +8841,7 @@ exports["default"] = {
                             }
                         ] }
                 }));
-                var match = turn_processor_1.findMatch(answer, tracks, function (retVal) {
+                const match = turn_processor_1.findMatch(answer, tracks, (retVal) => {
                     dispatch(admin_1._debug(retVal));
                 });
                 if (!match) {
@@ -8869,7 +8868,7 @@ exports["default"] = {
                         ] }
                 }));
                 dispatch(admin_1._debug({
-                    key: match.artist + " - " + match.name,
+                    key: `${match.artist} - ${match.name}`,
                     options: { indent: 2 }
                 }));
             });
@@ -8884,7 +8883,7 @@ exports["default"] = {
 
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function _debug(data) {
     return {
         type: "DEBUG",
@@ -8907,11 +8906,11 @@ exports._reset = _reset;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var redux_thunk_1 = __webpack_require__(32);
-var redux_1 = __webpack_require__(9);
-var index_1 = __webpack_require__(47);
-exports["default"] = redux_1.createStore(index_1["default"], redux_1.applyMiddleware(redux_thunk_1["default"]));
+Object.defineProperty(exports, "__esModule", { value: true });
+const redux_thunk_1 = __webpack_require__(32);
+const redux_1 = __webpack_require__(9);
+const index_1 = __webpack_require__(47);
+exports.default = redux_1.createStore(index_1.default, redux_1.applyMiddleware(redux_thunk_1.default));
 
 
 /***/ }),
@@ -9612,15 +9611,15 @@ function applyMiddleware() {
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var redux_1 = __webpack_require__(9);
-var lastfm_1 = __webpack_require__(48);
-var main_1 = __webpack_require__(49);
-var admin_1 = __webpack_require__(50);
-exports["default"] = redux_1.combineReducers({
-    lastFM: lastfm_1["default"],
-    main: main_1["default"],
-    admin: admin_1["default"]
+Object.defineProperty(exports, "__esModule", { value: true });
+const redux_1 = __webpack_require__(9);
+const lastfm_1 = __webpack_require__(48);
+const main_1 = __webpack_require__(49);
+const admin_1 = __webpack_require__(50);
+exports.default = redux_1.combineReducers({
+    lastFM: lastfm_1.default,
+    main: main_1.default,
+    admin: admin_1.default,
 });
 
 
@@ -9630,11 +9629,10 @@ exports["default"] = redux_1.combineReducers({
 
 "use strict";
 
-exports.__esModule = true;
-var constants_1 = __webpack_require__(1);
-var defaultState = { searchResults: [] };
-function default_1(state, action) {
-    if (state === void 0) { state = defaultState; }
+Object.defineProperty(exports, "__esModule", { value: true });
+const constants_1 = __webpack_require__(1);
+const defaultState = { searchResults: [] };
+function default_1(state = defaultState, action) {
     switch (action.type) {
         case constants_1.LAST_FM_SEARCH.SUCCESS: {
             return Object.assign({}, state, { searchResults: action.data });
@@ -9643,7 +9641,7 @@ function default_1(state, action) {
             return state;
     }
 }
-exports["default"] = default_1;
+exports.default = default_1;
 
 
 /***/ }),
@@ -9653,11 +9651,10 @@ exports["default"] = default_1;
 "use strict";
 
 /*jshint esversion: 6 */
-exports.__esModule = true;
-var constants_1 = __webpack_require__(1);
-var defaultState = { friends: [], game: null, error: null, invitee: null };
-function default_1(state, action) {
-    if (state === void 0) { state = defaultState; }
+Object.defineProperty(exports, "__esModule", { value: true });
+const constants_1 = __webpack_require__(1);
+const defaultState = { friends: [], game: null, error: null, invitee: null };
+function default_1(state = defaultState, action) {
     switch (action.type) {
         case constants_1.FETCH_FRIENDS.SUCCESS: {
             return Object.assign({}, state, { friends: action.data });
@@ -9677,11 +9674,14 @@ function default_1(state, action) {
         case constants_1.ANSWER_SUBMISSION.ERROR: {
             return Object.assign({}, state, { error: action.data });
         }
+        case constants_1.ACCESS_TOKEN.SET: {
+            return Object.assign({}, state, { accessToken: action.data });
+        }
         default:
             return state;
     }
 }
-exports["default"] = default_1;
+exports.default = default_1;
 
 
 /***/ }),
@@ -9690,20 +9690,19 @@ exports["default"] = default_1;
 
 "use strict";
 
-exports.__esModule = true;
-var defaultState = { steps: [] };
-function default_1(state, action) {
-    if (state === void 0) { state = defaultState; }
+Object.defineProperty(exports, "__esModule", { value: true });
+const defaultState = { steps: [] };
+function default_1(state = defaultState, action) {
     switch (action.type) {
         case "DEBUG":
-            return Object.assign({}, state, { steps: state.steps.concat([action.data]) });
+            return Object.assign({}, state, { steps: [...state.steps, action.data] });
         case "RESET":
             return defaultState;
         default:
             return state;
     }
 }
-exports["default"] = default_1;
+exports.default = default_1;
 
 
 /***/ })
