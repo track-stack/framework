@@ -4,7 +4,8 @@ import {
   FETCH_FRIENDS,
   ANSWER_SUBMISSION,
   FETCH_GAME,
-  INVITEE
+  INVITEE,
+  ACCESS_TOKEN
 } from '../constants'
 
 const defaultState = { friends: [], game: null, error: null, invitee: null }
@@ -28,6 +29,9 @@ export default function(state = defaultState, action) {
     }
     case ANSWER_SUBMISSION.ERROR: {
       return (<any>Object).assign({}, state, { error: action.data });
+    }
+    case ACCESS_TOKEN.SET: {
+      return (<any>Object).assign({}, state, { accessToken: action.data })
     }
     default:
       return state;
