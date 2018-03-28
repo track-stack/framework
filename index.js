@@ -1372,7 +1372,6 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
         .then(response => response.json())
         .then(json => {
         const game = types_1.Game.from(json.game);
-        console.log('GOT THE GAME', game);
         dispatch(site_1._answerSubmitted(game));
     })
         .catch(error => {
@@ -1393,15 +1392,10 @@ exports.default = {
             });
             const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97";
             const data = { token, expires, app_id };
-            fetch('http://localhost:3000/api/v1/auth/create', {
+            return fetch('http://localhost:3000/api/v1/auth/create', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(data)
-            })
-                .then(response => response.json)
-                .then(json => {
-            })
-                .catch(error => {
             });
         };
     },
@@ -9653,7 +9647,7 @@ exports.default = default_1;
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = __webpack_require__(1);
-const defaultState = { friends: [], game: null, error: null, invitee: null };
+const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null };
 function default_1(state = defaultState, action) {
     switch (action.type) {
         case constants_1.FETCH_FRIENDS.SUCCESS: {

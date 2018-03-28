@@ -8,7 +8,7 @@ import {
   ACCESS_TOKEN
 } from '../constants'
 
-const defaultState = { friends: [], game: null, error: null, invitee: null }
+const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null }
 
 export default function(state = defaultState, action) {
   switch (action.type) {

@@ -43,8 +43,6 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
   .then(response => response.json())
   .then(json => {
     const game = Game.from(json.game)
-
-    console.log('GOT THE GAME', game)
     dispatch(_answerSubmitted(game))
   })
   .catch(error => {
@@ -68,15 +66,10 @@ export default {
 
       const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97"
       const data = {token, expires, app_id}
-      fetch('http://localhost:3000/api/v1/auth/create', {
+      return fetch('http://localhost:3000/api/v1/auth/create', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
-      })
-      .then(response => response.json)
-      .then(json => {
-      })
-      .catch(error => {
       })
     }
   },
