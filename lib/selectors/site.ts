@@ -5,10 +5,11 @@ import {
   FETCH_GAME,
   INVITEE,
   LOGIN,
-  ACCESS_TOKEN
+  ACCESS_TOKEN,
+  DASHBAORD
 } from '../constants'
 
-import { Game, FBFriend } from '../types'
+import { Game, FBFriend, DashboardGamePreview } from '../types'
 
 interface AnswerSubmissionStartSelector {
   type: string
@@ -113,5 +114,30 @@ export function _setAccessToken(token: string): SetAccessToken {
   return {
     type: ACCESS_TOKEN.SET,
     data: token
+  }
+}
+
+export function _fetchDashboardPending() {
+  return {
+    type: DASHBAORD.PENDING,
+    data: null    
+  }
+}
+
+interface Dashboard {
+  previews: DashboardGamePreview[]
+  invites: any[]
+}
+export function _fetchDashboardSuccess(previews: Dashboard) {
+  return {
+    type: DASHBAORD.SUCCESS,
+    data: previews
+  }
+}
+
+export function _fetchDashboardError(error: any) {
+  return {
+    type: DASHBAORD.ERROR,
+    data: error
   }
 }

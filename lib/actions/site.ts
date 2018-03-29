@@ -11,10 +11,13 @@ import {
   _fetchedGame,
   _selectGameInvitee,
   _loginSuccess,
-  _setAccessToken
+  _setAccessToken,
+  _fetchDashboardPending,
+  _fetchDashboardSuccess,
+  _fetchDashboardError
 } from '../selectors/site'
 
-import { Game, FBFriend, Stack } from '../types'
+import { Game, FBFriend, Stack, DashboardGamePreview } from '../types'
 
 function performSearch({sanitizedAnswer}) {
   const apiKey = "80b1866e815a8d2ddf83757bd97fdc76"
@@ -172,6 +175,33 @@ export default {
 
         // Submit our answer and match to the server
         submitToServer(dispatch, stack.gameId, answer, match, false)
+      })
+    }
+  },
+
+  fetchDashboard: (token) => {
+    return dispatch => {
+      dispatch(_fetchDashboardPending)
+
+      const headers = new Headers({'X-Requested-With': 'XMLHttpRequest'})
+      const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97"
+      fetch(`http://localhost:3000/api/v1/dashboard?app_id=${app_id}&access_token=${token}`, {
+        credentials: 'same-origin',
+        headers: headers
+      })
+      .then(response => response.json())
+      .then(json => {
+        console.log('got the stuff!', json)
+        const previews = json.active_game_previews.map(preview => DashboardGamePreview.from(preview))
+        const invites = []
+        return dispatch(_fetchDashboardSuccess({
+          previews: previews,
+          invites: invites
+        }));
+      })
+      .catch(error => {
+        console.log(error)
+        return dispatch(_fetchDashboardError(error));
       })
     }
   }

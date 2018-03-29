@@ -109,6 +109,7 @@ exports.FETCH_GAME = action_helper_1.createActionSet('FETCH_GAME');
 exports.LOGIN = action_helper_1.createActionSet('LOGIN');
 exports.INVITEE = action_helper_1.createActionSet('INVITEE');
 exports.ACCESS_TOKEN = { SET: 'ACCESS_TOKEN_SET' };
+exports.DASHBAORD = action_helper_1.createActionSet('DASHBOARD');
 
 
 /***/ }),
@@ -592,15 +593,15 @@ var _createStore = __webpack_require__(11);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = __webpack_require__(44);
+var _combineReducers = __webpack_require__(45);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = __webpack_require__(45);
+var _bindActionCreators = __webpack_require__(46);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = __webpack_require__(46);
+var _applyMiddleware = __webpack_require__(47);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
@@ -844,7 +845,7 @@ var _isPlainObject = __webpack_require__(12);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = __webpack_require__(41);
+var _symbolObservable = __webpack_require__(42);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -1107,15 +1108,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _baseGetTag = __webpack_require__(33);
+var _baseGetTag = __webpack_require__(34);
 
 var _baseGetTag2 = _interopRequireDefault(_baseGetTag);
 
-var _getPrototype = __webpack_require__(38);
+var _getPrototype = __webpack_require__(39);
 
 var _getPrototype2 = _interopRequireDefault(_getPrototype);
 
-var _isObjectLike = __webpack_require__(40);
+var _isObjectLike = __webpack_require__(41);
 
 var _isObjectLike2 = _interopRequireDefault(_isObjectLike);
 
@@ -1190,7 +1191,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _root = __webpack_require__(34);
+var _root = __webpack_require__(35);
 
 var _root2 = _interopRequireDefault(_root);
 
@@ -1317,7 +1318,7 @@ function compose() {
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
 const a = __webpack_require__(18);
-const store_1 = __webpack_require__(31);
+const store_1 = __webpack_require__(32);
 exports.store = store_1.default;
 exports.actions = a;
 
@@ -1332,7 +1333,7 @@ exports.actions = a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var site_1 = __webpack_require__(19);
 exports.Site = site_1.default;
-var admin_1 = __webpack_require__(29);
+var admin_1 = __webpack_require__(30);
 exports.Admin = admin_1.default;
 
 
@@ -1480,6 +1481,31 @@ exports.default = {
                 }
                 // Submit our answer and match to the server
                 submitToServer(dispatch, stack.gameId, answer, match, false);
+            });
+        };
+    },
+    fetchDashboard: (token) => {
+        return dispatch => {
+            dispatch(site_1._fetchDashboardPending);
+            const headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
+            const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97";
+            fetch(`http://localhost:3000/api/v1/dashboard?app_id=${app_id}&access_token=${token}`, {
+                credentials: 'same-origin',
+                headers: headers
+            })
+                .then(response => response.json())
+                .then(json => {
+                console.log('got the stuff!', json);
+                const previews = json.active_game_previews.map(preview => types_1.DashboardGamePreview.from(preview));
+                const invites = [];
+                return dispatch(site_1._fetchDashboardSuccess({
+                    previews: previews,
+                    invites: invites
+                }));
+            })
+                .catch(error => {
+                console.log(error);
+                return dispatch(site_1._fetchDashboardError(error));
             });
         };
     }
@@ -8566,6 +8592,27 @@ function _setAccessToken(token) {
     };
 }
 exports._setAccessToken = _setAccessToken;
+function _fetchDashboardPending() {
+    return {
+        type: constants_1.DASHBAORD.PENDING,
+        data: null
+    };
+}
+exports._fetchDashboardPending = _fetchDashboardPending;
+function _fetchDashboardSuccess(previews) {
+    return {
+        type: constants_1.DASHBAORD.SUCCESS,
+        data: previews
+    };
+}
+exports._fetchDashboardSuccess = _fetchDashboardSuccess;
+function _fetchDashboardError(error) {
+    return {
+        type: constants_1.DASHBAORD.ERROR,
+        data: error
+    };
+}
+exports._fetchDashboardError = _fetchDashboardError;
 
 
 /***/ }),
@@ -8603,6 +8650,8 @@ var fb_friend_1 = __webpack_require__(28);
 exports.FBFriend = fb_friend_1.default;
 var stack_1 = __webpack_require__(6);
 exports.Stack = stack_1.default;
+var dashboard_game_preview_1 = __webpack_require__(29);
+exports.DashboardGamePreview = dashboard_game_preview_1.default;
 
 
 /***/ }),
@@ -8687,7 +8736,6 @@ exports.default = Player;
 
 "use strict";
 
-/*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
 class FBFriend {
     constructor(id, name, picture) {
@@ -8709,10 +8757,39 @@ exports.default = FBFriend;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+class DashboardGamePreview {
+    constructor(viewersTurn, status, gameId, opponent) {
+        this.viewersTurn = viewersTurn;
+        this.status = status;
+        this.gameId = gameId;
+        this.opponent = opponent;
+    }
+    static from(json) {
+        const viewersTurn = json.viewers_turn;
+        const status = json.status;
+        const gameId = json.game_id;
+        const opponent = {
+            id: json.opponent.id,
+            name: json.opponent.name,
+            image: json.opponent.image
+        };
+        return new DashboardGamePreview(viewersTurn, status, gameId, opponent);
+    }
+}
+exports.default = DashboardGamePreview;
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 const turn_processor_1 = __webpack_require__(2);
 const sanitizer_1 = __webpack_require__(0);
 const lastfm_response_verifier_1 = __webpack_require__(5);
-const admin_1 = __webpack_require__(30);
+const admin_1 = __webpack_require__(31);
 const interfaces_1 = __webpack_require__(4);
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
@@ -8872,7 +8949,7 @@ exports.default = {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8894,21 +8971,21 @@ exports._reset = _reset;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const redux_thunk_1 = __webpack_require__(32);
+const redux_thunk_1 = __webpack_require__(33);
 const redux_1 = __webpack_require__(9);
-const index_1 = __webpack_require__(47);
+const index_1 = __webpack_require__(48);
 exports.default = redux_1.createStore(index_1.default, redux_1.applyMiddleware(redux_thunk_1.default));
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8937,7 +9014,7 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8951,11 +9028,11 @@ var _Symbol2 = __webpack_require__(13);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
-var _getRawTag = __webpack_require__(36);
+var _getRawTag = __webpack_require__(37);
 
 var _getRawTag2 = _interopRequireDefault(_getRawTag);
 
-var _objectToString = __webpack_require__(37);
+var _objectToString = __webpack_require__(38);
 
 var _objectToString2 = _interopRequireDefault(_objectToString);
 
@@ -8985,7 +9062,7 @@ function baseGetTag(value) {
 exports.default = baseGetTag;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8997,7 +9074,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _freeGlobal = __webpack_require__(35);
+var _freeGlobal = __webpack_require__(36);
 
 var _freeGlobal2 = _interopRequireDefault(_freeGlobal);
 
@@ -9012,7 +9089,7 @@ var root = _freeGlobal2.default || freeSelf || Function('return this')();
 exports.default = root;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9031,7 +9108,7 @@ exports.default = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9093,7 +9170,7 @@ function getRawTag(value) {
 exports.default = getRawTag;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9126,7 +9203,7 @@ function objectToString(value) {
 exports.default = objectToString;
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9136,7 +9213,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _overArg = __webpack_require__(39);
+var _overArg = __webpack_require__(40);
 
 var _overArg2 = _interopRequireDefault(_overArg);
 
@@ -9148,7 +9225,7 @@ var getPrototype = (0, _overArg2.default)(Object.getPrototypeOf, Object);
 exports.default = getPrototype;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9174,7 +9251,7 @@ function overArg(func, transform) {
 exports.default = overArg;
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9217,7 +9294,7 @@ function isObjectLike(value) {
 exports.default = isObjectLike;
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9227,7 +9304,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(43);
+var _ponyfill = __webpack_require__(44);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -9250,10 +9327,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2.default)(root);
 exports.default = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(42)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(43)(module)))
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9283,7 +9360,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9312,7 +9389,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9464,7 +9541,7 @@ function combineReducers(reducers) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9526,7 +9603,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9599,7 +9676,7 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9607,9 +9684,9 @@ function applyMiddleware() {
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
 const redux_1 = __webpack_require__(9);
-const lastfm_1 = __webpack_require__(48);
-const main_1 = __webpack_require__(49);
-const admin_1 = __webpack_require__(50);
+const lastfm_1 = __webpack_require__(49);
+const main_1 = __webpack_require__(50);
+const admin_1 = __webpack_require__(51);
 exports.default = redux_1.combineReducers({
     lastFM: lastfm_1.default,
     main: main_1.default,
@@ -9618,7 +9695,7 @@ exports.default = redux_1.combineReducers({
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9639,7 +9716,7 @@ exports.default = default_1;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9647,7 +9724,7 @@ exports.default = default_1;
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = __webpack_require__(1);
-const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null };
+const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: [] };
 function default_1(state = defaultState, action) {
     switch (action.type) {
         case constants_1.FETCH_FRIENDS.SUCCESS: {
@@ -9671,6 +9748,9 @@ function default_1(state = defaultState, action) {
         case constants_1.ACCESS_TOKEN.SET: {
             return Object.assign({}, state, { accessToken: action.data });
         }
+        case constants_1.DASHBAORD.SUCCESS: {
+            return Object.assign({}, state, { dashboard: action.data });
+        }
         default:
             return state;
     }
@@ -9679,7 +9759,7 @@ exports.default = default_1;
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

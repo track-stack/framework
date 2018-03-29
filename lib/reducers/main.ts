@@ -5,10 +5,11 @@ import {
   ANSWER_SUBMISSION,
   FETCH_GAME,
   INVITEE,
-  ACCESS_TOKEN
+  ACCESS_TOKEN,
+  DASHBAORD
 } from '../constants'
 
-const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null }
+const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: []}
 
 export default function(state = defaultState, action) {
   switch (action.type) {
@@ -32,6 +33,9 @@ export default function(state = defaultState, action) {
     }
     case ACCESS_TOKEN.SET: {
       return (<any>Object).assign({}, state, { accessToken: action.data })
+    }
+    case DASHBAORD.SUCCESS: {
+      return (<any>Object).assign({}, state, { dashboard: action.data })
     }
     default:
       return state;
