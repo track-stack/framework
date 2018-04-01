@@ -67,7 +67,7 @@ export default {
         'Content-Type': 'application/json'
       })
 
-      const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97"
+      const app_id = "029828097c99845e38f1ac6d43aa43946bf193b80a38f826f47e68ae7f63bbe9"
       const data = {token, expires, app_id}
       return fetch('http://track-stack-staging.herokuapp.com/api/v1/auth/create', {
         method: 'POST',
@@ -184,7 +184,7 @@ export default {
       dispatch(_fetchDashboardPending)
 
       const headers = new Headers({'X-Requested-With': 'XMLHttpRequest'})
-      const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97"
+      const app_id = "029828097c99845e38f1ac6d43aa43946bf193b80a38f826f47e68ae7f63bbe9"
       fetch(`http://track-stack-staging.herokuapp.com/api/v1/dashboard?app_id=${app_id}&access_token=${token}`, {
         credentials: 'same-origin',
         headers: headers
