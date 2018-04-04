@@ -1,5 +1,3 @@
-/*jshint esversion: 6 */
-
 import {
   FETCH_FRIENDS,
   ANSWER_SUBMISSION,

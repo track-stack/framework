@@ -1,5 +1,3 @@
-/*jshint esversion: 6 */
-
 import * as a from './actions'
 import { default as s } from './store'
 

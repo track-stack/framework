@@ -1,4 +1,3 @@
-
 const defaultState = { steps: [] }
 
 export default function(state = defaultState, action) {
@@ -6,7 +5,7 @@ export default function(state = defaultState, action) {
     case "DEBUG":
       return (<any>Object).assign({}, state, { steps: [...state.steps, action.data] });
     case "RESET":
-      return defaultState 
+      return defaultState
     default:
       return state;
   }

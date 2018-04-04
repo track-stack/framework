@@ -1,6 +1,6 @@
 {
   "name": "trackstack",
-  "version": "0.0.54",
+  "version": "0.1.0",
   "description": "Shared code for Track Stack",
   "scripts": {
     "test": "jest",
@@ -15,14 +15,16 @@
     "stem-porter": "^0.0.1"
   },
   "devDependencies": {
-    "jest-cli": "^22.1.4",
     "@types/node": "^8.0.47",
     "babel-core": "^6.26.0",
     "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.10.0",
     "faker": "^4.1.0",
     "jest": "^21.2.1",
+    "jest-cli": "^22.1.4",
     "ts-jest": "^21.1.4",
     "ts-loader": "^3.1.0",
     "typescript": "^2.5.3",

@@ -1,10 +1,11 @@
-/*jshint esversion: 6 */
-
 import thunk from 'redux-thunk'
-import { createStore, applyMiddleware } from 'redux'
-import reducer from './reducers/index'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { main, admin } from './reducers'
 
-export default createStore(
-  reducer,
-  applyMiddleware(thunk)
-)
+export default function ({reducers, middleware}) {
+  reducers = (<any>Object).assign({}, {main, admin}, reducers)
+  return createStore(
+    combineReducers(reducers),
+    applyMiddleware(...middleware, thunk)
+  )
+}

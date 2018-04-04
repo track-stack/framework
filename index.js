@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -101,34 +101,15 @@ exports.sanitize = sanitize;
 
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const action_helper_1 = __webpack_require__(24);
-exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
-exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
-exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
-exports.FETCH_GAME = action_helper_1.createActionSet('FETCH_GAME');
-exports.LOGIN = action_helper_1.createActionSet('LOGIN');
-exports.INVITEE = action_helper_1.createActionSet('INVITEE');
-exports.ACCESS_TOKEN = { SET: 'ACCESS_TOKEN_SET' };
-exports.DASHBAORD = action_helper_1.createActionSet('DASHBOARD');
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/*jshint esversion: 6 */
-Object.defineProperty(exports, "__esModule", { value: true });
 /* turn-processor.ts
  *
  * A suite of functions designed to process user-generated input
  * at various stages of the turn validation process
 */
 const sanitizer_1 = __webpack_require__(0);
-const word_components_1 = __webpack_require__(20);
-const stem = __webpack_require__(21);
-const interfaces_1 = __webpack_require__(4);
+const word_components_1 = __webpack_require__(19);
+const stem = __webpack_require__(20);
+const interfaces_1 = __webpack_require__(3);
 // Public: Given user-generated input and an array of
 // tracks (json) from Last.fm, returns the track that
 // approximately matches the user-generated input.
@@ -398,7 +379,7 @@ exports.matchHasIntersection = matchHasIntersection;
 
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -459,7 +440,7 @@ stemmer.among = function among(word, offset, replace) {
 };
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -475,7 +456,7 @@ var TagStyle;
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -496,6 +477,25 @@ function lastFMResponseVerifier(json) {
     return tracks;
 }
 exports.lastFMResponseVerifier = lastFMResponseVerifier;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/*jshint esversion: 6 */
+Object.defineProperty(exports, "__esModule", { value: true });
+const action_helper_1 = __webpack_require__(23);
+exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
+exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
+exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
+exports.FETCH_GAME = action_helper_1.createActionSet('FETCH_GAME');
+exports.LOGIN = action_helper_1.createActionSet('LOGIN');
+exports.INVITEE = action_helper_1.createActionSet('INVITEE');
+exports.ACCESS_TOKEN = { SET: 'ACCESS_TOKEN_SET' };
+exports.DASHBAORD = action_helper_1.createActionSet('DASHBOARD');
 
 
 /***/ }),
@@ -579,61 +579,6 @@ exports.default = Match;
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
-
-var _createStore = __webpack_require__(11);
-
-var _createStore2 = _interopRequireDefault(_createStore);
-
-var _combineReducers = __webpack_require__(45);
-
-var _combineReducers2 = _interopRequireDefault(_combineReducers);
-
-var _bindActionCreators = __webpack_require__(46);
-
-var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
-
-var _applyMiddleware = __webpack_require__(47);
-
-var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
-
-var _compose = __webpack_require__(16);
-
-var _compose2 = _interopRequireDefault(_compose);
-
-var _warning = __webpack_require__(15);
-
-var _warning2 = _interopRequireDefault(_warning);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/*
-* This is a dummy function to check if the function name has been altered by minification.
-* If the function has been minified and NODE_ENV !== 'production', warn the user.
-*/
-function isCrushed() {}
-
-if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
-  (0, _warning2.default)('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
-}
-
-exports.createStore = _createStore2.default;
-exports.combineReducers = _combineReducers2.default;
-exports.bindActionCreators = _bindActionCreators2.default;
-exports.applyMiddleware = _applyMiddleware2.default;
-exports.compose = _compose2.default;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
-
-/***/ }),
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -826,7 +771,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -841,7 +786,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = createStore;
 
-var _isPlainObject = __webpack_require__(12);
+var _isPlainObject = __webpack_require__(11);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
@@ -1098,7 +1043,7 @@ var ActionTypes = exports.ActionTypes = {
 }
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1181,7 +1126,7 @@ function isPlainObject(value) {
 exports.default = isPlainObject;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1203,7 +1148,7 @@ var _Symbol = _root2.default.Symbol;
 exports.default = _Symbol;
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1233,7 +1178,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1266,7 +1211,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1310,6 +1255,19 @@ function compose() {
 }
 
 /***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const a = __webpack_require__(17);
+const store_1 = __webpack_require__(31);
+exports.store = store_1.default;
+exports.actions = a;
+
+
+/***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1317,10 +1275,10 @@ function compose() {
 
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const a = __webpack_require__(18);
-const store_1 = __webpack_require__(32);
-exports.store = store_1.default;
-exports.actions = a;
+var site_1 = __webpack_require__(18);
+exports.Site = site_1.default;
+var admin_1 = __webpack_require__(29);
+exports.Admin = admin_1.default;
 
 
 /***/ }),
@@ -1329,26 +1287,12 @@ exports.actions = a;
 
 "use strict";
 
-/*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-var site_1 = __webpack_require__(19);
-exports.Site = site_1.default;
-var admin_1 = __webpack_require__(30);
-exports.Admin = admin_1.default;
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const turn_processor_1 = __webpack_require__(2);
+const turn_processor_1 = __webpack_require__(1);
 const sanitizer_1 = __webpack_require__(0);
-const lastfm_response_verifier_1 = __webpack_require__(5);
-const site_1 = __webpack_require__(23);
-const types_1 = __webpack_require__(25);
+const lastfm_response_verifier_1 = __webpack_require__(4);
+const site_1 = __webpack_require__(22);
+const types_1 = __webpack_require__(24);
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
@@ -1513,7 +1457,7 @@ exports.default = {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8356,27 +8300,27 @@ exports.default = {
 
 
 /***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var stemmer = __webpack_require__(2);
+
+exports = module.exports = __webpack_require__(21);
+
+exports.among = stemmer.among;
+exports.except = stemmer.except;
+
+/***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stemmer = __webpack_require__(3);
-
-exports = module.exports = __webpack_require__(22);
-
-exports.among = stemmer.among;
-exports.except = stemmer.except;
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var stemmer = __webpack_require__(3),
+var stemmer = __webpack_require__(2),
     alphabet = "abcdefghijklmnopqrstuvwxyz",
     vowels = "aeiouy",
     consonants = alphabet.replace(RegExp("[" + vowels + "]", "g"), "") + "Y",
@@ -8520,13 +8464,13 @@ function short(word, r1) {
 }
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const constants_1 = __webpack_require__(1);
+const constants_1 = __webpack_require__(5);
 function _answerSubmissionStarted() {
     return {
         type: constants_1.ANSWER_SUBMISSION.PENDING
@@ -8616,7 +8560,7 @@ exports._fetchDashboardError = _fetchDashboardError;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8632,30 +8576,30 @@ exports.createActionSet = actionName => {
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var game_1 = __webpack_require__(26);
+var game_1 = __webpack_require__(25);
 exports.Game = game_1.default;
-var player_1 = __webpack_require__(27);
+var player_1 = __webpack_require__(26);
 exports.Player = player_1.default;
 var match_1 = __webpack_require__(8);
 exports.Match = match_1.default;
 var turn_1 = __webpack_require__(7);
 exports.Turn = turn_1.default;
-var fb_friend_1 = __webpack_require__(28);
+var fb_friend_1 = __webpack_require__(27);
 exports.FBFriend = fb_friend_1.default;
 var stack_1 = __webpack_require__(6);
 exports.Stack = stack_1.default;
-var dashboard_game_preview_1 = __webpack_require__(29);
+var dashboard_game_preview_1 = __webpack_require__(28);
 exports.DashboardGamePreview = dashboard_game_preview_1.default;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8718,7 +8662,7 @@ exports.default = Game;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8731,7 +8675,7 @@ exports.default = Player;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8751,7 +8695,7 @@ exports.default = FBFriend;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8780,17 +8724,17 @@ exports.default = DashboardGamePreview;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const turn_processor_1 = __webpack_require__(2);
+const turn_processor_1 = __webpack_require__(1);
 const sanitizer_1 = __webpack_require__(0);
-const lastfm_response_verifier_1 = __webpack_require__(5);
-const admin_1 = __webpack_require__(31);
-const interfaces_1 = __webpack_require__(4);
+const lastfm_response_verifier_1 = __webpack_require__(4);
+const admin_1 = __webpack_require__(30);
+const interfaces_1 = __webpack_require__(3);
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
@@ -8949,7 +8893,7 @@ exports.default = {
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8971,21 +8915,24 @@ exports._reset = _reset;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-/*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const redux_thunk_1 = __webpack_require__(33);
-const redux_1 = __webpack_require__(9);
-const index_1 = __webpack_require__(48);
-exports.default = redux_1.createStore(index_1.default, redux_1.applyMiddleware(redux_thunk_1.default));
+const redux_thunk_1 = __webpack_require__(32);
+const redux_1 = __webpack_require__(33);
+const reducers_1 = __webpack_require__(48);
+function default_1({ reducers, middleware }) {
+    reducers = Object.assign({}, { main: reducers_1.main, admin: reducers_1.admin }, reducers);
+    return redux_1.createStore(redux_1.combineReducers(reducers), redux_1.applyMiddleware(...middleware, redux_thunk_1.default));
+}
+exports.default = default_1;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9014,6 +8961,61 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
+
+var _createStore = __webpack_require__(10);
+
+var _createStore2 = _interopRequireDefault(_createStore);
+
+var _combineReducers = __webpack_require__(45);
+
+var _combineReducers2 = _interopRequireDefault(_combineReducers);
+
+var _bindActionCreators = __webpack_require__(46);
+
+var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
+
+var _applyMiddleware = __webpack_require__(47);
+
+var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
+
+var _compose = __webpack_require__(15);
+
+var _compose2 = _interopRequireDefault(_compose);
+
+var _warning = __webpack_require__(14);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+* This is a dummy function to check if the function name has been altered by minification.
+* If the function has been minified and NODE_ENV !== 'production', warn the user.
+*/
+function isCrushed() {}
+
+if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  (0, _warning2.default)('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+}
+
+exports.createStore = _createStore2.default;
+exports.combineReducers = _combineReducers2.default;
+exports.bindActionCreators = _bindActionCreators2.default;
+exports.applyMiddleware = _applyMiddleware2.default;
+exports.compose = _compose2.default;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+
+/***/ }),
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9024,7 +9026,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(13);
+var _Symbol2 = __webpack_require__(12);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
@@ -9105,7 +9107,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
 
 exports.default = freeGlobal;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ }),
 /* 37 */
@@ -9118,7 +9120,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(13);
+var _Symbol2 = __webpack_require__(12);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
@@ -9327,7 +9329,7 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2.default)(root);
 exports.default = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(43)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(43)(module)))
 
 /***/ }),
 /* 43 */
@@ -9400,13 +9402,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = combineReducers;
 
-var _createStore = __webpack_require__(11);
+var _createStore = __webpack_require__(10);
 
-var _isPlainObject = __webpack_require__(12);
+var _isPlainObject = __webpack_require__(11);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _warning = __webpack_require__(15);
+var _warning = __webpack_require__(14);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -9538,7 +9540,7 @@ function combineReducers(reducers) {
     return hasChanged ? nextState : state;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
 /* 46 */
@@ -9614,7 +9616,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = applyMiddleware;
 
-var _compose = __webpack_require__(16);
+var _compose = __webpack_require__(15);
 
 var _compose2 = _interopRequireDefault(_compose);
 
@@ -9681,17 +9683,11 @@ function applyMiddleware() {
 
 "use strict";
 
-/*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const redux_1 = __webpack_require__(9);
-const lastfm_1 = __webpack_require__(49);
-const main_1 = __webpack_require__(50);
-const admin_1 = __webpack_require__(51);
-exports.default = redux_1.combineReducers({
-    lastFM: lastfm_1.default,
-    main: main_1.default,
-    admin: admin_1.default,
-});
+var main_1 = __webpack_require__(49);
+exports.main = main_1.default;
+var admin_1 = __webpack_require__(50);
+exports.admin = admin_1.default;
 
 
 /***/ }),
@@ -9701,29 +9697,7 @@ exports.default = redux_1.combineReducers({
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const constants_1 = __webpack_require__(1);
-const defaultState = { searchResults: [] };
-function default_1(state = defaultState, action) {
-    switch (action.type) {
-        case constants_1.LAST_FM_SEARCH.SUCCESS: {
-            return Object.assign({}, state, { searchResults: action.data });
-        }
-        default:
-            return state;
-    }
-}
-exports.default = default_1;
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/*jshint esversion: 6 */
-Object.defineProperty(exports, "__esModule", { value: true });
-const constants_1 = __webpack_require__(1);
+const constants_1 = __webpack_require__(5);
 const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: [] };
 function default_1(state = defaultState, action) {
     switch (action.type) {
@@ -9759,7 +9733,7 @@ exports.default = default_1;
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
