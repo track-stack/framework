@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -107,9 +107,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * at various stages of the turn validation process
 */
 const sanitizer_1 = __webpack_require__(0);
-const word_components_1 = __webpack_require__(19);
-const stem = __webpack_require__(20);
-const interfaces_1 = __webpack_require__(3);
+const word_components_1 = __webpack_require__(21);
+const stem = __webpack_require__(22);
+const interfaces_1 = __webpack_require__(4);
 // Public: Given user-generated input and an array of
 // tracks (json) from Last.fm, returns the track that
 // approximately matches the user-generated input.
@@ -384,6 +384,30 @@ exports.matchHasIntersection = matchHasIntersection;
 
 "use strict";
 
+/*jshint esversion: 6 */
+Object.defineProperty(exports, "__esModule", { value: true });
+function lastFMResponseVerifier(json) {
+    // Bail early if the response lacks the required json structure
+    const foundTracks = json && json.results && json.results.trackmatches;
+    if (!foundTracks) {
+        return [];
+    }
+    // Bail early if the results are empty
+    const tracks = json.results.trackmatches.track;
+    if (tracks.length == 0) {
+        return [];
+    }
+    return tracks;
+}
+exports.lastFMResponseVerifier = lastFMResponseVerifier;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 var stemmer = {},
     cache = {};
@@ -440,7 +464,7 @@ stemmer.among = function among(word, offset, replace) {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -456,38 +480,110 @@ var TagStyle;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/*jshint esversion: 6 */
-Object.defineProperty(exports, "__esModule", { value: true });
-function lastFMResponseVerifier(json) {
-    // Bail early if the response lacks the required json structure
-    const foundTracks = json && json.results && json.results.trackmatches;
-    if (!foundTracks) {
-        return [];
-    }
-    // Bail early if the results are empty
-    const tracks = json.results.trackmatches.track;
-    if (tracks.length == 0) {
-        return [];
-    }
-    return tracks;
-}
-exports.lastFMResponseVerifier = lastFMResponseVerifier;
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+const constants_1 = __webpack_require__(6);
+function _answerSubmissionStarted() {
+    return {
+        type: constants_1.ANSWER_SUBMISSION.PENDING
+    };
+}
+exports._answerSubmissionStarted = _answerSubmissionStarted;
+function _answerSubmitted(game) {
+    return {
+        type: constants_1.ANSWER_SUBMISSION.SUCCESS,
+        data: game,
+    };
+}
+exports._answerSubmitted = _answerSubmitted;
+function _answerSubmissionFailed(error) {
+    return {
+        type: constants_1.ANSWER_SUBMISSION.ERROR,
+        data: error
+    };
+}
+exports._answerSubmissionFailed = _answerSubmissionFailed;
+function _fetchFriends(friends) {
+    return {
+        type: constants_1.FETCH_FRIENDS.SUCCESS,
+        data: friends
+    };
+}
+exports._fetchFriends = _fetchFriends;
+function _performSearch(results) {
+    return {
+        type: constants_1.LAST_FM_SEARCH.SUCCESS,
+        data: results
+    };
+}
+exports._performSearch = _performSearch;
+function _fetchedGame(game) {
+    return {
+        type: constants_1.FETCH_GAME.SUCCESS,
+        data: game
+    };
+}
+exports._fetchedGame = _fetchedGame;
+function _selectGameInvitee(friend) {
+    return {
+        type: constants_1.INVITEE.SUCCESS,
+        data: friend
+    };
+}
+exports._selectGameInvitee = _selectGameInvitee;
+function _loginSuccess(json) {
+    return {
+        type: constants_1.LOGIN.SUCCESS,
+        data: {
+            user: json.user,
+            accessToken: json.accessToken
+        }
+    };
+}
+exports._loginSuccess = _loginSuccess;
+function _setAccessToken(token) {
+    return {
+        type: constants_1.ACCESS_TOKEN.SET,
+        data: token
+    };
+}
+exports._setAccessToken = _setAccessToken;
+function _fetchDashboardPending() {
+    return {
+        type: constants_1.DASHBAORD.PENDING,
+        data: null
+    };
+}
+exports._fetchDashboardPending = _fetchDashboardPending;
+function _fetchDashboardSuccess(previews) {
+    return {
+        type: constants_1.DASHBAORD.SUCCESS,
+        data: previews
+    };
+}
+exports._fetchDashboardSuccess = _fetchDashboardSuccess;
+function _fetchDashboardError(error) {
+    return {
+        type: constants_1.DASHBAORD.ERROR,
+        data: error
+    };
+}
+exports._fetchDashboardError = _fetchDashboardError;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const action_helper_1 = __webpack_require__(23);
+const action_helper_1 = __webpack_require__(24);
 exports.ANSWER_SUBMISSION = action_helper_1.createActionSet('ANSWER_SUBMITTED');
 exports.FETCH_FRIENDS = action_helper_1.createActionSet('FETCH_FRIENDS');
 exports.LAST_FM_SEARCH = action_helper_1.createActionSet('LAST_F_SEARCH');
@@ -499,14 +595,37 @@ exports.DASHBAORD = action_helper_1.createActionSet('DASHBOARD');
 
 
 /***/ }),
-/* 6 */
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var game_1 = __webpack_require__(25);
+exports.Game = game_1.default;
+var player_1 = __webpack_require__(26);
+exports.Player = player_1.default;
+var match_1 = __webpack_require__(10);
+exports.Match = match_1.default;
+var turn_1 = __webpack_require__(9);
+exports.Turn = turn_1.default;
+var fb_friend_1 = __webpack_require__(27);
+exports.FBFriend = fb_friend_1.default;
+var stack_1 = __webpack_require__(8);
+exports.Stack = stack_1.default;
+var dashboard_game_preview_1 = __webpack_require__(28);
+exports.DashboardGamePreview = dashboard_game_preview_1.default;
+
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const turn_1 = __webpack_require__(7);
+const turn_1 = __webpack_require__(9);
 class Stack {
     constructor(turns, canEnd, gameId, ended) {
         this.turns = turns || new Array();
@@ -529,14 +648,14 @@ exports.default = Stack;
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const match_1 = __webpack_require__(8);
+const match_1 = __webpack_require__(10);
 class Turn {
     constructor(userId, answer, distance, hasExactNameMatch, hasExactArtistMatch, userPhoto, match, createdAt) {
         this.userId = userId;
@@ -557,7 +676,7 @@ exports.default = Turn;
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -578,7 +697,7 @@ exports.default = Match;
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -771,7 +890,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -786,11 +905,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = createStore;
 
-var _isPlainObject = __webpack_require__(11);
+var _isPlainObject = __webpack_require__(13);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = __webpack_require__(42);
+var _symbolObservable = __webpack_require__(44);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -1043,7 +1162,7 @@ var ActionTypes = exports.ActionTypes = {
 }
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1053,15 +1172,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _baseGetTag = __webpack_require__(34);
+var _baseGetTag = __webpack_require__(36);
 
 var _baseGetTag2 = _interopRequireDefault(_baseGetTag);
 
-var _getPrototype = __webpack_require__(39);
+var _getPrototype = __webpack_require__(41);
 
 var _getPrototype2 = _interopRequireDefault(_getPrototype);
 
-var _isObjectLike = __webpack_require__(41);
+var _isObjectLike = __webpack_require__(43);
 
 var _isObjectLike2 = _interopRequireDefault(_isObjectLike);
 
@@ -1126,7 +1245,7 @@ function isPlainObject(value) {
 exports.default = isPlainObject;
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1136,7 +1255,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _root = __webpack_require__(35);
+var _root = __webpack_require__(37);
 
 var _root2 = _interopRequireDefault(_root);
 
@@ -1148,7 +1267,7 @@ var _Symbol = _root2.default.Symbol;
 exports.default = _Symbol;
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1178,7 +1297,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1211,7 +1330,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1255,34 +1374,36 @@ function compose() {
 }
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const a = __webpack_require__(17);
-const store_1 = __webpack_require__(31);
+const a = __webpack_require__(19);
+const store_1 = __webpack_require__(33);
 exports.store = store_1.default;
 exports.actions = a;
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-var site_1 = __webpack_require__(18);
+var site_1 = __webpack_require__(20);
 exports.Site = site_1.default;
 var admin_1 = __webpack_require__(29);
 exports.Admin = admin_1.default;
+var api_1 = __webpack_require__(31);
+exports.api = api_1.default;
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1290,9 +1411,9 @@ exports.Admin = admin_1.default;
 Object.defineProperty(exports, "__esModule", { value: true });
 const turn_processor_1 = __webpack_require__(1);
 const sanitizer_1 = __webpack_require__(0);
-const lastfm_response_verifier_1 = __webpack_require__(4);
-const site_1 = __webpack_require__(22);
-const types_1 = __webpack_require__(24);
+const lastfm_response_verifier_1 = __webpack_require__(2);
+const site_1 = __webpack_require__(5);
+const types_1 = __webpack_require__(7);
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
@@ -1457,7 +1578,7 @@ exports.default = {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8300,27 +8421,27 @@ exports.default = {
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stemmer = __webpack_require__(2);
+var stemmer = __webpack_require__(3);
 
-exports = module.exports = __webpack_require__(21);
+exports = module.exports = __webpack_require__(23);
 
 exports.among = stemmer.among;
 exports.except = stemmer.except;
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stemmer = __webpack_require__(2),
+var stemmer = __webpack_require__(3),
     alphabet = "abcdefghijklmnopqrstuvwxyz",
     vowels = "aeiouy",
     consonants = alphabet.replace(RegExp("[" + vowels + "]", "g"), "") + "Y",
@@ -8464,103 +8585,7 @@ function short(word, r1) {
 }
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const constants_1 = __webpack_require__(5);
-function _answerSubmissionStarted() {
-    return {
-        type: constants_1.ANSWER_SUBMISSION.PENDING
-    };
-}
-exports._answerSubmissionStarted = _answerSubmissionStarted;
-function _answerSubmitted(game) {
-    return {
-        type: constants_1.ANSWER_SUBMISSION.SUCCESS,
-        data: game,
-    };
-}
-exports._answerSubmitted = _answerSubmitted;
-function _answerSubmissionFailed(error) {
-    return {
-        type: constants_1.ANSWER_SUBMISSION.ERROR,
-        data: error
-    };
-}
-exports._answerSubmissionFailed = _answerSubmissionFailed;
-function _fetchFriends(friends) {
-    return {
-        type: constants_1.FETCH_FRIENDS.SUCCESS,
-        data: friends
-    };
-}
-exports._fetchFriends = _fetchFriends;
-function _performSearch(results) {
-    return {
-        type: constants_1.LAST_FM_SEARCH.SUCCESS,
-        data: results
-    };
-}
-exports._performSearch = _performSearch;
-function _fetchedGame(game) {
-    return {
-        type: constants_1.FETCH_GAME.SUCCESS,
-        data: game
-    };
-}
-exports._fetchedGame = _fetchedGame;
-function _selectGameInvitee(friend) {
-    return {
-        type: constants_1.INVITEE.SUCCESS,
-        data: friend
-    };
-}
-exports._selectGameInvitee = _selectGameInvitee;
-function _loginSuccess(json) {
-    return {
-        type: constants_1.LOGIN.SUCCESS,
-        data: {
-            user: json.user,
-            accessToken: json.accessToken
-        }
-    };
-}
-exports._loginSuccess = _loginSuccess;
-function _setAccessToken(token) {
-    return {
-        type: constants_1.ACCESS_TOKEN.SET,
-        data: token
-    };
-}
-exports._setAccessToken = _setAccessToken;
-function _fetchDashboardPending() {
-    return {
-        type: constants_1.DASHBAORD.PENDING,
-        data: null
-    };
-}
-exports._fetchDashboardPending = _fetchDashboardPending;
-function _fetchDashboardSuccess(previews) {
-    return {
-        type: constants_1.DASHBAORD.SUCCESS,
-        data: previews
-    };
-}
-exports._fetchDashboardSuccess = _fetchDashboardSuccess;
-function _fetchDashboardError(error) {
-    return {
-        type: constants_1.DASHBAORD.ERROR,
-        data: error
-    };
-}
-exports._fetchDashboardError = _fetchDashboardError;
-
-
-/***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8576,29 +8601,6 @@ exports.createActionSet = actionName => {
 
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var game_1 = __webpack_require__(25);
-exports.Game = game_1.default;
-var player_1 = __webpack_require__(26);
-exports.Player = player_1.default;
-var match_1 = __webpack_require__(8);
-exports.Match = match_1.default;
-var turn_1 = __webpack_require__(7);
-exports.Turn = turn_1.default;
-var fb_friend_1 = __webpack_require__(27);
-exports.FBFriend = fb_friend_1.default;
-var stack_1 = __webpack_require__(6);
-exports.Stack = stack_1.default;
-var dashboard_game_preview_1 = __webpack_require__(28);
-exports.DashboardGamePreview = dashboard_game_preview_1.default;
-
-
-/***/ }),
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8606,7 +8608,7 @@ exports.DashboardGamePreview = dashboard_game_preview_1.default;
 
 /*jshint esversion: 6 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const stack_1 = __webpack_require__(6);
+const stack_1 = __webpack_require__(8);
 class Game {
     constructor(id, players, status, stacks) {
         this.id = id;
@@ -8732,9 +8734,9 @@ exports.default = DashboardGamePreview;
 Object.defineProperty(exports, "__esModule", { value: true });
 const turn_processor_1 = __webpack_require__(1);
 const sanitizer_1 = __webpack_require__(0);
-const lastfm_response_verifier_1 = __webpack_require__(4);
+const lastfm_response_verifier_1 = __webpack_require__(2);
 const admin_1 = __webpack_require__(30);
-const interfaces_1 = __webpack_require__(3);
+const interfaces_1 = __webpack_require__(4);
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
@@ -8921,9 +8923,202 @@ exports._reset = _reset;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const redux_thunk_1 = __webpack_require__(32);
-const redux_1 = __webpack_require__(33);
-const reducers_1 = __webpack_require__(48);
+const turn_processor_1 = __webpack_require__(1);
+const sanitizer_1 = __webpack_require__(0);
+const lastfm_response_verifier_1 = __webpack_require__(2);
+const site_1 = __webpack_require__(5);
+const types_1 = __webpack_require__(7);
+const config_1 = __webpack_require__(32);
+const { appId, baseUrl } = config_1.development;
+function performSearch({ sanitizedAnswer }) {
+    const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
+    return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
+        .then(response => response.json());
+}
+function submitToServer(dispatch, gameId, answer, match, gameOver) {
+    const headers = new Headers({
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+    });
+    const data = {
+        answer: answer,
+        match: match,
+        game_over: gameOver
+    };
+    fetch(`/games/${gameId}/turn`, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: headers,
+        body: JSON.stringify(data),
+    })
+        .then(response => response.json())
+        .then(json => {
+        const game = types_1.Game.from(json.game);
+        dispatch(site_1._answerSubmitted(game));
+    })
+        .catch(error => {
+        dispatch(site_1._answerSubmissionFailed(error));
+    });
+}
+exports.default = {
+    setAccessToken: (token) => {
+        return dispatch => {
+            dispatch(site_1._setAccessToken(token));
+        };
+    },
+    login: (token, expires, local, callback) => {
+        return dispatch => {
+            const headers = new Headers({
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            });
+            const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97";
+            const data = { token: token, expires: expires, app_id: appId };
+            return fetch(`${baseUrl}/api/v1/auth/create`, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(data)
+            });
+        };
+    },
+    selectGameInvitee: (friend) => {
+        return dispatch => {
+            return dispatch(site_1._selectGameInvitee(friend));
+        };
+    },
+    fetchGame: (token, gameId) => {
+        return dispatch => {
+            const headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
+            fetch(`${baseUrl}/api/v1/games/${gameId}?app_id=${appId}&access_token=${token}`, {
+                credentials: 'same-origin',
+                headers: headers
+            }).then(response => response.json()).then(json => {
+                const game = types_1.Game.from(json.game);
+                return dispatch(site_1._fetchedGame(game));
+            });
+        };
+    },
+    fetchFriends: () => {
+        return dispatch => {
+            fetch('/friends', { credentials: 'same-origin' })
+                .then(response => response.json())
+                .then(json => {
+                const friends = json.friends.map(friend => types_1.FBFriend.from(friend));
+                dispatch(site_1._fetchFriends(friends));
+            });
+        };
+    },
+    submitAnswer: (answer, stack) => {
+        return dispatch => {
+            dispatch(site_1._answerSubmissionStarted());
+            // TODO: full sanitization before searching may be too agressive
+            // Removing "by" and "-" may be enough
+            const sanitizedAnswer = sanitizer_1.sanitize(answer);
+            performSearch({ sanitizedAnswer }).then(json => {
+                // confirm that our input matches at least 1 track (check the top 5 results)
+                // confirm that our match passes the test against the previous turn
+                // if the stack can be ended, cofirm that our match passes the test against the first turn
+                // make sure we get a response from Last.fm
+                const tracks = lastfm_response_verifier_1.lastFMResponseVerifier(json);
+                if (tracks.length === 0) {
+                    dispatch(site_1._answerSubmissionFailed(`No track found for ${answer}.`));
+                    return;
+                }
+                // Attempt to find a match
+                const match = turn_processor_1.findMatch(answer, tracks);
+                // Bail early we didn't find a match
+                if (!match) {
+                    dispatch(site_1._answerSubmissionFailed(`No track found for ${answer}.`));
+                    return;
+                }
+                const previousTurn = stack.firstTurn();
+                const hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
+                // Bail early if there's no overlap with previous turn
+                if (!hasOverlapWithPreviousTurn) {
+                    dispatch(site_1._answerSubmissionFailed("No similarity to the previous track."));
+                    return;
+                }
+                // Bail early if the 2 artists are the same
+                if (match.artist === previousTurn.match.artist) {
+                    dispatch(site_1._answerSubmissionFailed("Can't play the same artist twice in a row."));
+                    return;
+                }
+                const trackPlayedAlready = stack.turns.filter((turn) => {
+                    return turn.match.artist == match.artist && turn.match.name == match.name;
+                });
+                if (trackPlayedAlready.length > 0) {
+                    dispatch(site_1._answerSubmissionFailed("That song has already been played."));
+                    return;
+                }
+                // validate match against first turn
+                if (stack.canEnd) {
+                    const firstTurn = stack.lastTurn();
+                    const hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
+                    // winner
+                    if (hasOverlapWithFirstTurn) {
+                        submitToServer(dispatch, stack.gameId, answer, match, true);
+                        return;
+                    }
+                }
+                // Submit our answer and match to the server
+                submitToServer(dispatch, stack.gameId, answer, match, false);
+            });
+        };
+    },
+    fetchDashboard: (token) => {
+        return dispatch => {
+            dispatch(site_1._fetchDashboardPending);
+            const headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
+            fetch(`${baseUrl}/api/v1/dashboard?app_id=${appId}&access_token=${token}`, {
+                credentials: 'same-origin',
+                headers: headers
+            })
+                .then(response => response.json())
+                .then(json => {
+                console.log('got the stuff!', json);
+                const previews = json.active_game_previews.map(preview => types_1.DashboardGamePreview.from(preview));
+                const invites = [];
+                return dispatch(site_1._fetchDashboardSuccess({
+                    previews: previews,
+                    invites: invites
+                }));
+            })
+                .catch(error => {
+                console.log(error);
+                return dispatch(site_1._fetchDashboardError(error));
+            });
+        };
+    }
+};
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.development = {
+    appId: "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97",
+    baseUrl: "http://localhost:3000"
+};
+exports.staging = {
+    appId: "029828097c99845e38f1ac6d43aa43946bf193b80a38f826f47e68ae7f63bbe9",
+    baseUrl: "http://track-stack-staging.herokuapp.com"
+};
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const redux_thunk_1 = __webpack_require__(34);
+const redux_1 = __webpack_require__(35);
+const reducers_1 = __webpack_require__(50);
 function default_1({ reducers, middleware }) {
     reducers = Object.assign({}, { main: reducers_1.main, admin: reducers_1.admin }, reducers);
     return redux_1.createStore(redux_1.combineReducers(reducers), redux_1.applyMiddleware(...middleware, redux_thunk_1.default));
@@ -8932,7 +9127,7 @@ exports.default = default_1;
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8961,7 +9156,7 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8972,27 +9167,27 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-var _createStore = __webpack_require__(10);
+var _createStore = __webpack_require__(12);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = __webpack_require__(45);
+var _combineReducers = __webpack_require__(47);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = __webpack_require__(46);
+var _bindActionCreators = __webpack_require__(48);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = __webpack_require__(47);
+var _applyMiddleware = __webpack_require__(49);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-var _compose = __webpack_require__(15);
+var _compose = __webpack_require__(17);
 
 var _compose2 = _interopRequireDefault(_compose);
 
-var _warning = __webpack_require__(14);
+var _warning = __webpack_require__(16);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -9013,10 +9208,10 @@ exports.combineReducers = _combineReducers2.default;
 exports.bindActionCreators = _bindActionCreators2.default;
 exports.applyMiddleware = _applyMiddleware2.default;
 exports.compose = _compose2.default;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9026,15 +9221,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(12);
+var _Symbol2 = __webpack_require__(14);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
-var _getRawTag = __webpack_require__(37);
+var _getRawTag = __webpack_require__(39);
 
 var _getRawTag2 = _interopRequireDefault(_getRawTag);
 
-var _objectToString = __webpack_require__(38);
+var _objectToString = __webpack_require__(40);
 
 var _objectToString2 = _interopRequireDefault(_objectToString);
 
@@ -9064,7 +9259,7 @@ function baseGetTag(value) {
 exports.default = baseGetTag;
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9076,7 +9271,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _freeGlobal = __webpack_require__(36);
+var _freeGlobal = __webpack_require__(38);
 
 var _freeGlobal2 = _interopRequireDefault(_freeGlobal);
 
@@ -9091,7 +9286,7 @@ var root = _freeGlobal2.default || freeSelf || Function('return this')();
 exports.default = root;
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9107,10 +9302,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
 
 exports.default = freeGlobal;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)))
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9120,7 +9315,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Symbol2 = __webpack_require__(12);
+var _Symbol2 = __webpack_require__(14);
 
 var _Symbol3 = _interopRequireDefault(_Symbol2);
 
@@ -9172,7 +9367,7 @@ function getRawTag(value) {
 exports.default = getRawTag;
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9205,7 +9400,7 @@ function objectToString(value) {
 exports.default = objectToString;
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9215,7 +9410,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _overArg = __webpack_require__(40);
+var _overArg = __webpack_require__(42);
 
 var _overArg2 = _interopRequireDefault(_overArg);
 
@@ -9227,7 +9422,7 @@ var getPrototype = (0, _overArg2.default)(Object.getPrototypeOf, Object);
 exports.default = getPrototype;
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9253,7 +9448,7 @@ function overArg(func, transform) {
 exports.default = overArg;
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9296,7 +9491,7 @@ function isObjectLike(value) {
 exports.default = isObjectLike;
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9306,7 +9501,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(44);
+var _ponyfill = __webpack_require__(46);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -9329,10 +9524,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2.default)(root);
 exports.default = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(43)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15), __webpack_require__(45)(module)))
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9362,7 +9557,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9391,7 +9586,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9402,13 +9597,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = combineReducers;
 
-var _createStore = __webpack_require__(10);
+var _createStore = __webpack_require__(12);
 
-var _isPlainObject = __webpack_require__(11);
+var _isPlainObject = __webpack_require__(13);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _warning = __webpack_require__(14);
+var _warning = __webpack_require__(16);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -9540,10 +9735,10 @@ function combineReducers(reducers) {
     return hasChanged ? nextState : state;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9605,7 +9800,7 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9616,7 +9811,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = applyMiddleware;
 
-var _compose = __webpack_require__(15);
+var _compose = __webpack_require__(17);
 
 var _compose2 = _interopRequireDefault(_compose);
 
@@ -9678,26 +9873,26 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var main_1 = __webpack_require__(49);
+var main_1 = __webpack_require__(51);
 exports.main = main_1.default;
-var admin_1 = __webpack_require__(50);
+var admin_1 = __webpack_require__(52);
 exports.admin = admin_1.default;
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const constants_1 = __webpack_require__(5);
+const constants_1 = __webpack_require__(6);
 const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: [] };
 function default_1(state = defaultState, action) {
     switch (action.type) {
@@ -9733,7 +9928,7 @@ exports.default = default_1;
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
