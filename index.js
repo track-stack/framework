@@ -8929,7 +8929,7 @@ const lastfm_response_verifier_1 = __webpack_require__(2);
 const site_1 = __webpack_require__(5);
 const types_1 = __webpack_require__(7);
 const config_1 = __webpack_require__(32);
-const { appId, baseUrl } = config_1.development;
+const { appId, baseUrl } = config_1.staging;
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
