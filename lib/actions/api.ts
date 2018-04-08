@@ -14,7 +14,8 @@ import {
   _setAccessToken,
   _fetchDashboardPending,
   _fetchDashboardSuccess,
-  _fetchDashboardError
+  _fetchDashboardError,
+  _unsetGame
 } from '../selectors/site'
 import { Game, FBFriend, Stack, DashboardGamePreview } from '../types'
 
@@ -27,7 +28,7 @@ function performSearch({sanitizedAnswer}) {
     .then(response => response.json())
 }
 
-function submitToServer(dispatch, gameId, answer, match, gameOver) {
+function submitToServer(dispatch, token, gameId, answer, match, gameOver) {
   const headers = new Headers({
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json'
@@ -36,10 +37,12 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
   const data = {
     answer: answer,
     match: match,
-    game_over: gameOver
+    game_over: gameOver,
+    app_id: appId,
+    access_token: token
   }
 
-  fetch(`/games/${gameId}/turn`, {
+  fetch(`${baseUrl}/api/v1/games/${gameId}/turn`, {
     method: 'POST',
     credentials: 'same-origin',
     headers: headers,
@@ -85,6 +88,12 @@ export default {
     }
   },
 
+  unsetGame: () => {
+    return dispatch => {
+      return dispatch(_unsetGame())
+    }
+  },
+
   fetchGame: (token, gameId) => {
     return dispatch => {
       const headers = new Headers({'X-Requested-With': 'XMLHttpRequest'})
@@ -110,7 +119,7 @@ export default {
     }
   },
 
-  submitAnswer: (answer: string, stack: Stack) => {
+  submitAnswer: (token: string, answer: string, stack: Stack) => {
     return dispatch => {
       dispatch(_answerSubmissionStarted())
 
@@ -164,20 +173,20 @@ export default {
           return
         }
 
-        // validate match against first turn
+        // validate match against first turN
         if (stack.canEnd) {
           const firstTurn = stack.lastTurn()
           const hasOverlapWithFirstTurn = matchHasIntersection(match, firstTurn.match)
 
           // winner
           if (hasOverlapWithFirstTurn) {
-            submitToServer(dispatch, stack.gameId, answer, match, true)
+            submitToServer(dispatch, token, stack.gameId, answer, match, true)
             return
           }
         }
 
         // Submit our answer and match to the server
-        submitToServer(dispatch, stack.gameId, answer, match, false)
+        submitToServer(dispatch, token, stack.gameId, answer, match, false)
       })
     }
   },
@@ -193,7 +202,6 @@ export default {
       })
       .then(response => response.json())
       .then(json => {
-        console.log('got the stuff!', json)
         const previews = json.active_game_previews.map(preview => DashboardGamePreview.from(preview))
         const invites = []
         return dispatch(_fetchDashboardSuccess({

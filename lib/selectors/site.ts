@@ -6,7 +6,8 @@ import {
   INVITEE,
   LOGIN,
   ACCESS_TOKEN,
-  DASHBAORD
+  DASHBAORD,
+  GAME
 } from '../constants'
 
 import { Game, FBFriend, DashboardGamePreview } from '../types'
@@ -139,5 +140,11 @@ export function _fetchDashboardError(error: any) {
   return {
     type: DASHBAORD.ERROR,
     data: error
+  }
+}
+
+export function _unsetGame() {
+  return {
+    type: GAME.UNSET
   }
 }

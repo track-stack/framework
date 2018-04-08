@@ -4,7 +4,8 @@ import {
   FETCH_GAME,
   INVITEE,
   ACCESS_TOKEN,
-  DASHBAORD
+  DASHBAORD,
+  GAME
 } from '../constants'
 
 const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: []}
@@ -34,6 +35,9 @@ export default function(state = defaultState, action) {
     }
     case DASHBAORD.SUCCESS: {
       return (<any>Object).assign({}, state, { dashboard: action.data })
+    }
+    case GAME.UNSET: {
+      return (<any>Object).assign({}, state, { game: null })
     }
     default:
       return state;

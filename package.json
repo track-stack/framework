@@ -1,6 +1,6 @@
 {
   "name": "trackstack",
-  "version": "0.1.2",
+    "version": "0.1.5",
   "description": "Shared code for Track Stack",
   "scripts": {
     "test": "jest",

@@ -573,6 +573,12 @@ function _fetchDashboardError(error) {
     };
 }
 exports._fetchDashboardError = _fetchDashboardError;
+function _unsetGame() {
+    return {
+        type: constants_1.GAME.UNSET
+    };
+}
+exports._unsetGame = _unsetGame;
 
 
 /***/ }),
@@ -592,6 +598,7 @@ exports.LOGIN = action_helper_1.createActionSet('LOGIN');
 exports.INVITEE = action_helper_1.createActionSet('INVITEE');
 exports.ACCESS_TOKEN = { SET: 'ACCESS_TOKEN_SET' };
 exports.DASHBAORD = action_helper_1.createActionSet('DASHBOARD');
+exports.GAME = { UNSET: 'GAME_UNSET' };
 
 
 /***/ }),
@@ -8935,7 +8942,7 @@ function performSearch({ sanitizedAnswer }) {
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
         .then(response => response.json());
 }
-function submitToServer(dispatch, gameId, answer, match, gameOver) {
+function submitToServer(dispatch, token, gameId, answer, match, gameOver) {
     const headers = new Headers({
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/json'
@@ -8943,9 +8950,11 @@ function submitToServer(dispatch, gameId, answer, match, gameOver) {
     const data = {
         answer: answer,
         match: match,
-        game_over: gameOver
+        game_over: gameOver,
+        app_id: appId,
+        access_token: token
     };
-    fetch(`/games/${gameId}/turn`, {
+    fetch(`${baseUrl}/api/v1/games/${gameId}/turn`, {
         method: 'POST',
         credentials: 'same-origin',
         headers: headers,
@@ -8986,6 +8995,11 @@ exports.default = {
             return dispatch(site_1._selectGameInvitee(friend));
         };
     },
+    unsetGame: () => {
+        return dispatch => {
+            return dispatch(site_1._unsetGame());
+        };
+    },
     fetchGame: (token, gameId) => {
         return dispatch => {
             const headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
@@ -9008,7 +9022,7 @@ exports.default = {
             });
         };
     },
-    submitAnswer: (answer, stack) => {
+    submitAnswer: (token, answer, stack) => {
         return dispatch => {
             dispatch(site_1._answerSubmissionStarted());
             // TODO: full sanitization before searching may be too agressive
@@ -9050,18 +9064,18 @@ exports.default = {
                     dispatch(site_1._answerSubmissionFailed("That song has already been played."));
                     return;
                 }
-                // validate match against first turn
+                // validate match against first turN
                 if (stack.canEnd) {
                     const firstTurn = stack.lastTurn();
                     const hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
                     // winner
                     if (hasOverlapWithFirstTurn) {
-                        submitToServer(dispatch, stack.gameId, answer, match, true);
+                        submitToServer(dispatch, token, stack.gameId, answer, match, true);
                         return;
                     }
                 }
                 // Submit our answer and match to the server
-                submitToServer(dispatch, stack.gameId, answer, match, false);
+                submitToServer(dispatch, token, stack.gameId, answer, match, false);
             });
         };
     },
@@ -9075,7 +9089,6 @@ exports.default = {
             })
                 .then(response => response.json())
                 .then(json => {
-                console.log('got the stuff!', json);
                 const previews = json.active_game_previews.map(preview => types_1.DashboardGamePreview.from(preview));
                 const invites = [];
                 return dispatch(site_1._fetchDashboardSuccess({
@@ -9919,6 +9932,9 @@ function default_1(state = defaultState, action) {
         }
         case constants_1.DASHBAORD.SUCCESS: {
             return Object.assign({}, state, { dashboard: action.data });
+        }
+        case constants_1.GAME.UNSET: {
+            return Object.assign({}, state, { game: null });
         }
         default:
             return state;

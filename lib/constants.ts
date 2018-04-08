@@ -10,3 +10,4 @@ export const LOGIN = createActionSet('LOGIN')
 export const INVITEE = createActionSet('INVITEE')
 export const ACCESS_TOKEN = { SET: 'ACCESS_TOKEN_SET' }
 export const DASHBAORD = createActionSet('DASHBOARD')
+export const GAME = { UNSET: 'GAME_UNSET'}
