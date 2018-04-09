@@ -8,7 +8,7 @@ import {
   GAME
 } from '../constants'
 
-const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: []}
+const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: {}}
 
 export default function(state = defaultState, action) {
   switch (action.type) {

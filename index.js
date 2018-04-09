@@ -9089,10 +9089,13 @@ exports.default = {
             })
                 .then(response => response.json())
                 .then(json => {
-                const previews = json.active_game_previews.map(preview => types_1.DashboardGamePreview.from(preview));
+                const groups = json.active_game_previews;
+                groups.forEach((key, previews) => {
+                    groups[key] = previews.map(preview => types_1.DashboardGamePreview.from(preview));
+                });
                 const invites = [];
                 return dispatch(site_1._fetchDashboardSuccess({
-                    previews: previews,
+                    previews: groups,
                     invites: invites
                 }));
             })
@@ -9906,7 +9909,7 @@ exports.admin = admin_1.default;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = __webpack_require__(6);
-const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: [] };
+const defaultState = { friends: [], game: null, error: null, invitee: null, accessToken: null, dashboard: {} };
 function default_1(state = defaultState, action) {
     switch (action.type) {
         case constants_1.FETCH_FRIENDS.SUCCESS: {

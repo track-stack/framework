@@ -202,10 +202,13 @@ export default {
       })
       .then(response => response.json())
       .then(json => {
-        const previews = json.active_game_previews.map(preview => DashboardGamePreview.from(preview))
+        const groups = json.active_game_previews
+        groups.forEach((key, previews) => {
+          groups[key] = previews.map(preview => DashboardGamePreview.from(preview))
+        })
         const invites = []
         return dispatch(_fetchDashboardSuccess({
-          previews: previews,
+          previews: groups,
           invites: invites
         }));
       })
