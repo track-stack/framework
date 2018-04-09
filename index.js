@@ -9083,7 +9083,7 @@ exports.default = {
         return dispatch => {
             dispatch(site_1._fetchDashboardPending);
             const headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
-            fetch(`${baseUrl}/api/v1/dashboard?app_id=${appId}&access_token=${token}`, {
+            return fetch(`${baseUrl}/api/v1/dashboard?app_id=${appId}&access_token=${token}`, {
                 credentials: 'same-origin',
                 headers: headers
             })
