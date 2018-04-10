@@ -200,12 +200,20 @@ export default {
         credentials: 'same-origin',
         headers: headers
       })
+      .then(response => {
+        if (response.status !== 200) {
+          return response.json()
+        } else {
+          throw Error(response.statusText)
+        }
+      })
       .then(response => response.json())
       .then(json => {
         const groups = json.active_game_previews
-        groups.forEach((key, previews) => {
+        for (const key in groups) {
+          let previews = groups[key]
           groups[key] = previews.map(preview => DashboardGamePreview.from(preview))
-        })
+        }
         const invites = []
         return dispatch(_fetchDashboardSuccess({
           previews: groups,
