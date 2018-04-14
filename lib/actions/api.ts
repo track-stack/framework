@@ -19,8 +19,8 @@ import {
 } from '../selectors/site'
 import { Game, FBFriend, Stack, DashboardGamePreview } from '../types'
 
-import { staging } from '../utils/config'
-const { appId, baseUrl } = staging
+import { development } from '../utils/config'
+const { appId, baseUrl } = development
 
 function performSearch({sanitizedAnswer}) {
   const apiKey = "80b1866e815a8d2ddf83757bd97fdc76"
