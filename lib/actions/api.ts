@@ -235,7 +235,7 @@ export default {
 
       const data = {
         access_token: accessToken,
-        apns_token: expoToken,
+        expo_token: expoToken,
         device_id: deviceId
       }
 
