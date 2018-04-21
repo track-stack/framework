@@ -206,7 +206,6 @@ export default {
           throw Error(response.statusText)
         }
       })
-      .then(response => response.json())
       .then(json => {
         const groups = json.active_game_previews
         for (const key in groups) {
