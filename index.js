@@ -8936,7 +8936,7 @@ const lastfm_response_verifier_1 = __webpack_require__(2);
 const site_1 = __webpack_require__(5);
 const types_1 = __webpack_require__(7);
 const config_1 = __webpack_require__(32);
-const { appId, baseUrl } = config_1.development.device;
+const { appId, baseUrl } = config_1.staging;
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
@@ -9113,13 +9113,17 @@ exports.default = {
             });
         };
     },
-    postNotificationsToken: (accessToken, notificationsToken) => {
+    postNotificationsToken: (accessToken, expoToken, deviceId) => {
         return dispatch => {
             const headers = new Headers({
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json'
             });
-            const data = { access_token: accessToken, apns_token: notificationsToken };
+            const data = {
+                expo_token: expoToken,
+                apns_token: expoToken,
+                device_id: deviceId
+            };
             return fetch(`${baseUrl}/api/v1/devices/register`, {
                 method: 'POST',
                 headers: headers,

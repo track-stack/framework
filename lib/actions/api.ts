@@ -19,8 +19,8 @@ import {
 } from '../selectors/site'
 import { Game, FBFriend, Stack, DashboardGamePreview } from '../types'
 
-import { development } from '../utils/config'
-const { appId, baseUrl } = development.device
+import { staging } from '../utils/config'
+const { appId, baseUrl } = staging
 
 function performSearch({sanitizedAnswer}) {
   const apiKey = "80b1866e815a8d2ddf83757bd97fdc76"
@@ -226,14 +226,19 @@ export default {
     }
   },
 
-  postNotificationsToken: (accessToken, notificationsToken) => {
+  postNotificationsToken: (accessToken, expoToken, deviceId) => {
     return dispatch => {
       const headers = new Headers({
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/json'
       })
 
-      const data = {access_token: accessToken, apns_token: notificationsToken}
+      const data = {
+        expo_token: expoToken,
+        apns_token: expoToken,
+        device_id: deviceId
+      }
+
       return fetch(`${baseUrl}/api/v1/devices/register`, {
         method: 'POST',
         headers: headers,
