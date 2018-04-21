@@ -20,7 +20,7 @@ import {
 import { Game, FBFriend, Stack, DashboardGamePreview } from '../types'
 
 import { development } from '../utils/config'
-const { appId, baseUrl } = development
+const { appId, baseUrl } = development.device
 
 function performSearch({sanitizedAnswer}) {
   const apiKey = "80b1866e815a8d2ddf83757bd97fdc76"
@@ -72,7 +72,6 @@ export default {
         'Content-Type': 'application/json'
       })
 
-      const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97"
       const data = {token: token, expires: expires, app_id: appId}
       return fetch(`${baseUrl}/api/v1/auth/create`, {
         method: 'POST',
@@ -223,6 +222,22 @@ export default {
       .catch(error => {
         console.log(error)
         return dispatch(_fetchDashboardError(error));
+      })
+    }
+  },
+
+  postNotificationsToken: (accessToken, notificationsToken) => {
+    return dispatch => {
+      const headers = new Headers({
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      })
+
+      const data = {access_token: accessToken, apns_token: notificationsToken}
+      return fetch(`${baseUrl}/api/v1/devices/register`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
       })
     }
   }

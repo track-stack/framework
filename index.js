@@ -8936,7 +8936,7 @@ const lastfm_response_verifier_1 = __webpack_require__(2);
 const site_1 = __webpack_require__(5);
 const types_1 = __webpack_require__(7);
 const config_1 = __webpack_require__(32);
-const { appId, baseUrl } = config_1.development;
+const { appId, baseUrl } = config_1.development.device;
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
@@ -8981,7 +8981,6 @@ exports.default = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json'
             });
-            const app_id = "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97";
             const data = { token: token, expires: expires, app_id: appId };
             return fetch(`${baseUrl}/api/v1/auth/create`, {
                 method: 'POST',
@@ -9113,6 +9112,20 @@ exports.default = {
                 return dispatch(site_1._fetchDashboardError(error));
             });
         };
+    },
+    postNotificationsToken: (accessToken, notificationsToken) => {
+        return dispatch => {
+            const headers = new Headers({
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            });
+            const data = { access_token: accessToken, apns_token: notificationsToken };
+            return fetch(`${baseUrl}/api/v1/devices/register`, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(data)
+            });
+        };
     }
 };
 
@@ -9125,8 +9138,14 @@ exports.default = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.development = {
-    appId: "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97",
-    baseUrl: "http://localhost:3000"
+    sim: {
+        appId: "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97",
+        baseUrl: "http://localhost:3000"
+    },
+    device: {
+        appId: "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97",
+        baseUrl: "http://192.168.1.65:3000"
+    }
 };
 exports.staging = {
     appId: "029828097c99845e38f1ac6d43aa43946bf193b80a38f826f47e68ae7f63bbe9",

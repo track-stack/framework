@@ -1,6 +1,12 @@
 export const development = {
-  appId: "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97",
-  baseUrl: "http://localhost:3000"
+  sim: {
+    appId: "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97",
+    baseUrl: "http://localhost:3000"
+  },
+  device: {
+    appId: "5389c2bba5feea37eaae1fed6637d8c7df8bdaa912a4cb2b5b40a178e17abd97",
+    baseUrl: "http://192.168.1.65:3000"
+  }
 }
 
 export const staging = {
