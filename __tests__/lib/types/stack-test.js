@@ -17,8 +17,8 @@ test("returns the last turn", () => {
   ]
   const stack = Stack.from({turns: turns})
 
-  const latestTurn = turns[turns.length - 1]
-  expect(stack.lastTurn().name).toBe(latestTurn.name)
+  const latestTurn = turns[0]
+  expect(stack.latestTurn().name).toBe(latestTurn.name)
 })
 
 // #firstTurun
@@ -30,6 +30,6 @@ test("returns the first turn", () => {
 
   const stack = Stack.from({turns: turns})
 
-  const firstTurn = turns[0]
+  const firstTurn = turns[turns.length - 1]
   expect(stack.firstTurn().name).toBe(firstTurn.name)
 })

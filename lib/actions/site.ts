@@ -163,7 +163,7 @@ export default {
 
         // validate match against first turn
         if (stack.canEnd) {
-          const firstTurn = stack.lastTurn()
+          const firstTurn = stack.firstTurn()
           const hasOverlapWithFirstTurn = matchHasIntersection(match, firstTurn.match)
 
           // winner

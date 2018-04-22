@@ -640,11 +640,11 @@ class Stack {
         this.gameId = gameId;
         this.ended = ended;
     }
-    lastTurn() {
-        return this.turns[this.turns.length - 1];
+    latestTurn() {
+        return this.turns[0];
     }
     firstTurn() {
-        return this.turns[0];
+        return this.turns[this.turns.length - 1];
     }
     static from(json) {
         const turns = json.turns.map(turn => turn_1.default.from(turn));
@@ -1543,7 +1543,7 @@ exports.default = {
                 }
                 // validate match against first turn
                 if (stack.canEnd) {
-                    const firstTurn = stack.lastTurn();
+                    const firstTurn = stack.firstTurn();
                     const hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
                     // winner
                     if (hasOverlapWithFirstTurn) {
@@ -8631,7 +8631,7 @@ class Game {
         };
         return new Game(json.id, players, json.status, stacks);
     }
-    lastTurn() {
+    latestTurn() {
         const stack = this.lastStack();
         if (!stack) {
             return null;
@@ -8642,7 +8642,7 @@ class Game {
         if (stack.turns.length == 0) {
             return null;
         }
-        return stack.lastTurn();
+        return stack.latestTurn();
     }
     firstTurn() {
         const stack = this.lastStack();
@@ -8936,7 +8936,7 @@ const lastfm_response_verifier_1 = __webpack_require__(2);
 const site_1 = __webpack_require__(5);
 const types_1 = __webpack_require__(7);
 const config_1 = __webpack_require__(32);
-const { appId, baseUrl } = config_1.staging;
+const { appId, baseUrl } = config_1.development.sim;
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
@@ -9066,7 +9066,7 @@ exports.default = {
                 }
                 // validate match against first turN
                 if (stack.canEnd) {
-                    const firstTurn = stack.lastTurn();
+                    const firstTurn = stack.firstTurn();
                     const hasOverlapWithFirstTurn = turn_processor_1.matchHasIntersection(match, firstTurn.match);
                     // winner
                     if (hasOverlapWithFirstTurn) {

@@ -15,12 +15,12 @@ export default class Stack {
     this.ended = ended
   }
 
-  lastTurn(): Turn {
-    return this.turns[this.turns.length - 1]
+  latestTurn(): Turn {
+    return this.turns[0]
   }
 
   firstTurn(): Turn {
-    return this.turns[0]
+    return this.turns[this.turns.length - 1]
   }
 
   static from(json: any): Stack {
