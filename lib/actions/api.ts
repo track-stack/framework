@@ -200,7 +200,7 @@ export default {
         headers: headers
       })
       .then(response => {
-        if (response.status !== 200) {
+        if (response.status === 200) {
           return response.json()
         } else {
           throw Error(response.statusText)
