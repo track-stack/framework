@@ -100,10 +100,11 @@ export default {
       fetch(`${baseUrl}/api/v1/games/${gameId}?app_id=${appId}&access_token=${token}`, {
         credentials: 'same-origin',
         headers: headers
-      }).then(response => response.json()).then(json => {
-        const game = Game.from(json.game)
-        return dispatch(_fetchedGame(game));
-      })
+      }).then(response => response.json())
+        .then(json => {
+          const game = Game.from(json.game)
+          return dispatch(_fetchedGame(game));
+        })
     }
   },
 
@@ -236,6 +237,7 @@ export default {
         access_token: accessToken,
         expo_token: expoToken,
         device_id: deviceId
+        app_id: appId
       }
 
       return fetch(`${baseUrl}/api/v1/devices/register`, {
@@ -243,6 +245,30 @@ export default {
         headers: headers,
         body: JSON.stringify(data)
       })
+    }
+  },
+
+  createNewStack: (accessToken, gameId) => {
+    return dispatch => {
+      const headers = new Headers({
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      })
+
+      const data = {
+        access_token: accessToken,
+        app_id: appId
+      }
+
+      fetch(`${baseUrl}/api/v1/games/${gameId}/stacks`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+      }).then(response => response.json())
+        .then(json => {
+          const game = Game.from(json.game)
+          return dispatch(_fetchedGame(game));
+        })
     }
   }
 }
