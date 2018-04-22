@@ -19,8 +19,8 @@ import {
 } from '../selectors/site'
 import { Game, FBFriend, Stack, DashboardGamePreview } from '../types'
 
-import { development } from '../utils/config'
-const { appId, baseUrl } = development.sim
+import { staging } from '../utils/config'
+const { appId, baseUrl } = staging
 
 function performSearch({sanitizedAnswer}) {
   const apiKey = "80b1866e815a8d2ddf83757bd97fdc76"
@@ -149,7 +149,7 @@ export default {
           return
         }
 
-        const previousTurn = stack.firstTurn()
+        const previousTurn = stack.latestTurn()
         const hasOverlapWithPreviousTurn = matchHasIntersection(match, previousTurn.match)
 
         // Bail early if there's no overlap with previous turn

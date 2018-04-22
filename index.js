@@ -8632,7 +8632,7 @@ class Game {
         return new Game(json.id, players, json.status, stacks);
     }
     latestTurn() {
-        const stack = this.lastStack();
+        const stack = this.latestStack();
         if (!stack) {
             return null;
         }
@@ -8645,7 +8645,7 @@ class Game {
         return stack.latestTurn();
     }
     firstTurn() {
-        const stack = this.lastStack();
+        const stack = this.latestStack();
         if (!stack) {
             return null;
         }
@@ -8657,7 +8657,7 @@ class Game {
         }
         return stack.firstTurn();
     }
-    lastStack() {
+    latestStack() {
         if (!this.stacks) {
             return null;
         }
@@ -8936,7 +8936,7 @@ const lastfm_response_verifier_1 = __webpack_require__(2);
 const site_1 = __webpack_require__(5);
 const types_1 = __webpack_require__(7);
 const config_1 = __webpack_require__(32);
-const { appId, baseUrl } = config_1.development.sim;
+const { appId, baseUrl } = config_1.staging;
 function performSearch({ sanitizedAnswer }) {
     const apiKey = "80b1866e815a8d2ddf83757bd97fdc76";
     return fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${sanitizedAnswer}&api_key=${apiKey}&format=json`)
@@ -9045,7 +9045,7 @@ exports.default = {
                     dispatch(site_1._answerSubmissionFailed(`No track found for ${answer}.`));
                     return;
                 }
-                const previousTurn = stack.firstTurn();
+                const previousTurn = stack.latestTurn();
                 const hasOverlapWithPreviousTurn = turn_processor_1.matchHasIntersection(match, previousTurn.match);
                 // Bail early if there's no overlap with previous turn
                 if (!hasOverlapWithPreviousTurn) {
