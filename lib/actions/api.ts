@@ -236,7 +236,7 @@ export default {
       const data = {
         access_token: accessToken,
         expo_token: expoToken,
-        device_id: deviceId
+        device_id: deviceId,
         app_id: appId
       }
 
