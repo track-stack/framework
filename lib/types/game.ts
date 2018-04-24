@@ -14,12 +14,14 @@ export default class Game {
   players: GamePlayers
   status: number
   stacks: Stack[]
+  viewersTurn: boolean
 
-  constructor(id: number, players: GamePlayers, status: number, stacks: Stack[]) {
+  constructor(id: number, players: GamePlayers, status: number, stacks: Stack[], viewersTurn: boolean) {
      this.id = id
      this.players = players
      this.status = status
      this.stacks = stacks
+     this.viewersTurn = viewersTurn
   }
 
   static from(json: any): Game {
@@ -28,7 +30,7 @@ export default class Game {
       viewer: json.players.viewer,
       opponent: json.players.opponent
     }
-    return new Game(json.id, players, json.status, stacks)
+    return new Game(json.id, players, json.status, stacks, json.viewers_turn)
   }
 
   latestTurn(): Turn {

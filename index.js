@@ -647,7 +647,7 @@ class Stack {
         return this.turns[this.turns.length - 1];
     }
     static from(json) {
-        const turns = json.turns.map(turn => turn_1.default.from(turn));
+        const turns = json.turns.reverse().map(turn => turn_1.default.from(turn));
         return new Stack(turns, json.can_end, json.game_id, json.ended);
     }
 }
@@ -8617,11 +8617,12 @@ exports.createActionSet = actionName => {
 Object.defineProperty(exports, "__esModule", { value: true });
 const stack_1 = __webpack_require__(8);
 class Game {
-    constructor(id, players, status, stacks) {
+    constructor(id, players, status, stacks, viewersTurn) {
         this.id = id;
         this.players = players;
         this.status = status;
         this.stacks = stacks;
+        this.viewersTurn = viewersTurn;
     }
     static from(json) {
         const stacks = json.stacks.map(stack => stack_1.default.from(stack));
@@ -8629,7 +8630,7 @@ class Game {
             viewer: json.players.viewer,
             opponent: json.players.opponent
         };
-        return new Game(json.id, players, json.status, stacks);
+        return new Game(json.id, players, json.status, stacks, json.viewers_turn);
     }
     latestTurn() {
         const stack = this.latestStack();

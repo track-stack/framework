@@ -24,7 +24,7 @@ export default class Stack {
   }
 
   static from(json: any): Stack {
-    const turns = json.turns.map(turn => Turn.from(turn))
+    const turns = json.turns.reverse().map(turn => Turn.from(turn))
     return new Stack(turns, json.can_end, json.game_id, json.ended)
   }
 }
