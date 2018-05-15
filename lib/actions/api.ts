@@ -108,9 +108,10 @@ export default {
     }
   },
 
-  fetchFriends: () => {
+  fetchFriends: (token) => {
     return dispatch => {
-      fetch('/friends', { credentials: 'same-origin' })
+      const headers = new Headers({'X-Requested-With': 'XMLHttpRequest'})
+      fetch(`${baseUrl}/api/v1/friends/list?app_id=${appId}&access_token=${token}`)
         .then(response => response.json())
         .then(json => {
           const friends: [FBFriend] = json.friends.map(friend => FBFriend.from(friend))
