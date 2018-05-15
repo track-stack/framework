@@ -271,5 +271,34 @@ export default {
           return dispatch(_fetchedGame(game));
         })
     }
+  },
+
+  createNewGame: (accessToken, uid) => {
+    return dispatch => {
+      const headers = new Headers({
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      })
+
+      const data = {
+        access_token: accessToken,
+        app_id: appId,
+        uid: uid
+      }
+
+      return fetch(`${baseUrl}/api/v1/games/`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(json => {
+        const game = Game.from(json.game)
+        return game
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
   }
 }
