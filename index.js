@@ -9013,9 +9013,10 @@ exports.default = {
             });
         };
     },
-    fetchFriends: () => {
+    fetchFriends: (token) => {
         return dispatch => {
-            fetch('/friends', { credentials: 'same-origin' })
+            const headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
+            fetch(`${baseUrl}/api/v1/friends/list?app_id=${appId}&access_token=${token}`)
                 .then(response => response.json())
                 .then(json => {
                 const friends = json.friends.map(friend => types_1.FBFriend.from(friend));
@@ -9151,6 +9152,32 @@ exports.default = {
                 .then(json => {
                 const game = types_1.Game.from(json.game);
                 return dispatch(site_1._fetchedGame(game));
+            });
+        };
+    },
+    createNewGame: (accessToken, uid) => {
+        return dispatch => {
+            const headers = new Headers({
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            });
+            const data = {
+                access_token: accessToken,
+                app_id: appId,
+                uid: uid
+            };
+            return fetch(`${baseUrl}/api/v1/games/`, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(json => {
+                const game = types_1.Game.from(json.game);
+                return game;
+            })
+                .catch(error => {
+                console.log(error);
             });
         };
     }
