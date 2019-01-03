@@ -214,10 +214,9 @@ export default {
           let previews = groups[key]
           groups[key] = previews.map(preview => DashboardGamePreview.from(preview))
         }
-        const invites = []
         return dispatch(_fetchDashboardSuccess({
           previews: groups,
-          invites: invites
+          invites: json.invites.map(invite => DashboardGamePreview.from(invite))
         }));
       })
       .catch(error => {
